@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <title>《無限元素》</title>
+    <style>
+        /* 🌟 浮動音樂播放器樣式 🌟 */
+        .music-player-container {
+            position: fixed;
+            bottom: 20px;
+            left: 68px;
+            top: auto;
+            right: auto;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .music-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(30, 41, 59, 0.75);
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            color: #38bdf8;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: all 0.25s ease;
+            line-height: 1 !important;
+            padding: 0 !important;
+        }
+
+        .music-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            transform: scale(1.05);
+        }
+
+        .music-info-panel {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .music-title-text {
+            font-size: 0.75rem;
+            color: #e2e8f0;
+            max-width: 110px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .music-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .music-sub-btn {
+            background: none;
+            border: none;
+            color: #38bdf8;
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 2px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .music-sub-btn:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 480px) {
+            .music-title-text {
+                max-width: 70px;
+            }
+        }
+
+        .char-filter-container {
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.75);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .filter-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            font-weight: 700;
+            min-width: 68px;
+            flex-shrink: 0;
+        }
+
+        .filter-btn {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #94a3b8;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        .filter-btn.active {
+            background: #0284c7;
+            color: #ffffff;
+            font-weight: 700;
+            border-color: #38bdf8;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 16px 40px;
+            margin: 0;
+            position: relative;
+            background-color: transparent;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-color: #0f172a; 
+            background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.35) 100%),
+                              var(--bg-image, url('images/background.jpg'));
+            background-position: center top;
+            background-repeat: no-repeat;
+            background-size: cover;
+            pointer-events: none;
+            transition: background-image 0.5s ease-in-out;
+            will-change: background-image;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 540px;
+            margin: 0 auto;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .ui-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 16px;
+            top: auto;
+            right: auto;
+            z-index: 200;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(30, 41, 59, 0.75);
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            color: #38bdf8;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: all 0.25s ease;
+            padding-bottom: 2px !important;
+        }
+
+        .ui-toggle-btn:hover {
+            background: rgba(56, 189, 248, 0.9);
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        body.ui-hidden .container,
+        body.ui-hidden .main-title,
+        body.ui-hidden .tagline,
+        body.ui-hidden .story-intro,
+        body.ui-hidden .event-card,
+        body.ui-hidden .section-title,
+        body.ui-hidden .link-list,
+        body.ui-hidden .footer,
+        body.ui-hidden .back-to-top-btn,
+        body.ui-hidden .char-modal-overlay,
+        body.ui-hidden .schedule-modal-overlay {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        /* 視覺小說開啟時，隱藏主頁相機按鈕 📷 */
+        body.vn-open .ui-toggle-btn {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+
+        /* 🌟 視覺小說全螢幕 Overlay 視窗 🌟 */
+        .vn-modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 150;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .vn-iframe-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .vn-iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .vn-top-floating-btns {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 300;
+            display: flex;
+            gap: 8px;
+        }
+
+        .vn-float-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            color: #38bdf8;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: all 0.2s ease;
+        }
+
+        .vn-float-btn:hover {
+            background: rgba(56, 189, 248, 0.9);
+            color: #fff;
+            transform: scale(1.08);
+        }
+
+        .poster-title-box {
+            position: fixed;
+            bottom: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 190;
+            text-align: center;
+            pointer-events: none;
+            width: 90%;
+            max-width: 850px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        body.ui-hidden .poster-title-box {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .poster-main-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 3px;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            text-shadow: 0 0 12px rgba(15, 23, 42, 0.95), 0 3px 14px rgba(0, 0, 0, 0.9);
+        }
+
+        .poster-tagline {
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            line-height: 1.5;
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6)) drop-shadow(0 3px 10px rgba(0, 0, 0, 0.9));
+        }
+
+        @media (max-width: 640px) {
+            .poster-title-box { bottom: 120px !important; }
+            .poster-main-title { font-size: 1.5rem !important; margin-bottom: 6px !important; }
+            .poster-tagline { font-size: 0.8rem !important; line-height: 1.4 !important; letter-spacing: 0.5px !important; }
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 45vh;
+        }
+
+        .main-title {
+            font-size: 1.85rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            margin-bottom: 6px;
+        }
+
+        .tagline {
+            font-size: 0.95rem;
+            color: #8fb7dd;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            text-shadow: 0 0 6px rgba(15, 23, 42, 0.9), 0 2px 8px rgba(0, 0, 0, 0.85), 0 0 12px rgba(15, 23, 42, 0.8);
+        }
+
+        .story-intro {
+            background: rgba(15, 23, 42, 0.55);
+            border-left: 3px solid #38bdf8;
+            border-radius: 0 10px 10px 0;
+            padding: 14px 18px;
+            margin: 16px auto 20px;
+            text-align: left;
+            backdrop-filter: blur(4px);
+        }
+
+        .story-intro p {
+            font-size: 0.9rem;
+            line-height: 1.65;
+            color: #e2e8f0;
+            letter-spacing: 0.3px;
+        }
+
+        .story-intro p:first-child { margin-bottom: 10px; }
+
+        .event-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 12px;
+            padding: 14px 16px;
+            backdrop-filter: blur(8px);
+            text-align: left;
+        }
+
+        .event-badge {
+            display: inline-block;
+            background: #0284c7;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+
+        .event-text {
+            font-size: 0.88rem;
+            line-height: 1.5;
+            color: #e2e8f0;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 22px 4px 10px;
+        }
+
+        .link-card-dropdown {
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(6px);
+        }
+
+        .link-card-dropdown summary::-webkit-details-marker { display: none; }
+
+        .link-card-summary {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .link-card-summary:hover { background: rgba(51, 65, 85, 0.95); }
+
+        .arrow-icon {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .link-card-dropdown[open] .arrow-icon {
+            transform: rotate(180deg);
+            color: #38bdf8;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 12px;
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .avatar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .avatar-item:hover { transform: scale(1.2); }
+
+        .avatar-item img {
+            width: 60px; height: 60px;
+            border-radius: 50%; object-fit: cover;
+            border: 2px solid rgba(56, 189, 248, 0.4);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .avatar-label {
+            font-size: 0.75rem;
+            color: #e2e8f0;
+            margin-top: 6px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .link-card {
+            display: flex;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #ffffff;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(6px);
+        }
+
+        .link-card:hover {
+            background: rgba(51, 65, 85, 0.95);
+            border-color: rgba(56, 189, 248, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .link-card.highlight {
+            background: linear-gradient(135deg, rgba(14, 116, 144, 0.85) 0%, rgba(30, 41, 59, 0.85) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.5);
+        }
+
+        .avatar {
+            width: 70px; height: 70px;
+            border-radius: 50%; object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0; margin-right: 14px;
+            background-color: #475569;
+        }
+
+        .link-info { flex-grow: 1; }
+
+        .link-title {
+            font-size: 1rem; font-weight: 700;
+            color: #f8fafc; margin-bottom: 2px;
+        }
+
+        .link-desc { font-size: 0.8rem; color: #94a3b8; }
+
+        .arrow {
+            font-size: 1.1rem; color: #64748b; margin-left: 8px;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .link-card:hover .arrow {
+            color: #38bdf8; transform: translateX(3px);
+        }
+
+        .char-modal-overlay, .schedule-modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: flex;
+            justify-content: center; align-items: center;
+            padding: 16px; transition: opacity 0.4s ease;
+        }
+
+        .char-modal-content, .schedule-modal-content {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 16px; padding: 24px;
+            max-width: 500px; width: 100%;
+            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: #ffffff; max-height: 82vh; overflow-y: auto;
+            display: flex; flex-direction: column;
+        }
+
+        .close-btn {
+            position: absolute; top: 14px; right: 16px;
+            background: none; border: none; color: #94a3b8;
+            font-size: 1.2rem; cursor: pointer; z-index: 10;
+        }
+
+        .modal-title, .char-title {
+            font-size: 1.15rem; font-weight: 700; margin-top: 8px; color: #38bdf8;
+        }
+
+        .modal-text, .char-text {
+            font-size: 0.92rem; line-height: 1.6; margin: 16px 0 24px;
+            color: #e2e8f0; white-space: pre-line; overflow-y: auto; flex-grow: 1;
+            -webkit-text-size-adjust: none;
+        }
+
+        .char-tags-container {
+            display: flex; flex-direction: column; gap: 8px; margin: 12px 0 16px;
+            padding: 10px 12px; background: rgba(15, 23, 42, 0.5);
+            border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .char-quote {
+            font-size: 0.88rem; font-style: italic; color: #7dd3fc;
+            margin: 6px 0 10px; padding: 6px 12px; background: rgba(15, 23, 42, 0.4);
+            border-left: 3px solid #38bdf8; border-radius: 0 6px 6px 0; line-height: 1.4; letter-spacing: 0.3px;
+        }
+
+        .tag-group { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+        .tag-label { font-size: 0.72rem; color: #94a3b8; font-weight: 600; min-width: 65px; }
+        .tag-badge { font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+        .tag-badge.chapter { background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+        .tag-badge.faction { background: rgba(168, 85, 247, 0.18); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .tag-badge.type    { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .tag-badge.element { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+        .form-switch-btn {
+            display: inline-block; margin-bottom: 12px; padding: 6px 14px;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            border: 1px solid rgba(56, 189, 248, 0.5); border-radius: 20px;
+            color: #ffffff; font-size: 0.82rem; font-weight: 700; cursor: pointer;
+            transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .form-switch-btn:hover {
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); transform: scale(1.05);
+        }
+
+        .footer { text-align: center; font-size: 0.75rem; color: #64748b; margin-top: 32px; }
+
+        .back-to-top-btn {
+            position: fixed; bottom: 24px; right: 18px; z-index: 180;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.5);
+            color: #38bdf8; font-size: 1.2rem; display: flex; justify-content: center;
+            align-items: center; cursor: pointer; backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4); transition: all 0.3s ease;
+            opacity: 0; visibility: hidden; transform: translateY(10px);
+            line-height: 1 !important; padding: 0 !important; padding-bottom: 2px !important;
+        }
+
+        .back-to-top-btn.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .back-to-top-btn:hover { background: rgba(56, 189, 248, 0.9); color: #ffffff; transform: translateY(-3px) scale(1.05); }
+
+        body.modal-open { overflow: hidden !important; }
+        body.modal-open .music-player-container {
+            opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transition: opacity 0.3s ease;
+        }
+
+        @media (max-width: 640px) {
+            .header { margin-top: 20px !important; }
+            .main-title { font-size: 1.75rem !important; }
+            .ui-toggle-btn { top: auto !important; bottom: 20px !important; left: 16px !important; right: auto !important; transform: none !important; }
+            .music-player-container { top: auto !important; bottom: 20px !important; left: 68px !important; right: auto !important; transform: none !important; }
+            .music-title-text { display: none !important; }
+            .music-info-panel { padding: 4px 8px !important; }
+            .back-to-top-btn { bottom: 20px !important; right: 16px !important; }
+        }
+
+        body.ui-hidden .main-title, body.ui-hidden .tagline { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+        body.ui-hidden .ui-toggle-btn {
+            opacity: 0.25 !important; background: rgba(15, 23, 42, 0.25) !important; border-color: rgba(255, 255, 255, 0.15) !important;
+            box-shadow: none !important; backdrop-filter: none !important;
+        }
+        body.ui-hidden .ui-toggle-btn:hover, body.ui-hidden .ui-toggle-btn:active {
+            opacity: 0.85 !important; background: rgba(56, 189, 248, 0.85) !important; border-color: #38bdf8 !important;
+        }
+
+        .fortune-card-capture {
+            width: 100%; background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 14px; padding: 18px; display: flex; flex-direction: column; align-items: center;
+            backdrop-filter: blur(6px); box-sizing: border-box;
+        }
+
+        .fortune-brand-footer {
+            display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+            background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px; width: 100%; box-sizing: border-box; margin-top: 4px; text-align: left;
+        }
+
+        .fortune-qr-img { width: 52px; height: 52px; border-radius: 6px; border: 1px solid #38bdf8; background: #ffffff; padding: 2px; flex-shrink: 0; }
+        .fortune-brand-text { display: flex; flex-direction: column; gap: 2px; }
+        .fortune-brand-title { font-size: 0.85rem; font-weight: 700; color: #38bdf8; }
+        .fortune-brand-sub { font-size: 0.72rem; color: #cbd5e1; }
+        .fortune-brand-url { font-size: 0.68rem; color: #94a3b8; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+<!-- 🌟 相機觀圖按鈕 🌟 -->
+<button id="ui-toggle-btn" class="ui-toggle-btn" onclick="toggleUI(event)" title="觀看全幅背景圖">📷</button>
+
+<!-- 🌟 浮動音樂播放器 🌟 -->
+<div class="music-player-container">
+    <button id="music-toggle-btn" class="music-btn" onclick="togglePlayMusic()" title="播放/暫停背景音樂">🎵</button>
+    <div id="music-info-panel" class="music-info-panel">
+        <span id="music-title" class="music-title-text">點擊播放 BGM</span>
+        <div class="music-controls">
+            <button class="music-sub-btn" onclick="playPrevTrack()" title="上一首">⏮</button>
+            <button class="music-sub-btn" onclick="playNextTrack()" title="下一首">⏭</button>
+        </div>
+    </div>
+</div>
+
+<audio id="bgm-audio" onended="playNextTrack()"></audio>
+
+<div id="main-container" class="container">
+    <header class="header">
+        <h1 class="main-title">《無限元素》</h1>
+        <div class="tagline">與賦形者相遇，和獸人夥伴展開日常冒險</div>
+
+        <div class="story-intro">
+            <p>從最初的元素冒險，到如今在聚學舍修練、參與再契選的漫長旅程，賦形者們將在這片世界中探索力量、羈絆，以及隱藏於歷史深處的真相。</p>
+        </div>
+
+        <div class="event-card">
+            <span class="event-badge">CURRENT EVENT</span>
+            <p class="event-text">
+                <strong>2026/8/13 學園祭篇章即將正式開跑！</strong><br><br>
+                萬眾矚目的本傳第十一集將於明天隆重發售<br>
+                緊接在第五次契選之後，充滿青春與汗水的「學園祭篇章」也正要揭開序幕！<br>
+                無限量級的極速競跑、熱血沸騰的籃球賽事，還有響徹夜空的樂團對決，連番精彩活動絕對讓你目不暇給！<br>
+                然而，在校園熱鬧喧囂的氣氛背後，一場未知的危機似乎正悄然醞釀…<br>
+            </p>
+        </div>
+    </header>
+
+    <div class="section-title">作品專頁 / 互動體驗</div>
+    <div class="link-list">
+        <div class="link-card highlight" onclick="openScheduleModal()" style="cursor: pointer;">
+            <img src="images/lanlan.jpg" alt="嵐懶" class="avatar">
+            <div class="link-info">
+                <div class="link-title">出版與活動月曆 / 排程預告</div>
+                <div class="link-desc">查看 8 - 10 月本傳發售、連載、學園祭主題與周邊資訊</div>
+            </div>
+            <div class="arrow">➔</div>
+        </div>
+
+        <a href="https://www.bookwalker.com.tw/search?v=1147&series_display=1" target="_blank" class="link-card highlight">
+            <img src="images/kulu.jpg" alt="克爾" class="avatar">
+            <div class="link-info">
+                <div class="link-title">BookWalker 作品專頁</div>
+                <div class="link-desc">內容豐富的本傳、免費連載的外傳一次滿足你的閱讀興致</div>
+            </div>
+            <div class="arrow">➔</div>
+        </a>
+
+        <div class="link-card" onclick="drawDailyFortune()" style="cursor: pointer;">
+            <img src="images/arc.jpg" alt="亞爾克" class="avatar">
+            <div class="link-info">
+                <div class="link-title">每日元素共鳴籤</div>
+                <div class="link-desc">點擊抽取今日幸運夥伴與元素開運指引！</div>
+            </div>
+            <div class="arrow">➔</div>
+        </div>
+
+        <a href="https://rhoxdra.github.io/endless-element-quiz/" target="_blank" class="link-card">
+            <img src="images/jareth.jpg" alt="賈瑞斯" class="avatar">
+            <div class="link-info">
+                <div class="link-title">與你契合的夥伴心理測驗</div>
+                <div class="link-desc">測測看你在這個世界裡最適合與誰同行？</div>
+            </div>
+            <div class="arrow">➔</div>
+        </a>
+    </div>
+
+    <div class="section-title">篇章專區</div>
+    <div class="link-list">
+        <div class="link-card highlight" onclick="openVNModal()" style="cursor: pointer;">
+            <img src="images/kokumei.jpg" alt="克明" class="avatar">
+            <div class="link-info">
+                <div class="link-title">主題進展 / 回聲殘響 (小說閱讀器)</div>
+                <div class="link-desc">點擊進入沉浸式閱讀體驗，含篇章選單、Auto與對話履歷</div>
+            </div>
+            <div class="arrow">➔</div>
+        </div>
+    </div>
+
+    <!-- 角色圖鑑 -->
+    <div class="section-title">角色圖鑑</div>
+    <div class="link-list">
+        <details class="link-card-dropdown">
+            <summary class="link-card-summary">
+                <img src="images/koushou_beast.jpg" alt="高翔" class="avatar">
+                <div class="link-info">
+                    <div class="link-title">角色介紹</div>
+                    <div class="link-desc">展開夥伴圖鑑，點選圖像觀看簡介與專屬全幅大圖</div>
+                </div>
+                <div class="arrow-icon">▼</div>
+            </summary>
+
+            <div class="char-filter-container">
+                <div class="filter-group">
+                    <span class="filter-label">所屬陣營：</span>
+                    <button class="filter-btn active" onclick="filterCharacters('faction', 'all', this)">全部</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '十三元素', this)">十三元素</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '上古元素', this)">上古元素</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '野性之聲', this)">野性之聲</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '艾瑞爾軍', this)">艾瑞爾軍</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '聯合陣線', this)">聯合陣線</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '誓奪爪盟', this)">誓奪爪盟</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '詛碼團', this)">詛碼團</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '聚學舍', this)">聚學舍</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '狼人村', this)">狼人村</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '貓族村', this)">貓族村</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '晝光時報', this)">晝光時報</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '砧鍛坊', this)">砧鍛坊</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '無盡元素', this)">無盡元素</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '白原行族', this)">白原行族</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '霸潮盟', this)">霸潮盟</button>
+                    <button class="filter-btn" onclick="filterCharacters('faction', '維那嶺', this)">維那嶺</button>
+                </div>
+
+                <div class="filter-group" style="margin-top: 8px;">
+                    <span class="filter-label">能力類型：</span>
+                    <button class="filter-btn active" onclick="filterCharacters('type', 'all', this)">全部</button>
+                    <button class="filter-btn" onclick="filterCharacters('type', '賦形者', this)">元素賦形者</button>
+                    <button class="filter-btn" onclick="filterCharacters('type', '使用者', this)">元素使用者</button>
+                    <button class="filter-btn" onclick="filterCharacters('type', '地脈操流者', this)">地脈操流者</button>
+                    <button class="filter-btn" onclick="filterCharacters('type', 'none', this)">無能力者</button>
+                </div>
+            </div>
+
+            <div class="avatar-grid" id="avatar-grid">
+                <div class="avatar-item" data-key="lanlan" onclick="openCharModal('lanlan')"><img src="images/lanlan.jpg" alt="嵐懶"><span class="avatar-label">嵐懶</span></div>
+                <div class="avatar-item" data-key="kulu" onclick="openCharModal('kulu')"><img src="images/kulu.jpg" alt="克爾"><span class="avatar-label">克爾</span></div>
+                <div class="avatar-item" data-key="arc" onclick="openCharModal('arc')"><img src="images/arc.jpg" alt="亞爾克"><span class="avatar-label">亞爾克</span></div>
+                <div class="avatar-item" data-key="roar" onclick="openCharModal('roar')"><img src="images/roar.jpg" alt="洛爾"><span class="avatar-label">洛爾</span></div>
+                <div class="avatar-item" data-key="kokumei" onclick="openCharModal('kokumei')"><img src="images/kokumei.jpg" alt="克明"><span class="avatar-label">克明</span></div>
+                <div class="avatar-item" data-key="koushou" onclick="openCharModal('koushou')"><img src="images/koushou.jpg" alt="高翔"><span class="avatar-label">高翔</span></div>
+                <div class="avatar-item" data-key="takawa" onclick="openCharModal('takawa')"><img src="images/takawa.jpg" alt="高和"><span class="avatar-label">高和</span></div>
+                <div class="avatar-item" data-key="igarashi" onclick="openCharModal('igarashi')"><img src="images/igarashi.jpg" alt="五十嵐"><span class="avatar-label">五十嵐</span></div>
+                <div class="avatar-item" data-key="area" onclick="openCharModal('area')"><img src="images/area.jpg" alt="艾瑞爾"><span class="avatar-label">艾瑞爾</span></div>
+                <div class="avatar-item" data-key="wakima" onclick="openCharModal('wakima')"><img src="images/wakima.jpg" alt="瓦奇瑪"><span class="avatar-label">瓦奇瑪</span></div>
+                <div class="avatar-item" data-key="volt" onclick="openCharModal('volt')"><img src="images/volt.jpg" alt="弗爾特"><span class="avatar-label">弗爾特</span></div>
+                <div class="avatar-item" data-key="proto" onclick="openCharModal('proto')"><img src="images/proto.jpg" alt="普洛特"><span class="avatar-label">普洛特</span></div>
+                <div class="avatar-item" data-key="zoma" onclick="openCharModal('zoma')"><img src="images/zoma.jpg" alt="詛碼"><span class="avatar-label">詛碼</span></div>
+                <div class="avatar-item" data-key="veil" onclick="openCharModal('veil')"><img src="images/veil.jpg" alt="白珥"><span class="avatar-label">白珥</span></div>
+                <div class="avatar-item" data-key="ultima" onclick="openCharModal('ultima')"><img src="images/ultima.jpg" alt="阿爾提瑪"><span class="avatar-label">阿爾提瑪</span></div>
+                <div class="avatar-item" data-key="jareth" onclick="openCharModal('jareth')"><img src="images/jareth.jpg" alt="賈瑞斯"><span class="avatar-label">賈瑞斯</span></div>
+                <div class="avatar-item" data-key="zarion" onclick="openCharModal('zarion')"><img src="images/zarion.jpg" alt="澤里恩"><span class="avatar-label">澤里恩</span></div>
+                <div class="avatar-item" data-key="kuzure" onclick="openCharModal('kuzure')"><img src="images/kuzure.jpg" alt="崩"><span class="avatar-label">崩</span></div>
+                <div class="avatar-item" data-key="osae" onclick="openCharModal('osae')"><img src="images/osae.jpg" alt="制"><span class="avatar-label">制</span></div>
+                <div class="avatar-item" data-key="kage" onclick="openCharModal('kage')"><img src="images/kage.jpg" alt="影"><span class="avatar-label">影</span></div>
+                <div class="avatar-item" data-key="rub" onclick="openCharModal('rub')"><img src="images/rub.jpg" alt="劫"><span class="avatar-label">劫</span></div>
+                <div class="avatar-item" data-key="electric" onclick="openCharModal('electric')"><img src="images/electric.jpg" alt="伊蕾琪"><span class="avatar-label">伊蕾琪</span></div>
+                <div class="avatar-item" data-key="tia" onclick="openCharModal('tia')"><img src="images/tia.jpg" alt="提婭"><span class="avatar-label">提婭</span></div>
+                <div class="avatar-item" data-key="rofena" onclick="openCharModal('rofena')"><img src="images/rofena.jpg" alt="羅菲娜"><span class="avatar-label">羅菲娜</span></div>
+                <div class="avatar-item" data-key="arashiyama" onclick="openCharModal('arashiyama')"><img src="images/arashiyama.jpg" alt="嵐山"><span class="avatar-label">嵐山</span></div>
+                <div class="avatar-item" data-key="fox" onclick="openCharModal('fox')"><img src="images/fox.jpg" alt="睿策樺霖"><span class="avatar-label">睿策樺霖</span></div>
+                <div class="avatar-item" data-key="sugar" onclick="openCharModal('sugar')"><img src="images/sugar.jpg" alt="霜糖紗母"><span class="avatar-label">霜糖紗母</span></div>
+                <div class="avatar-item" data-key="deer" onclick="openCharModal('deer')"><img src="images/deer.jpg" alt="繪靈鹿茲"><span class="avatar-label">繪靈鹿茲</span></div>
+                <div class="avatar-item" data-key="owl" onclick="openCharModal('owl')"><img src="images/owl.jpg" alt="夜瞳梟賢"><span class="avatar-label">夜瞳梟賢</span></div>
+                <div class="avatar-item" data-key="teiner" onclick="openCharModal('teiner')"><img src="images/teiner.jpg" alt="翠芽泰納"><span class="avatar-label">翠芽泰納</span></div>
+                <div class="avatar-item" data-key="doutou" onclick="openCharModal('doutou')"><img src="images/doutou.jpg" alt="怒濤銳步"><span class="avatar-label">怒濤銳步</span></div>
+                <div class="avatar-item" data-key="kaiden" onclick="openCharModal('kaiden')"><img src="images/kaiden.jpg" alt="凱登"><span class="avatar-label">凱登</span></div>
+                <div class="avatar-item" data-key="gousuke" onclick="openCharModal('gousuke')"><img src="images/gousuke.jpg" alt="豪助"><span class="avatar-label">豪助</span></div>
+                <div class="avatar-item" data-key="chitar" onclick="openCharModal('chitar')"><img src="images/chitar.jpg" alt="瞬介"><span class="avatar-label">瞬介</span></div>
+                <div class="avatar-item" data-key="horse" onclick="openCharModal('horse')"><img src="images/horse.jpg" alt="颯太"><span class="avatar-label">颯太</span></div>
+                <div class="avatar-item" data-key="raku" onclick="openCharModal('raku')"><img src="images/raku.jpg" alt="埒"><span class="avatar-label">埒</span></div>
+                <div class="avatar-item" data-key="garoz" onclick="openCharModal('garoz')"><img src="images/garoz.jpg" alt="犺"><span class="avatar-label">犺</span></div>
+                <div class="avatar-item" data-key="sinn" onclick="openCharModal('sinn')"><img src="images/sinn.jpg" alt="泊信"><span class="avatar-label">泊信</span></div>
+                <div class="avatar-item" data-key="gorilla" onclick="openCharModal('gorilla')"><img src="images/gorilla.jpg" alt="烈塵巡衛"><span class="avatar-label">烈塵巡衛</span></div>
+                <div class="avatar-item" data-key="boar" onclick="openCharModal('boar')"><img src="images/boar.jpg" alt="鍛魂獷牙"><span class="avatar-label">鍛魂獷牙</span></div>
+                <div class="avatar-item" data-key="racoon" onclick="openCharModal('racoon')"><img src="images/racoon.jpg" alt="影識秘爪"><span class="avatar-label">影識秘爪</span></div>
+                <div class="avatar-item" data-key="whissel" onclick="openCharModal('whissel')"><img src="images/whissel.jpg" alt="旭言"><span class="avatar-label">旭言</span></div>
+                <div class="avatar-item" data-key="rin" onclick="openCharModal('rin')"><img src="images/rin.jpg" alt="嶙安"><span class="avatar-label">嶙安</span></div>
+                <div class="avatar-item" data-key="cat" onclick="openCharModal('cat')"><img src="images/cat.jpg" alt="瑟莉雅"><span class="avatar-label">瑟莉雅</span></div>
+                <div class="avatar-item" data-key="reva" onclick="openCharModal('reva')"><img src="images/reva.jpg" alt="雷瓦維那"><span class="avatar-label">雷瓦維那</span></div>
+                <div class="avatar-item" data-key="leon" onclick="openCharModal('leon')"><img src="images/leon.jpg" alt="萊昂維那"><span class="avatar-label">萊昂維那</span></div>
+                <div class="avatar-item" data-key="tormunn" onclick="openCharModal('tormunn')"><img src="images/tormunn.jpg" alt="拓穆恩"><span class="avatar-label">拓穆恩</span></div>
+                <div class="avatar-item" data-key="grossa" onclick="openCharModal('grossa')"><img src="images/grossa.jpg" alt="格洛薩"><span class="avatar-label">格洛薩</span></div>
+                <div class="avatar-item" data-key="igrahhan" onclick="openCharModal('igrahhan')"><img src="images/igrahhan.jpg" alt="伊格拉罕"><span class="avatar-label">伊格拉罕</span></div>
+                <div class="avatar-item" data-key="touphrin" onclick="openCharModal('touphrin')"><img src="images/touphrin.jpg" alt="塔芙琳"><span class="avatar-label">塔芙琳</span></div>
+            </div>
+        </details>
+    </div>
+
+    <!-- 線上閱讀平台 -->
+    <div class="section-title">其他各大線上閱讀平台</div>
+    <div class="link-list">
+        <a href="https://readmoo.com/publisher/8667" target="_blank" class="link-card">
+            <img src="images/area.jpg" alt="艾瑞爾" class="avatar">
+            <div class="link-info"><div class="link-title">Readmoo</div><div class="link-desc"></div></div><div class="arrow">➔</div>
+        </a>
+        <a href="https://www.books.com.tw/web/sys_puballb/books/?pubid=bookwalker137" target="_blank" class="link-card">
+            <img src="images/igarashi.jpg" alt="五十嵐" class="avatar">
+            <div class="link-info"><div class="link-title">博客來</div><div class="link-desc"></div></div><div class="arrow">➔</div>
+        </a>            
+        <a href="https://ebook.hyread.com.tw/searchList.jsp?search_field=FullText&search_input=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&search_field=PU&search_input=%E5%B5%90%E6%87%B6%E6%9B%B8" target="_blank" class="link-card">
+            <img src="images/kuzure.jpg" alt="崩" class="avatar">
+            <div class="link-info"><div class="link-title">Hyread</div><div class="link-desc"></div></div><div class="arrow">➔</div>
+        </a>            
+        <a href="https://play.google.com/store/search?q=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&c=books&hl=zh-TW" target="_blank" class="link-card">
+            <img src="images/osae.jpg" alt="制" class="avatar">
+            <div class="link-info"><div class="link-title">Google Play</div><div class="link-desc"></div></div><div class="arrow">➔</div>
+        </a>            
+        <a href="https://tw.myrenta.com/search2?keyword=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&field=name" target="_blank" class="link-card">
+            <img src="images/chitar.jpg" alt="瞬介" class="avatar">
+            <div class="link-info"><div class="link-title">MyRenta</div><div class="link-desc"></div></div><div class="arrow">➔</div>
+        </a>            
+        <a href="https://www.kobo.com/tw/zh/series/1GoXVrlB21SC9am6qDfZ9Q" target="_blank" class="link-card">
+            <img src="images/gousuke.jpg" alt="豪助" class="avatar">
+            <div class="link-info"><div class="link-title">Kobo</div><div class="link-desc"></div></div><div class="arrow">➔</div>
+        </a>
+    </div>
+
+    <!-- 作者專區 -->
+    <div class="section-title">作者專區</div>
+    <div class="link-list">
+        <a href="https://www.facebook.com/profile.php?id=100000318845586" target="_blank" class="link-card highlight">
+            <img src="images/roar.jpg" alt="洛爾" class="avatar">
+            <div class="link-info">
+                <div class="link-title">懶懶｜嵐懶書 Facebook</div>
+                <div class="link-desc">創作心得與日常動態</div>
+            </div>
+            <div class="arrow">➔</div>
+        </a>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 嵐懶書 All Rights Reserved.</p>
+    </footer>
+</div>
+
+<!-- 出版排程彈窗 -->
+<div id="schedule-modal" class="schedule-modal-overlay" style="display: none;">
+    <div class="schedule-modal-content">
+        <button class="close-btn" onclick="closeScheduleModal()">✕</button>
+        <div>
+            <span class="event-badge">SCHEDULE</span>
+            <h2 class="modal-title">【無限元素 8-10月未來排程公告】</h2>
+        </div>
+        <div class="modal-text">
+接下來的三個月有滿滿的精采內容，快把這些日子記在行事曆上吧！
+
+<strong>【 八月 】</strong>
+08/07 聚學軼聞 15
+08/14 《無限元素》本傳第 11 集正式上市 
+08/21 無盡探途 20
+08/28 主題進展 - 學園祭 啟幕
+
+<strong>【 九月 】</strong>
+09/04 無盡探途 21
+09/11 主題進展 - 學園祭 勝手
+09/18 聚學軼聞 16
+09/25 無盡探途 22
+
+<strong>【 十月 】</strong>
+10/02 主題進展 - 學園祭 觀展
+10/09 聚學軼聞 17
+10/16 主題進展 - 學園祭 渾解
+10/23 荒野焰嵐 2-6
+10/30 無盡探途 23
+
+-----------------------------------
+
+<strong>🔥 重點情報速遞</strong>
+
+■ <strong>學園祭篇章正式啟動！</strong>
+從八月開始，故事將正式邁入學園祭篇，《無限元素》本傳與外傳的連動也將比以往更加深刻。
+
+■ <strong>《荒野焰嵐 2》恢復連載</strong>
+讓大家久等了！《荒野焰嵐 2》預計於十月順應劇情發展恢復連載。
+
+■ <strong>專欄全面更新：「回聲殘響」轉型為「主題進展」</strong>
+原本在 FB 粉絲專頁不定時刊登的「回聲殘響」，將轉型為與本傳主線緊密相連的「主題進展」，於無限元素官網首頁也會有專欄同步刊登。未來我們將透過這個單元，為大家簡短介紹本傳中的相關篇章內容，讓各位第一時間感受到學園祭的熱烈氣氛！
+（※ 詳細故事與其他未介紹的篇章，屆時一樣會完整收錄在未來發售的本傳單行本中。）
+
+■ <strong>全新周邊與熱銷補貨預告</strong>
+新一批的周邊產品小物上架囉！同時既有熱銷產品也已再度補貨，立即前往周邊賣場將他們帶回家！
+        </div>
+    </div>
+</div>
+
+<!-- 角色詳情彈窗 -->
+<div id="char-modal" class="char-modal-overlay" style="display: none;">
+    <div class="char-modal-content">
+        <button class="close-btn" onclick="closeCharModal()">✕</button>
+        <h2 id="char-title" class="char-title">角色名稱</h2>
+        <div id="char-quote" class="char-quote"></div>
+        <div id="char-tags-container" class="char-tags-container"></div>
+        <div id="char-switch-container" style="margin-top: 4px;"></div>
+        <div id="char-text" class="char-text"></div>
+    </div>
+</div>
+
+<!-- 每日元素共鳴籤彈窗 -->
+<div id="fortune-modal" class="char-modal-overlay" style="display: none;">
+    <div class="char-modal-content" style="text-align: center; align-items: center; max-width: 440px;">
+        <button class="close-btn" onclick="closeFortuneModal()">✕</button>
+        <div id="fortune-capture-area" class="fortune-card-capture">
+            <span class="event-badge" style="background: #a855f7;">DAILY FORTUNE</span>
+            <h2 id="fortune-title" class="modal-title" style="margin-bottom: 12px; margin-top: 4px;">今日共鳴指引</h2>
+            <img id="fortune-avatar" src="" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #38bdf8; margin: 4px 0; object-fit: cover; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+            <div id="fortune-char-name" style="font-weight: 700; font-size: 1.15rem; color: #f8fafc; margin-top: 4px;"></div>
+            <div id="fortune-element-type" style="font-size: 0.82rem; color: #38bdf8; margin: 4px 0 10px; font-weight: 600;"></div>
+            <div id="fortune-quote" class="char-quote" style="margin: 10px 0; text-align: left; width: 100%;"></div>
+            <div id="fortune-lucky-info" style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 14px; text-align: left; width: 100%; background: rgba(15, 23, 42, 0.4); padding: 8px 12px; border-radius: 8px; box-sizing: border-box;"></div>
+
+            <div class="fortune-brand-footer">
+                <img id="fortune-qr" class="fortune-qr-img" src="" alt="官網 QR Code">
+                <div class="fortune-brand-text">
+                    <div class="fortune-brand-title">《無限元素》每日共鳴籤</div>
+                    <div class="fortune-brand-sub">掃描 QR Code 抽取你的今日夥伴</div>
+                    <div class="fortune-brand-url">https://rhoxdra.github.io/intro/</div>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; gap: 10px; width: 100%; margin-top: 14px;">
+            <button id="draw-again-btn" class="form-switch-btn" onclick="drawDailyFortune()" style="margin-bottom: 0; flex: 1;">🎲 再抽一次 (剩 2 次)</button>
+            <button class="form-switch-btn" onclick="downloadFortuneImage()" style="margin-bottom: 0; flex: 1; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-color: rgba(56, 189, 248, 0.5);">📸 儲存籤詩圖卡</button>
+        </div>
+    </div>
+</div>
+
+<!-- 🌟 視覺小說全螢幕 Overlay 視窗 🌟 -->
+<div id="vn-modal" class="vn-modal-overlay">
+    <div class="vn-top-floating-btns">
+        <button class="vn-float-btn" onclick="toggleVNFullscreen()" title="切換全螢幕">⛶</button>
+        <button class="vn-float-btn" onclick="closeVNModal()" title="關閉視覺小說">✕</button>
+    </div>
+    
+    <div id="vn-container" class="vn-iframe-container">
+        <iframe id="vn-iframe" src="about:blank"></iframe>
+    </div>
+</div>
+
+<script>
+    // 🌟 視覺小說 Modal 觸發邏輯 🌟
+    function openVNModal(initialChapterIndex = 0) {
+        const modal = document.getElementById('vn-modal');
+        const iframe = document.getElementById('vn-iframe');
+        
+        if (iframe.src === 'about:blank' || !iframe.src.includes('vn_reader.html')) {
+            iframe.src = 'vn_reader.html';
+        }
+
+        iframe.onload = function() {
+            if (initialChapterIndex > 0) {
+                iframe.contentWindow.postMessage({ type: 'SELECT_CHAPTER_INDEX', index: initialChapterIndex }, '*');
+            }
+        };
+
+        modal.style.display = 'flex';
+        document.body.classList.add('ui-hidden'); // 隱藏主頁面卡片 UI
+        document.body.classList.add('vn-open');   // 強制隱藏主頁面的相機按鈕 📷
+    }
+
+    // ⚡ 核心關閉邏輯：關閉時自動退出全螢幕，還原主頁點擊狀態 ⚡
+    function closeVNModal() {
+        // 若處於全螢幕，強制先退出全螢幕
+        if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+            if (document.exitFullscreen) {
+                document.exitFullscreen().catch(err => console.log(err));
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+
+        const modal = document.getElementById('vn-modal');
+        modal.style.display = 'none';
+        document.body.classList.remove('ui-hidden'); // 恢復主頁面卡片 UI
+        document.body.classList.remove('vn-open');   // 恢復相機按鈕 📷
+        document.body.classList.remove('modal-open'); // 確保主頁面可正常點擊與捲動
+    }
+
+    // 全螢幕開關邏輯
+    function toggleVNFullscreen() {
+        const elem = document.getElementById('vn-modal');
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(err => alert(`無法進入全螢幕模式: ${err.message}`));
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
+        }
+    }
+
+    // 監聽全螢幕狀態改變事件，確保手動按 Esc 退出時狀態未解鎖
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
+    function handleFullscreenChange() {
+        const modal = document.getElementById('vn-modal');
+        if (!document.fullscreenElement && !document.webkitFullscreenElement && modal.style.display === 'none') {
+            document.body.classList.remove('modal-open');
+            document.body.classList.remove('vn-open');
+            document.body.classList.remove('ui-hidden');
+        }
+    }
+
+    // 接收來自 vn_reader.html 的背景切換通知
+    window.addEventListener('message', function(e) {
+        if (e.data && (e.data.type === 'CHANGE_BG' || e.type === 'CHANGE_BG')) {
+            const bgUrl = e.data.bgUrl;
+            if (bgUrl) {
+                document.body.style.setProperty('--bg-image', `url('${bgUrl}')`);
+            }
+        }
+    });
+
+    // 🌟 純淨觀圖模式開關（點擊相機或點擊空白處切換） 🌟
+    function toggleUI(e) {
+        if (e) e.stopPropagation();
+
+        const isHidden = document.body.classList.toggle('ui-hidden');
+        const toggleBtn = document.getElementById('ui-toggle-btn');
+        if (toggleBtn) toggleBtn.blur();
+        
+        if (isHidden) {
+            document.body.classList.add('modal-open');
+            if (toggleBtn) {
+                toggleBtn.innerHTML = '↩';
+                toggleBtn.title = '點擊恢復選單卡片';
+                toggleBtn.style.opacity = '0.25';
+                toggleBtn.style.background = 'rgba(15, 23, 42, 0.25)';
+                toggleBtn.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+                toggleBtn.style.boxShadow = 'none';
+                toggleBtn.style.backdropFilter = 'none';
+            }
+        } else {
+            const hasOpenModal = document.querySelector('.vn-modal-overlay[style*="flex"], .char-modal-overlay[style*="flex"], .schedule-modal-overlay[style*="flex"]');
+            if (!hasOpenModal) {
+                document.body.classList.remove('modal-open');
+            }
+            if (toggleBtn) {
+                toggleBtn.innerHTML = '📷';
+                toggleBtn.title = '觀看全幅背景圖';
+                toggleBtn.style.opacity = '';
+                toggleBtn.style.background = '';
+                toggleBtn.style.borderColor = '';
+                toggleBtn.style.boxShadow = '';
+                toggleBtn.style.backdropFilter = '';
+            }
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        if (document.body.classList.contains('ui-hidden') && !document.body.classList.contains('vn-open')) {
+            if (!e.target.closest('#poster-title-box') && !e.target.closest('#ui-toggle-btn')) {
+                toggleUI();
+            }
+        }
+    });
+
+    // 回到頂部邏輯
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.addEventListener('scroll', () => {
+        const backToTopBtn = document.getElementById('back-to-top-btn');
+        if (backToTopBtn) {
+            if (window.scrollY > 300) backToTopBtn.classList.add('show');
+            else backToTopBtn.classList.remove('show');
+        }
+    });
+
+    // 音樂播放器
+    const playlist = [
+        { title: "嵐光城的早晨慢跑", src: "music/bgm1.mp3" },
+        { title: "尼爾桑夏日時光", src: "music/bgm2.mp3" },
+        { title: "聚學舍午後一隅", src: "music/bgm3.mp3" },
+        { title: "艾瑞爾城市政廳", src: "music/bgm4.mp3" },
+        { title: "蕾寶來電", src: "music/bgm5.mp3" },
+        { title: "詛碼團基地", src: "music/bgm6.mp3" },
+        { title: "夜晨奇境遊樂園", src: "music/bgm7.mp3" },
+        { title: "荒野焰嵐團練室", src: "music/bgm8.mp3" },
+        { title: "裏網世界", src: "music/bgm9.mp3" },
+        { title: "瞭望燼鐵鎮", src: "music/bgm10.mp3" },
+        { title: "元素之源", src: "music/bgm11.mp3" },
+        { title: "豹飲豹食DJ台", src: "music/bgm12.mp3" }
+    ];
+
+    let currentTrackIndex = 0;
+    let isMusicPlaying = false;
+
+    function loadTrack(index) {
+        const audio = document.getElementById('bgm-audio');
+        const titleElem = document.getElementById('music-title');
+        if (playlist[index] && audio) {
+            audio.src = playlist[index].src;
+            audio.volume = 0.4;
+            audio.load();
+            if (titleElem) titleElem.innerText = playlist[index].title;
+        }
+    }
+
+    function togglePlayMusic() {
+        const audio = document.getElementById('bgm-audio');
+        const btn = document.getElementById('music-toggle-btn');
+        if (!audio) return;
+
+        if (!audio.src || audio.src.endsWith('.html') || audio.src === window.location.href) {
+            loadTrack(currentTrackIndex);
+        }
+
+        if (isMusicPlaying) {
+            audio.pause();
+            btn.innerText = "🎵";
+            btn.style.borderColor = "rgba(56, 189, 248, 0.5)";
+            isMusicPlaying = false;
+        } else {
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    btn.innerText = "⏸";
+                    btn.style.borderColor = "#34d399";
+                    isMusicPlaying = true;
+                }).catch(error => { console.error("音樂播放失敗：", error); });
+            }
+        }
+    }
+
+    function playNextTrack() {
+        currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+        loadTrack(currentTrackIndex);
+        const audio = document.getElementById('bgm-audio');
+        if (isMusicPlaying && audio) audio.play().catch(err => console.log(err));
+    }
+
+    function playPrevTrack() {
+        currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+        loadTrack(currentTrackIndex);
+        const audio = document.getElementById('bgm-audio');
+        if (isMusicPlaying && audio) audio.play().catch(err => console.log(err));
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const titleElem = document.getElementById('music-title');
+        if (titleElem && playlist[0]) titleElem.innerText = playlist[0].title;
+    });
+
+    // 角色專屬資料庫
+    const characterData = {
+        "lanlan": { name: "嵐懶", quote: "「還是等我不懶的時候吧……」", tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐", "無盡探途"], faction: ["野性之聲", "無盡元素", "上古元素", "聯合陣線"], type: ["無名元素賦形者", "權能：重生 / 連結"], element: ["火", "風"] }, bgImage: "images/lanlan_bg.jpg", desc: `嵐懶，前身為星球傳說「紅焰」，亦是薄明之戰眾多勢力爭相探尋的關鍵。在洛爾等人的協助與賈瑞斯最終一搏的賦形下取得實體，成功挫敗阿爾提瑪的野心，將世界從傾覆的邊緣拉回。然而，嵐懶始終堅信那場逆轉的奇蹟並非出自他一人之力，而是每位夥伴以情感與理解共同成就的成果。` },
+        "kulu": { name: "克爾", quote: "「你們這些人類，我恨死了！」", tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["野性之聲", "十三元素", "狼人村"], type: ["融元素賦形者", "權能：理解 / 迫察"], element: ["火", "雷"] }, bgImage: "images/kulu_bg.jpg", desc: `克爾，融元素賦形者，出身於尼爾桑狼人村，亦是村中威名赫赫的狩獵頭領。` },
+        "arc": { name: "亞爾克", quote: "「我害怕再度失去夥伴，所以現在才只認你一個……」", tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["野性之聲", "十三元素"], type: ["震元素賦形者", "權能：震動、共鳴"], element: ["火", "土", "風"] }, bgImage: "images/arc_bg.jpg", desc: `亞爾克，震元素賦形者。原是野獸之身的他，最初與同伴一同生活在艾瑞爾大陸的自然保留區……` },
+        "roar": { name: "洛爾", quote: "「我一定要結束這一切的爭端，創造一個我們能夠安心居住的地方。」", tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["野性之聲", "十三元素"], type: ["零元素賦形者", "權能：回歸 / 徹除"], element: ["風", "光"] }, bgImage: "images/roar_bg.jpg", desc: `洛爾——零元素賦形者，夥伴們多半習慣稱他為阿洛。` },
+        "kokumei": { name: "克明", quote: "「我會盡村長之責攜手抵抗威脅，也會開啟與外族共存的新時代！」", tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["野性之聲", "十三元素", "狼人村"], type: ["沌元素賦形者", "權能：混沌 / 懾魂"], element: ["闇"] }, bgImage: "images/kokumei_bg.jpg", desc: `克明，沌元素賦形者，同時也是克爾的弟弟。` },
+        "koushou": { name: "高翔", quote: "「上次我讓你離我而去。但這一次……我要把你帶回身邊！」", tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["野性之聲", "十三元素", "狼人村"], type: ["極元素賦形者", "權能：極限 / 昇華"], element: ["風", "水", "火"] }, bgImage: "images/koushou_bg.jpg", beastBgImage: "images/koushou_beast_bg.jpg", desc: `高翔，極元素賦形者，自幼成長於嵐光村。` },
+        "takawa": { name: "高和", quote: "「創造希望的人，怎麼可以放棄希望？我不會再讓你離開我們了！」", tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["野性之聲", "十三元素"], type: ["恆元素賦形者", "權能：恆定 / 聚型"], element: ["水", "光"] }, bgImage: "images/takawa_bg.jpg", beastBgImage: "images/takawa_beast_bg.jpg", desc: `高和，恆元素賦形者，自幼便與洛爾相伴成長。` },
+        "igarashi": { name: "五十嵐", quote: "「或許，你們早就準備好要啟程離開這座燈塔，而真正沒準備好放手的……竟然是我。」", tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐" ], faction: ["艾瑞爾軍", "十三元素"], type: ["嵐元素賦形者", "權能：氣候 / 折射"], element: ["風"] }, bgImage: "images/igarashi_bg.jpg", desc: `五十嵐，嵐元素賦形者。` },
+        "area": { name: "艾瑞爾", quote: "「我是暗夜中展翅翱翔的恐怖，自奈落之淵而來的『黑夜魔君』。所有徬徨、心懷歹念的惡徒啊，接受我的睥睨吧！」", form1Label: "🐱 獸人型態", form2Label: "👤 人類型態", tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["艾瑞爾軍", "十三元素"], type: ["斷元素賦形者", "權能：斷裂 / 襲轉"], element: ["光", "重力"] }, bgImage: "images/area_bg.jpg", beastBgImage: "images/area_human_bg.jpg", desc: `艾瑞爾，斷元素賦形者。他是艾瑞爾城的掌權總督，亦為遊走於城內各大實驗室的科學家。` },
+        "wakima": { name: "瓦奇瑪", quote: "「你這個甜點叛徒，接受本大明神的制裁吧！」", tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["艾瑞爾軍", "十三元素", "聯合陣線"], type: ["位元素賦形者", "權能：權位 / 適應"], element: ["光"] }, bgImage: "images/wakima_bg.jpg", desc: `瓦奇瑪，位元素賦形者，鯰魚精族。` },
+        "volt": { name: "弗爾特", quote: "「這裡是任我支配的世界，想耍的花招全都會化為徒勞無用！」", tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["詛碼團", "十三元素"], type: ["滅元素賦形者", "權能：寂滅 / 洄流"], element: ["闇"] }, bgImage: "images/volt_bg.jpg", desc: `弗爾特，滅元素賦形者。` },
+        "proto": { name: "普洛特", quote: "「沒有人可以阻擋我的去路！」", tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["詛碼團", "十三元素"], type: ["毀元素賦形者", "權能：摧毀 / 霸軀"], element: ["火", "土"] }, bgImage: "images/proto_bg.jpg", beastBgImage: "images/proto_beast_bg.jpg", desc: `普洛特，毀元素賦形者。` },
+        "zoma": { name: "詛碼", quote: "「這是我的獨到美學。」", tags: { chapter: ["薄明之戰", "再契選篇", "荒野焰嵐"], faction: ["詛碼團", "十三元素"], type: ["究極元素賦形者", "權能：侵染"], element: ["闇", "重力"] }, bgImage: "images/zoma_bg.jpg", desc: `詛碼，究極元素的賦形者。` },
+        "veil": { name: "白珥", quote: "「哎呀，真是精采的表演啊。」", tags: { chapter: ["薄明之戰", "再契選篇"], faction: ["詛碼團", "十三元素"], type: ["命元素賦形者", "權能：魂命 / 殞噬"], element: ["火", "重力"] }, bgImage: "images/veil_bg.jpg", desc: `白珥，曾是詛碼於「薄明之戰」時所使用的人類型態外設。` },
+        "ultima": { name: "阿爾提瑪", quote: "「這……這就是掌控世界的感覺嗎？」", tags: { chapter: ["薄明之戰", "再契選篇"], faction: ["聯合陣線"], type: ["元素使用者"], element: ["無"] }, bgImage: "images/ultima_bg.jpg", desc: `阿爾提瑪，首位成功發現元素存在的救世學者，實際年齡超過數百歲。` },
+        "jareth": { name: "賈瑞斯", quote: "「我只想讓你記得一件事，你值得我的重視，這是我沒有後悔過的選擇。」", tags: { chapter: ["薄明之戰", "再契選篇", "荒野焰嵐", "無盡探途"], faction: ["聯合陣線", "無盡元素", "上古元素"], type: ["創元素賦形者", "權能：創生 / 賦形"], element: ["火"] }, bgImage: "images/jareth_bg.jpg", desc: `賈瑞斯，創元素賦形者。` },
+        "zarion": { name: "澤里恩", quote: "「我……我不會停止閃耀的！」", tags: { chapter: ["聚學舍篇", "再契選篇", "荒野焰嵐", "無盡探途"], faction: ["野性之聲", "無盡元素", "上古元素", "聯合陣線"], type: ["耀元素賦形者", "權能：成長"], element: ["土", "光", "重力"] }, bgImage: "images/zarion_bg.jpg", desc: `澤里恩，耀元素賦形者，灰熊族獸人。` },
+        "kuzure": { name: "崩", quote: "「或許那時……我該回頭看你一眼的。」", tags: { chapter: ["再契選篇", "荒野焰嵐", "無盡探途"], faction: ["誓奪爪盟", "無盡元素", "上古元素"], type: ["崩元素賦形者", "權能：崩壞"], element: ["無"] }, bgImage: "images/kuzure_bg.jpg", desc: `崩，牛頭族獸人。` },
+        "osae": { name: "制", quote: "「看好了——這可是集結我鬣制工藝匠魂的結晶——《無垠號》！」", tags: { chapter: ["再契選篇", "荒野焰嵐", "無盡探途"], faction: ["誓奪爪盟", "無盡元素", "上古元素"], type: ["制元素賦形者", "權能：壓制 / 汲縮"], element: ["無"] }, bgImage: "images/osae_bg.jpg", desc: `制，鬣狗族獸人。` },
+        "kage": { name: "影", quote: "「那只是因為我們有點相似罷了，都是享樂至上的玩家。」", tags: { chapter: ["再契選篇", "荒野焰嵐", "無盡探途"], faction: ["誓奪爪盟", "無盡元素", "上古元素"], type: ["影元素賦形者", "權能：變質 / 消融"], element: ["無"] }, bgImage: "images/kage_bg.jpg", desc: `影，黑豹族獸人。` },
+        "rub": { name: "劫", quote: "「真是悲慘的下場呢，這就是和你扯上關係的後果，你的存在，根本不會帶給任何人幸福！」", form1Label: "🐺 成年型態", form2Label: "⏳ 少年型態", tags: { chapter: ["再契選篇", "荒野焰嵐", "無盡探途"], faction: ["誓奪爪盟", "無盡元素", "上古元素"], type: ["劫元素賦形者", "權能：奪取"], element: ["無"] }, bgImage: "images/rub_bg.jpg", beastBgImage: "images/rub_young_bg.jpg", desc: `劫，狼犬族獸人。` },
+        "electric": { name: "伊蕾琪", quote: "「方便替我簽個名嗎？」", tags: { chapter: ["再契選篇", "荒野焰嵐"], faction: ["誓奪爪盟"], type: ["元素使用者"], element: ["雷", "闇","重力"] }, bgImage: "images/electric_bg.jpg", desc: `伊蕾琪，白狼族女性，元素使用者。` },
+        "tia": { name: "提婭", quote: "「我很期待屬於你自己的音樂會是怎麼樣的，之後一定要讓我聽聽看喔！」", tags: { chapter: ["薄明之戰", "荒野焰嵐"], faction: ["狼人村"], type: ["元素使用者"], element: ["冰"] }, bgImage: "images/tia_bg.jpg", desc: `獵牙提婭，黑狼女性，元素使用者。` },
+        "rofena": { name: "羅菲娜", quote: "「有客人啊？怎麼沒有事先遞交申請書，還偏偏選這麼冷僻的入口來拜訪呢？」", tags: { chapter: ["聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["艾瑞爾軍", "貓族村"], type: ["元素使用者"], element: ["土", "風", "光"] }, bgImage: "images/rofena_bg.jpg", desc: `羅菲娜，獅族女性，畢業於聚學舍。` },
+        "arashiyama": { name: "嵐山", quote: "「歡迎回來。」", tags: { chapter: ["薄明之戰", "聚學舍篇"], faction: ["貓族村"], type: [], element: [] }, bgImage: "images/arashiyama_bg.jpg", desc: `嵐山長老，貓族村的現任村長。` },
+        "sugar": { name: "霜糖紗母", quote: "「我並不是『決定』它們該成為什麼樣子，而是『聽』它們想變成什麼模樣。」", tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: ["元素使用者"], element: ["水", "火"] }, bgImage: "images/sugar_bg.jpg", desc: `霜糖紗母，白綿羊族獸人。` },
+        "deer": { name: "繪靈鹿茲", quote: "「有謎題的地方，就必定有偵探。只要有我的智慧與優雅，懸而未決的謎團便無所遁形，因為——我是繪靈鹿茲！」", tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: ["元素使用者"], element: ["水"] }, bgImage: "images/deer_bg.jpg", desc: `繪靈鹿茲：聚學舍的藝術教授。` },
+        "owl": { name: "夜瞳梟賢", quote: "「我不一定能成為那個最萬能、實力最驚天動地的強者，但我希望能成為那種在世界陷入失序之際，仍能讓身旁的人找到方向、引導他們回歸正途的存在。」", tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: ["元素使用者"], element: ["風"] }, bgImage: "images/owl_bg.jpg", desc: `夜瞳梟賢：聚學舍首屈一指的醫學教授。` },
+        "teiner": { name: "翠芽泰納", quote: "「這麼多雙眼睛盯著我，我會不會一不小心先變成你們的午餐啦？」", tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: ["元素使用者"], element: ["土"] }, bgImage: "images/teiner_bg.jpg", desc: `翠芽泰納：聚學舍的農藝與環境權威。` },
+        "doutou": { name: "怒濤銳步", quote: "「然後……在最後的最後，由我一舉奪走勝利。那將會是落在我掌握之中的美味，一場從頭到尾都為我所設計的饗宴。」", tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: ["元素使用者"], element: ["風"] }, bgImage: "images/doutou_bg.jpg", desc: `怒濤銳步：羚羊族的驕傲。` },
+        "kaiden": { name: "凱登", quote: "「那種入學資格，咱到時候對著校長擠擠肌肉、展現一下，或許是他求著咱進去都來不及呢。」", tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: ["元素使用者"], element: ["水", "土"] }, bgImage: "images/kaiden_bg.jpg", desc: `凱登：鯊魚族獸人。` },
+        "gousuke": { name: "豪助", quote: "「什麼時候……我也能夠像凱登哥那樣呢？」", tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: [], element: [] }, bgImage: "images/gousuke_bg.jpg", desc: `豪助，白熊族獸人。` },
+        "chitar": { name: "瞬介", quote: "「我不想讓颯太的堅持到頭來只是一場空，我不想讓他的奉獻變成白費力氣！」", tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: [], element: [] }, bgImage: "images/chitar_bg.jpg", desc: `瞬介，獵豹族獸人。` },
+        "horse": { name: "颯太", quote: "「在這種情況下，如果能保住你的速度……讓你衝完這段，一定可以拿到非常可觀的積分。這樣一來，我們就能反超那些元素使用者了吧？難得的機會……我可不想放過。」", tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: [], element: [] }, bgImage: "images/horse_bg.jpg", desc: `颯太，棕馬族獸人。` },
+        "raku": { name: "埒", quote: "「我會在無數的時空中庇佑你。戴上它，不管你在哪裡……我都能找到你。」", tags: { chapter: ["再契選篇", "無盡探途"], faction: ["上古元素"], type: ["埒元素賦形者"], element: ["無"] }, bgImage: "images/raku_bg.jpg", desc: `埒，綠狼族獸人。` },
+        "garoz": { name: "犺", quote: "「你知道，我不會背叛你的……」", tags: { chapter: ["再契選篇", "無盡探途"], faction: ["上古元素"], type: ["犺元素賦形者"], element: ["無"] }, bgImage: "images/garoz_bg.jpg", desc: `犺，灰狼族獸人。` },
+        "sinn": { name: "泊信", quote: "「今天還沒和你好好喝過呢，這陣子我可想死你了。」", tags: { chapter: ["再契選篇"], faction: ["詛碼團"], type: [], element: [] }, bgImage: "images/sinn_bg.jpg", desc: `泊信，新生詛碼團的第一分隊長。` },
+        "gorilla": { name: "烈塵巡衛", quote: "「少廢話。快從我眼前消失，我還有事要忙。」", tags: { chapter: ["再契選篇"], faction: ["誓奪爪盟", "砧鍛坊"], type: ["元素使用者"], element: ["土"] }, bgImage: "images/gorilla_bg.jpg", desc: `烈塵巡衛，黑猩猩族的元素使用者。` },
+        "boar": { name: "鍛魂獷牙", quote: "「因為科學、因為效率，就能把我的心血這樣端走？這種事太不講理了。」", tags: { chapter: ["再契選篇"], faction: ["誓奪爪盟", "砧鍛坊"], type: ["元素使用者"], element: ["火", "土"] }, bgImage: "images/boar_bg.jpg", desc: `鍛魂獷牙，野豬族獸人。` },
+        "whissel": { name: "旭言", quote: "「我們可以一起旅行。我們去聽嵐光的演唱會，去看尼爾桑的環輝樹脊，用兩雙不同的眼睛看同樣的事物！」", tags: { chapter: ["再契選篇"], faction: ["晝光時報"], type: [], element: [] }, bgImage: "images/whissel_bg.jpg", desc: `旭言，黃鼠狼族，晝光時報的記者。` },
+        "rin": { name: "嶙安", quote: "「如果有一天真的離開這裡，我……」", tags: { chapter: ["再契選篇"], faction: ["砧鍛坊"], type: [], element: [] }, bgImage: "images/rin_bg.jpg", desc: `嶙安，蜥蜴族獸人。` },
+        "fox": { name: "睿策樺霖", quote: "「希望我們能合作愉快，共創生靈與元素和諧共存的新未來。」", tags: { chapter: ["聚學舍篇", "再契選篇"], faction: ["聚學舍"], type: ["元素使用者"], element: [] }, bgImage: "images/fox_bg.jpg", desc: `睿策樺霖，狐狸族獸人。` },
+        "racoon": { name: "影識秘爪", quote: "「紀錄只呈現可能性，評價與推論則由觀察者決定。」", tags: { chapter: ["聚學舍篇", "再契選篇"], faction: ["聚學舍"], type: ["元素使用者"], element: [] }, bgImage: "images/racoon_bg.jpg", desc: `影識秘爪，浣熊族獸人。` },
+        "cat": { name: "瑟莉雅", quote: "「大家都很恐懼、害怕，深怕自己所認知的一切都是虛構，是假的，是別人口中所訴說的故事而已！我不知道該相信什麼！」", tags: { chapter: ["再契選篇"], faction: ["貓族村"], type: [], element: [] }, bgImage: "images/cat_bg.jpg", desc: `瑟莉雅，灰虎斑貓族女性。` },
+        "reva": { name: "雷瓦維那", quote: "「看起來只是石頭，但也許它們和你們元素一族原本的型態一樣，是以我們人類無法理解的方式活著的。」", tags: { chapter: ["無盡探途"], faction: ["維那嶺"], type: ["地脈操流者"], element: ["火"] }, bgImage: "images/reva_bg.jpg", desc: `雷瓦・維那——人類。` },
+        "leon": { name: "萊昂維那", quote: "「這真的很厲害……你們的技術水平遠超出我們的想像。」", tags: { chapter: ["無盡探途"], faction: ["維那嶺"], type: [], element: [] }, bgImage: "images/leon_bg.jpg", desc: `萊昂・維那——人類。` },
+        "tormunn": { name: "拓穆恩", quote: "「請帶著這份秘密繼續前進吧。我想有朝一日，會出現那個讓我們霸潮盟足以買下這份情報的契機。」", tags: { chapter: ["無盡探途"], faction: ["霸潮盟"], type: [], element: [] }, bgImage: "images/tormunn_bg.jpg", desc: `拓穆恩，野豬族。` },
+        "grossa": { name: "格洛薩", quote: "「居然敢在我面前耍這種連手法都看不出來的老千啊，膽子真不小。被你算計了一道，不過——我很欣賞你，這反而讓我越來越中意你們了。」", tags: { chapter: ["無盡探途"], faction: ["霸潮盟"], type: [], element: [] }, bgImage: "images/grossa_bg.jpg", desc: `格洛薩，黑猩猩族。` },
+        "igrahhan": { name: "伊格拉罕", quote: "「此地不容迷途者。爾等為何帶著罪人的氣息而來？」", tags: { chapter: ["無盡探途"], faction: ["白原行族"], type: ["地脈操流者"], element: ["風"] }, bgImage: "images/igrahhan_bg.jpg", desc: `伊格拉罕，白狼族。` },
+        "touphrin": { name: "塔芙琳", quote: "「沒有啦！我只是開個玩笑，想看看你們的反應而已啦！」", tags: { chapter: ["無盡探途"], faction: ["白原行族"], type: ["地脈操流者"], element: ["土", "光"] }, bgImage: "images/touphrin_bg.jpg", desc: `塔芙琳，白狼族女性。` }
+    };
+
+    let currentModalCharKey = null;
+    let isBeastFormActive = false;
+
+    function openScheduleModal() {
+        const scheduleModalContent = document.querySelector('.schedule-modal-content');
+        if (scheduleModalContent) scheduleModalContent.scrollTop = 0;
+        document.body.classList.add('modal-open');
+        document.getElementById('schedule-modal').style.display = 'flex';
+    }
+
+    function closeScheduleModal() {
+        document.body.classList.remove('modal-open');
+        document.getElementById('schedule-modal').style.display = 'none';
+    }
+
+    function openCharModal(charKey) {
+        currentModalCharKey = charKey;
+        isBeastFormActive = false;
+        
+        const char = characterData[charKey];
+        const titleName = char ? char.name : charKey;
+        const charDesc = (char && char.desc && char.desc.trim() !== "") ? char.desc : "角色詳細簡介與設定準備中……";
+        const bgImg = (char && char.bgImage) ? char.bgImage : `images/${charKey}_bg.jpg`;
+
+        document.getElementById('char-title').innerText = titleName;
+        const charTextElem = document.getElementById('char-text');
+        charTextElem.innerText = charDesc;
+        
+        const quoteElem = document.getElementById('char-quote');
+        if (char && char.quote && char.quote.trim() !== "") {
+            quoteElem.innerText = char.quote;
+            quoteElem.style.display = 'block';
+        } else {
+            quoteElem.style.display = 'none';
+        }
+
+        document.body.style.setProperty('--bg-image', `url('${bgImg}')`);
+
+        const tagsContainer = document.getElementById('char-tags-container');
+        const tags = (char && char.tags) ? char.tags : { chapter: ["聚學舍篇"], faction: ["未定"], type: ["元素使用者"], element: ["一般屬性"] };
+        const renderBadges = (list, className) => (list || []).map(t => `<span class="tag-badge ${className}">${t}</span>`).join('');
+
+        tagsContainer.innerHTML = `
+            <div class="tag-group"><span class="tag-label">登場篇章：</span>${renderBadges(tags.chapter, 'chapter')}</div>
+            <div class="tag-group"><span class="tag-label">所屬陣營：</span>${renderBadges(tags.faction, 'faction')}</div>
+            <div class="tag-group"><span class="tag-label">能力類型：</span>${renderBadges(tags.type, 'type')}</div>
+            <div class="tag-group"><span class="tag-label">擅長屬性：</span>${renderBadges(tags.element, 'element')}</div>
+        `;
+
+        const switchContainer = document.getElementById('char-switch-container');
+        if (char && char.beastBgImage) {
+            const labelText = char.form2Label || "🐾 切換為獸化型態";
+            switchContainer.innerHTML = `<button id="form-toggle-btn" class="form-switch-btn" onclick="toggleCharForm()">${labelText}</button>`;
+        } else {
+            switchContainer.innerHTML = '';
+        }
+        
+        document.body.classList.add('modal-open');
+        const modalOverlay = document.getElementById('char-modal');
+        modalOverlay.style.display = 'flex';
+
+        requestAnimationFrame(() => {
+            const charModalContent = document.querySelector('.char-modal-content');
+            if (charModalContent) charModalContent.scrollTop = 0;
+            if (charTextElem) charTextElem.scrollTop = 0;
+            modalOverlay.scrollTop = 0;
+        });
+    }
+
+    function toggleCharForm() {
+        const char = characterData[currentModalCharKey];
+        if (!char || !char.beastBgImage) return;
+
+        const toggleBtn = document.getElementById('form-toggle-btn');
+        const f1Label = char.form1Label || "👤 切換為人類型態";
+        const f2Label = char.form2Label || "🐾 切換為獸化型態";
+
+        if (!isBeastFormActive) {
+            document.body.style.setProperty('--bg-image', `url('${char.beastBgImage}')`);
+            toggleBtn.innerText = f1Label;
+            isBeastFormActive = true;
+        } else {
+            document.body.style.setProperty('--bg-image', `url('${char.bgImage}')`);
+            toggleBtn.innerText = f2Label;
+            isBeastFormActive = false;
+        }
+    }
+
+    function closeCharModal() {
+        document.body.classList.remove('modal-open');
+        document.getElementById('char-modal').style.display = 'none';
+    }
+
+    window.addEventListener('click', function(e) {
+        const charModal = document.getElementById('char-modal');
+        if (e.target === charModal) closeCharModal();
+
+        const scheduleModal = document.getElementById('schedule-modal');
+        if (e.target === scheduleModal) closeScheduleModal();
+    });
+
+    const originalStoryText = "從最初的元素冒險，到如今在聚學舍修練、參與再契選的漫長旅程，賦形者們將在這片世界中探索力量、羈絆，以及隱藏於歷史深處的真相。";
+
+    const randomDialogues = [
+        { charKey: "lanlan", text: "嵐懶：「唔……克爾你剛剛有叫我嗎？沒有的話我要繼續睡了喔……」" },
+        { charKey: "kulu", text: "克爾：「喂，別靠我太近。話說回來……你今天看著我的眼神怎麼怪怪的？」" },
+        { charKey: "arc", text: "亞爾克：「今天天氣不錯，要不要跟我去山路跑個幾公里？高速奔馳時心情會變好喔！」" },
+        { charKey: "roar", text: "洛爾：「大家！今晚小餐館有新品試吃，練完團後記得全部過來幫我品嚐看看喔！」" }
+    ];
+
+    function initStoryIntro() {
+        const storyIntroElem = document.querySelector('.story-intro');
+        if (storyIntroElem) {
+            storyIntroElem.innerHTML = `
+                <p style="font-size: 0.9rem; line-height: 1.65; color: #e2e8f0; margin-bottom: 6px;">${originalStoryText}</p>
+                <p style="font-size: 0.75rem; color: #38bdf8; opacity: 0.85; margin-bottom: 0; text-align: right;">( ✦ 點擊開啟夥伴對話 ✦ )</p>
+            `;
+
+            storyIntroElem.style.cursor = 'pointer';
+            storyIntroElem.onclick = function() {
+                const randomIndex = Math.floor(Math.random() * randomDialogues.length);
+                const item = randomDialogues[randomIndex];
+                storyIntroElem.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 12px;">
+                        <img src="images/${item.charKey}.jpg" alt="${item.charKey}" style="width: 48px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
+                        <div style="flex-grow: 1;">
+                            <p style="font-weight: 600; color: #f8fafc; margin-bottom: 4px; font-size: 0.88rem; line-height: 1.5;">${item.text}</p>
+                            <p style="font-size: 0.72rem; color: #38bdf8; opacity: 0.85; margin-bottom: 0; text-align: right;">( ✦ 點擊切換下一句對話 ✦ )</p>
+                        </div>
+                    </div>
+                `;
+            };
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initStoryIntro);
+    } else {
+        initStoryIntro();
+    }
+
+    const fortuneDatabase = [
+        { charKey: "lanlan", name: "嵐懶", typeCategory: "賦形者", elementName: "無名", quote: "「奇蹟並非出自一人之力，而是每位夥伴以情感與理解共同成就的成果。今天也慢慢來吧～」", lucky: "🍀 幸運地點：遊競前線 ｜ 幸運物品：日式炒麵" },
+        { charKey: "kulu", name: "克爾", typeCategory: "賦形者", elementName: "融", quote: "「如果有什麼被壓抑的情緒與痛楚，別憋在心裡，試著全吼出來吧！」", lucky: "🍀 幸運地點：樂團團練室 ｜ 幸運物品：特製熱咖啡" },
+        { charKey: "arc", name: "亞爾克", typeCategory: "賦形者", elementName: "震", quote: "「今天如果感到些許不安，試著跟隨自己的節奏去跑道上限速奔馳一段吧。」", lucky: "🍀 幸運地點：山間跑道 ｜ 幸運物品：運動頭巾" },
+        { charKey: "roar", name: "洛爾", typeCategory: "賦形者", elementName: "零", quote: "「只要大家聚在一起，就沒有跨不過去的難關！今天也一起充滿活力地出發吧！」", lucky: "🍀 幸運地點：嵐光鎮小餐館 ｜ 幸運物品：特製鼓棒" }
+    ];
+
+    let currentFortuneCharName = "";
+    let currentFortuneBgUrl = "";
+
+    function drawDailyFortune() {
+        const redrawBtn = document.getElementById('draw-again-btn');
+        let drawCount = parseInt(sessionStorage.getItem('fortuneDrawCount') || '0', 10);
+        if (drawCount >= 3) return;
+
+        const randomIndex = Math.floor(Math.random() * fortuneDatabase.length);
+        const item = fortuneDatabase[randomIndex];
+        currentFortuneCharName = item.name;
+
+        document.getElementById('fortune-avatar').src = `images/${item.charKey}.jpg`;
+        document.getElementById('fortune-char-name').innerText = item.name;
+
+        const typeElem = document.getElementById('fortune-element-type');
+        if (item.typeCategory === "賦形者") typeElem.innerText = `賦形元素共鳴：${item.elementName}`;
+        else if (item.typeCategory === "使用者") typeElem.innerText = `屬性元素共鳴：${item.elementName}`;
+        else if (item.typeCategory === "地脈操流者") typeElem.innerText = `你今天居然與地脈共鳴，真是稀奇！（${item.elementName}）`;
+        else typeElem.innerText = `沒關係，我們就這樣度過平淡美好的一天也不錯～`;
+
+        document.getElementById('fortune-quote').innerText = item.quote;
+        document.getElementById('fortune-lucky-info').innerText = item.lucky;
+
+        const fortuneQrElem = document.getElementById('fortune-qr');
+        if (fortuneQrElem) {
+            const officialSiteUrl = "https://rhoxdra.github.io/intro/";
+            fortuneQrElem.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(officialSiteUrl)}&color=0f172a`;
+        }
+
+        const bgImg = (characterData[item.charKey] && characterData[item.charKey].bgImage) ? characterData[item.charKey].bgImage : `images/${item.charKey}_bg.jpg`;
+        currentFortuneBgUrl = bgImg;
+        document.body.style.setProperty('--bg-image', `url('${bgImg}')`);
+
+        drawCount += 1;
+        sessionStorage.setItem('fortuneDrawCount', drawCount.toString());
+
+        const remaining = 3 - drawCount;
+        if (redrawBtn) {
+            if (remaining > 0) {
+                redrawBtn.innerText = `🎲 再抽一次 (剩 ${remaining} 次)`;
+                redrawBtn.style.opacity = "1";
+                redrawBtn.style.cursor = "pointer";
+            } else {
+                redrawBtn.innerText = "🔒 次數已達上限";
+                redrawBtn.style.opacity = "0.5";
+                redrawBtn.style.cursor = "not-allowed";
+            }
+        }
+
+        document.body.classList.add('modal-open');
+        document.getElementById('fortune-modal').style.display = 'flex';
+    }
+
+    function downloadFortuneImage() {
+        const captureArea = document.getElementById("fortune-capture-area");
+        if (!captureArea || typeof html2canvas === 'undefined') return;
+
+        const bgUrl = currentFortuneBgUrl || "images/background.jpg";
+
+        html2canvas(captureArea, {
+            scale: 2, useCORS: true, allowTaint: true, backgroundColor: "#0f172a",
+            onclone: function(clonedDoc) {
+                const clonedArea = clonedDoc.getElementById("fortune-capture-area");
+                if (clonedArea) {
+                    clonedArea.style.backgroundImage = `url('${bgUrl}')`;
+                    clonedArea.style.backgroundSize = "cover";
+                    clonedArea.style.backgroundPosition = "center top";
+                    clonedArea.style.padding = "20px 24px";
+                }
+                const clonedAvatar = clonedDoc.getElementById("fortune-avatar");
+                if (clonedAvatar) clonedAvatar.style.display = "none";
+                const clonedTitle = clonedDoc.getElementById("fortune-title");
+                if (clonedTitle) clonedTitle.style.display = "none";
+
+                const spacer = clonedDoc.createElement("div");
+                spacer.style.height = "140px";
+                spacer.style.width = "100%";
+                
+                const nameElem = clonedDoc.getElementById("fortune-char-name");
+                if (nameElem && clonedArea) clonedArea.insertBefore(spacer, nameElem);
+            }
+        }).then(canvas => {
+            const link = document.createElement("a");
+            link.download = `無限元素_今日共鳴籤_${currentFortuneCharName || "結果"}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        });
+    }
+
+    function closeFortuneModal() {
+        document.body.classList.remove('modal-open');
+        document.getElementById('fortune-modal').style.display = 'none';
+    }
+
+    window.addEventListener('click', function(e) {
+        const fortuneModal = document.getElementById('fortune-modal');
+        if (e.target === fortuneModal) closeFortuneModal();
+    });
+
+    let currentFactionFilter = 'all';
+    let currentTypeFilter = 'all';
+
+    function filterCharacters(category, value, btnElem) {
+        if (category === 'faction') currentFactionFilter = value;
+        else if (category === 'type') currentTypeFilter = value;
+
+        if (btnElem) {
+            const parentGroup = btnElem.parentElement;
+            parentGroup.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btnElem.classList.add('active');
+        }
+
+        const avatarItems = document.querySelectorAll('#avatar-grid .avatar-item');
+        avatarItems.forEach(item => {
+            const charKey = item.getAttribute('data-key');
+            const char = characterData[charKey];
+            if (!char) return;
+
+            let factionMatch = (currentFactionFilter === 'all') || (char.tags && char.tags.faction && char.tags.faction.includes(currentFactionFilter));
+            let typeMatch = false;
+
+            if (currentTypeFilter === 'all') {
+                typeMatch = true;
+            } else if (currentTypeFilter === 'none') {
+                const types = (char.tags && char.tags.type) ? char.tags.type.join('') : '';
+                typeMatch = !types || (!types.includes('賦形者') && !types.includes('使用者') && !types.includes('地脈'));
+            } else {
+                const types = (char.tags && char.tags.type) ? char.tags.type.join('') : '';
+                typeMatch = types.includes(currentTypeFilter);
+            }
+
+            if (factionMatch && typeMatch) item.style.display = 'flex';
+            else item.style.display = 'none';
+        });
+    }
+</script>
+
+<div id="poster-title-box" class="poster-title-box">
+    <div class="poster-main-title">《無限元素》</div>
+    <div class="poster-tagline">與賦形者相遇，和獸人夥伴展開日常冒險</div>
+</div>
+
+<button id="back-to-top-btn" class="back-to-top-btn" onclick="scrollToTop()" title="回到頁面頂部">⬆</button>
+
+</body>
+</html>
