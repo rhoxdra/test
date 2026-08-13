@@ -53,12 +53,26 @@
     /* 右上角控制工具列 */
     #controls-bar {
       position: absolute;
-      top: 15px;
-      right: 15px;
+      top: 12px;
+      right: 12px;
       z-index: 100;
       display: flex;
-      gap: 8px;
+      gap: 5px;
       transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .ctrl-btn {
+      background: rgba(30, 41, 59, 0.85);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      padding: 5px 10px; /* 手機直式微調按鈕內距 */
+      border-radius: 20px;
+      font-size: 11px;    /* 稍微縮小字體避免擠壓 */
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      white-space: nowrap;
     }
 
     .ctrl-btn {
@@ -119,12 +133,20 @@
       word-break: break-word;
     }
 
-    /* 🌟 核心修正：當沒有說話者時，徹底移除藍色名字空間，讓白色內文完美從第一排開始！ 🌟 */
+    /* 🌟 修正：當沒有說話者時，自動隱藏說話者並讓對話框內容往上靠齊 */
+    #dialogue-box.no-speaker {
+      justify-content: flex-start !important;
+    }
+
     #dialogue-box.no-speaker #speaker-name {
       display: none !important;
       height: 0 !important;
       margin: 0 !important;
       padding: 0 !important;
+    }
+
+    .no-speaker #speaker-name {
+      display: none;
     }
 
     #next-indicator {
@@ -143,13 +165,14 @@
 
     #progress-tag {
       position: absolute;
-      bottom: 120px;
+      bottom: 140px;
       left: 5%;
       z-index: 10;
       font-size: 11px;
       color: rgba(255, 255, 255, 0.5);
       transition: opacity 0.3s ease, visibility 0.3s ease;
     }
+    
 
     body.vn-ui-hidden #dialogue-box,
     body.vn-ui-hidden #controls-bar,
@@ -271,25 +294,114 @@
       border: 1px solid rgba(56, 189, 248, 0.4);
     }
 
-    @media (max-width: 640px) {
-      #dialogue-box { bottom: 150px; }
-      #progress-tag { bottom: 130px; }
+    @media (max-width: 768px) {
+      #dialogue-box {
+        bottom: 30px !important;       /* 貼近手機底部，釋放上方空間 */
+        width: 95% !important;
+        min-height: 110px !important;  /* 縮小手機版對話框最小高度 */
+        padding: 12px 16px !important;
+      }
+
+      #speaker-name {
+        font-size: 0.95rem !important;  /* 手機版說話者名字變小 */
+        margin-bottom: 4px !important;
+      }
+
+      #content-text {
+        font-size: 0.95rem !important;  /* 手機版內文變小，解決超出範圍問題 */
+        line-height: 1.5 !important;
+      }
+
+      #progress-tag {
+        bottom: 15px !important;       /* 讓進度標籤隨對話框上移 */
+      }
+      #controls-bar .ctrl-btn:last-child {
+        display: none !important;
+      }
     }
+    
+
+    /* 針對手機橫式（高度極窄，如高度小於 500px）額外防護 */
+    @media (max-height: 500px) and (max-width: 900px) {
+      #dialogue-box {
+        bottom: 20px !important;
+        min-height: 95px !important;
+        padding: 8px 14px !important;
+      }
+      
+      #content-text {
+        font-size: 0.85rem !important;  /* 橫式極窄時進一步縮小字體確保不溢出 */
+        line-height: 1.4 !important;
+      }
+
+      #progress-tag {
+        bottom: 5px !important;
+      }
+      #controls-bar .ctrl-btn:last-child {
+        display: none !important;
+      }
+    }
+    /* 🌟 左右半邊點擊導覽提示（透明分區，不影響視覺） 🌟 */
+    .click-zone-left, .click-zone-right {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      z-index: 5;
+      display: none; /* 預設隱藏，透過 JS 或手機版啟用 */
+    }
+    .click-zone-left { left: 0; }
+    .click-zone-right { right: 0; }
+
+    /* 手機版啟用左右分區點擊 */
+    @media (max-width: 768px) {
+      .click-zone-left, .click-zone-right {
+        display: block;
+      }
+    }
+    /* 當介面隱藏時，讓整個畫面變成隨時可點擊恢復的觸發區 */
+    body.vn-ui-hidden #stage {
+      cursor: pointer;
+    }
+    #pc-controls-tip {
+      position: absolute;
+      bottom: 140px;
+      right: 5%;
+      z-index: 10;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.65);
+      letter-spacing: 0.5px;
+      pointer-events: none; /* 避免擋到滑鼠點擊 */
+      transition: opacity 0.3s ease;
+    }
+
+    /* 🌟 手機版自動隱藏提示（因為手機多半用觸控，不需要顯示鍵盤提示） 🌟 */
+    @media (max-width: 768px) {
+      #pc-controls-tip {
+        display: none !important;
+      }
+    }
+    
+    
   </style>
 </head>
 <body>
 
   <div id="stage" onclick="handleStageClick()">
+    <!-- 左右分區點擊區域（手機版專用） -->
+    <div class="click-zone-left" onclick="event.stopPropagation(); handleBack();" title="上一句"></div>
+    <div class="click-zone-right" onclick="event.stopPropagation(); handleAdvance();" title="下一句"></div>
+
     <!-- 雙背景層 -->
     <div id="bg1" class="bg-layer active"></div>
     <div id="bg2" class="bg-layer"></div>
 
     <!-- 右上角控制工具列 -->
     <div id="controls-bar" onclick="event.stopPropagation()">
-      <button class="ctrl-btn" onclick="openChapterModal()">☰ 篇章選擇</button>
+      <button class="ctrl-btn" onclick="openChapterModal()">☰ 篇章</button>
       <button id="auto-btn" class="ctrl-btn" onclick="toggleAuto()">► Auto</button>
-      <button class="ctrl-btn" onclick="openLogModal()">履歷 Log</button>
-      <button class="ctrl-btn" onclick="toggleVnUI(event)" title="隱藏對話框觀看純背景">隱藏介面</button>
+      <button class="ctrl-btn" onclick="openLogModal()">Log</button>
+      <button class="ctrl-btn" onclick="toggleVnUI(event)" title="隱藏對話框觀看純背景">隱藏</button>
     </div>
 
     <!-- 對話框 -->
@@ -300,6 +412,8 @@
     </div>
 
     <div id="progress-tag">1 / --</div>
+    <div id="pc-controls-tip">
+      提示：使用 ⬅ ➡ 鍵或空白鍵快速翻頁
   </div>
 
   <!-- 歷史履歷 Log 彈窗 -->
@@ -323,7 +437,7 @@
   <script>
     // 原始 15 篇回聲殘響文章庫
     const announcements = [
-      {
+    {
         title: "學園祭　啟幕",
         badge: "主題進展",
         bgImage: "images/background.jpg",
@@ -562,21 +676,17 @@
 
       if (item.story && Array.isArray(item.story)) {
         let lastBgUrl = item.bgImage; // 預設先用篇章的大背景
-
         storySteps = item.story.map(s => {
-          // 如果這句有寫 bgUrl，就更新並記住它；沒寫就沿用上一句的背景！
           if (s.bgUrl && s.bgUrl.trim() !== "") {
-            lastBgUrl = s.bgUrl;
+            lastBgUrl = s.bgUrl; // 記住新背景，後續自動沿用
           }
-
           return {
             speaker: s.speaker || "",
             text: s.text || "",
-            bgUrl: lastBgUrl // 自動套用當前維持的背景
+            bgUrl: lastBgUrl
           };
         });
-      } 
-      else if (item.rawText) {
+      } else if (item.rawText) {
         const paragraphs = item.rawText.split(/\n\n+/).map(p => p.trim()).filter(p => p.length > 0);
         storySteps = paragraphs.map(paragraph => {
           let speaker = "";
@@ -597,13 +707,16 @@
       }
 
       return {
-        id: "chap_" + idx,
         title: item.title,
         badge: item.badge,
         bgImage: item.bgImage,
         story: storySteps
       };
     });
+
+    let typingTimer = null;
+    let isTyping = false;
+    let fullTextToType = "";
 
     let currentChapterIndex = 0;
     let currentStepIndex = 0;
@@ -614,10 +727,6 @@
     function getCurrentStory() {
       return chaptersData[currentChapterIndex].story;
     }
-
-    let typingTimer = null;
-    let isTyping = false;
-    let fullTextToType = "";
 
     function renderStep() {
       const story = getCurrentStory();
@@ -635,14 +744,14 @@
         dialogueBox.classList.add('no-speaker');
       }
 
-      // 🌟 打字機特效核心邏輯 🌟
-      if (typingTimer) clearInterval(typingTimer); // 清除上一個未完成的打字機
+      // 🌟 新增：打字機特效核心邏輯
+      if (typingTimer) clearInterval(typingTimer);
       fullTextToType = data.text;
-      contentTextEl.innerText = ""; // 先清空文字
+      contentTextEl.innerText = "";
       isTyping = true;
 
       let charIndex = 0;
-      const typingSpeed = 15; // 數字越小打字越快 (15毫秒/字，速度非常快且流暢)
+      const typingSpeed = 15; // 打字速度（毫秒/字）
 
       typingTimer = setInterval(() => {
         if (charIndex < fullTextToType.length) {
@@ -654,7 +763,6 @@
         }
       }, typingSpeed);
 
-      // 背景切換邏輯維持不變
       const targetBgUrl = data.bgUrl || "";
       const bg1El = document.getElementById('bg1');
       const bg2El = document.getElementById('bg2');
@@ -680,7 +788,7 @@
         return;
       }
 
-      // 🌟 如果打字機還在跑，點擊一下直接把整段文字瞬間顯示完畢 🌟
+      // 🌟 新增：如果打字機正在跑，點擊畫面直接瞬間顯示完整文字
       if (isTyping) {
         if (typingTimer) clearInterval(typingTimer);
         document.getElementById('content-text').innerText = fullTextToType;
@@ -841,6 +949,19 @@
     // 初始化第一張背景與文字
     document.getElementById('bg1').style.backgroundImage = `url('${getCurrentStory()[0].bgUrl}')`;
     renderStep();
+    // 🌟 自動偵測手機版並將按鈕文字精簡變短 🌟
+    window.addEventListener('DOMContentLoaded', () => {
+        if (window.innerWidth <= 768) {
+            // 尋找右上角控制列的所有按鈕並修改文字
+            const btns = document.querySelectorAll('#controls-bar .ctrl-btn');
+            btns.forEach(btn => {
+                if (btn.innerText.includes('篇章')) btn.innerText = '☰ 篇章';
+                if (btn.innerText.includes('Auto')) btn.innerText = '► Auto';
+                if (btn.innerText.includes('履歷')) btn.innerText = 'Log';
+                if (btn.innerText.includes('隱藏')) btn.innerText = '隱藏';
+            });
+        }
+    });
   </script>
 </body>
 </html>
