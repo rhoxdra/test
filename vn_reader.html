@@ -163,14 +163,26 @@
       100% { transform: translateY(-5px); opacity: 1; }
     }
 
-    #progress-tag {
+    #dialogue-outer-footer {
       position: absolute;
-      bottom: 140px;
-      left: 5%;
+      bottom: 145px; /* 剛好接在 bottom: 180px 的對話框下方 */
+      width: 90%;
+      max-width: 960px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       z-index: 10;
+      padding: 0 4px; /* 稍微內縮對齊對話框邊距 */
+      pointer-events: none; /* 點擊穿透，不影響舞台點擊 */
+    }
+
+    /* 讓進度標籤脫離原本的絕對定位 */
+    #progress-tag {
+      position: static !important;
+      bottom: auto !important;
+      left: auto !important;
       font-size: 11px;
       color: rgba(255, 255, 255, 0.5);
-      transition: opacity 0.3s ease, visibility 0.3s ease;
     }
     
 
@@ -363,21 +375,32 @@
     body.vn-ui-hidden #stage {
       cursor: pointer;
     }
-    #pc-controls-tip {
-      position: absolute;
-      bottom: 140px;
-      right: 5%;
-      z-index: 10;
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.65);
-      letter-spacing: 0.5px;
-      pointer-events: none; /* 避免擋到滑鼠點擊 */
-      transition: opacity 0.3s ease;
+    
+
+    #dialogue-footer-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(56, 189, 248, 0.15);
     }
 
-    /* 🌟 手機版自動隱藏提示（因為手機多半用觸控，不需要顯示鍵盤提示） 🌟 */
+    #progress-tag {
+      position: static !important;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    #pc-controls-tip {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 0.5px;
+    }
+
+    /* 🌟 手機版自動隱藏鍵盤提示與外側資訊列 🌟 */
     @media (max-width: 768px) {
-      #pc-controls-tip {
+      #dialogue-outer-footer {
         display: none !important;
       }
     }
@@ -411,10 +434,11 @@
       <div id="next-indicator">▼</div>
     </div>
 
-    <div id="progress-tag">1 / --</div>
-    <div id="pc-controls-tip">
-      提示：使用 ⬅ ➡ 鍵或空白鍵快速翻頁
-  </div>
+    <!-- 🌟 新增：貼在對話框下方的固定資訊列（包含進度與提示） 🌟 -->
+    <div id="dialogue-outer-footer">
+      <div id="progress-tag">1 / --</div>
+      <div id="pc-controls-tip">提示：使用 ⬅ ➡ 鍵或空白鍵快速翻頁</div>
+    </div>
 
   <!-- 歷史履歷 Log 彈窗 -->
   <div id="log-modal" onclick="event.stopPropagation()">
