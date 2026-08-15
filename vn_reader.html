@@ -185,7 +185,7 @@
       font-size: 11px;
       color: rgba(255, 255, 255, 0.5);
     }
-    
+   
 
     body.vn-ui-hidden #dialogue-box,
     body.vn-ui-hidden #controls-bar,
@@ -332,7 +332,7 @@
         display: none !important;
       }
     }
-    
+   
 
     /* 針對手機橫式（高度極窄，如高度小於 500px）額外防護 */
     @media (max-height: 500px) and (max-width: 900px) {
@@ -341,7 +341,7 @@
         min-height: 95px !important;
         padding: 8px 14px !important;
       }
-      
+     
       #content-text {
         font-size: 0.85rem !important;  /* 橫式極窄時進一步縮小字體確保不溢出 */
         line-height: 1.4 !important;
@@ -376,7 +376,7 @@
     body.vn-ui-hidden #stage {
       cursor: pointer;
     }
-    
+   
 
     #dialogue-footer-info {
       display: flex;
@@ -405,8 +405,8 @@
         display: none !important;
       }
     }
-    
-    
+   
+   
   </style>
 </head>
 <body>
@@ -468,11 +468,11 @@
         bgImage: "images/background.jpg",
         story: [
           // 旁白不用寫 speaker
-          { speaker: "■學園祭　啟幕", text: "聚學舍的學園祭，是這座頂尖學府向世人展示力量的絕佳舞台。科展與園遊會的喧鬧人群間，能聽見此起彼落的歡呼與驚嘆聲。" },
+          { speaker: "■學園祭　啟幕", text: "聚學舍的學園祭，是這座頂尖學府向世人展示力量的絕佳舞台。科展與園遊會的喧鬧人群間，能聽見此起彼落的歡呼與驚嘆聲。", bgUrl: "images/bg_school.jpg"},
           { text: "然而，今年的慶典中卻流動著一股不尋常的暗湧。" },
           { text: "由於「荒野焰嵐」與「豹飲豹食」即將舉行現場樂團對邦，作為主辦方的「誓奪爪盟」因此獲得潛入艾瑞爾城的機會。儘管總督嚴格限制了入場名單、排除所有可能的幕後威脅，但這群「特殊人士」的現身，依然在平靜的學園裡投下了震撼彈。" },
           { text: "當他們一行人踏入校門，無人機便灑下漫天花瓣，伊蕾琪隨即被粉絲重重包圍，展開了全程直播。" },
-          
+         
           // 有人名的對話
           { speaker: "伊蕾琪", text: "嘿，各位蕾寶們！沒想到大家這麼熱情，連校門都快被堵住了啊！" },
           { text: "緊接著，DJ巨星影、身為伴舞的劫，以及曾被迫推銷「甜心果飆飲」而火紅的崩，也紛紛成為眾人追逐的焦點。" },
@@ -512,9 +512,9 @@
           { text: "同伴與敵人都漸漸遠去後，艾瑞爾站在原地，看著天空中緩緩飄落的無人機花瓣，長長地嘆了一口氣。" },
           { speaker: "艾瑞爾", text: "能做的防範都做了，剩下的……就祈禱這份脆弱的和平能撐到日落吧。" },
           { text: "※※※" },
-          
+         
           // 這裡切換背景為 bg2.jpg
-          { text: "踏入「沉浸之門」的瞬間，眼前隨即出現宏偉的萬人運動場。這裏舉辦的是對地形起伏與體能有著極致苛求的「無限量級」田徑賽。" },
+          { text: "踏入「沉浸之門」的瞬間，眼前隨即出現宏偉的萬人運動場。這裏舉辦的是對地形起伏與體能有著極致苛求的「無限量級」田徑賽。", bgUrl: "images/bg_run.jpg" },
           { speaker: "亞爾克", text: "這就是……最高水準的競賽起點嗎？" },
           { text: "亞爾克琥珀色的雙眸倒映著天空中無數翻騰的班旗。五顏六色的布條在護欄上颯颯作響，像要將那股狂熱全數捲入一般。" },
           { speaker: "亞爾克", text: "沒想到竟然有這麼多人來看，簡直像演唱會的現場！" },
@@ -562,7 +562,7 @@
           { speaker: "亞爾克", text: "我知道了……抱歉，是我太天真了！" },
           { text: "亞爾克心頭巨震，終於抹去迷惘。他在風暴中化作一道橘色的雷霆，動作變得前所未有的流暢與狂野，直指顛峰之後的下一區域！" },
           { text: "※※※" },
-          { text: "運動場外，園遊會的街道上。一處懸掛著「誓奪爪盟」旗幟、販售「競域激鬥」擴充包的攤位前擠滿了狂熱的學生。" },
+          { text: "運動場外，園遊會的街道上。一處懸掛著「誓奪爪盟」旗幟、販售「競域激鬥」擴充包的攤位前擠滿了狂熱的學生。", bgUrl: "images/bg_naka.jpg"},
           { text: "後方的陰影處，劫獨自一人冷漠地滑著手機，制則熟練地招呼著客人。" },
           { speaker: "制", text: "喂，幫我從後面的貨箱拿一捆新的庫存出來，這批快賣完了。" },
           { text: "然而，制伸出去等待接應的手僵在半空中，遲遲沒有等到那份理所應當的重量。猛然驚覺後，脖頸僵硬地轉過去，對上的是劫那雙毫無溫度、冷淡瞥過來的深邃眸子。" },
@@ -601,6 +601,7 @@
           { text: "與嵐懶那種如野火燎原般的氣場截然不同，洛爾神色自若地走上台。目光看著同樣沉靜的對手神情，氣勢十足地抽出起始手牌。" },
           { speaker: "洛爾", text: "決鬥！" },
           { text: "——待續——" }
+
         ]
       },
       {
@@ -930,7 +931,7 @@
     window.addEventListener('keydown', function(e) {
       const chapterModal = document.getElementById('chapter-modal');
       const logModal = document.getElementById('log-modal');
-      const isModalOpen = (chapterModal && chapterModal.style.display === 'flex') || 
+      const isModalOpen = (chapterModal && chapterModal.style.display === 'flex') ||
                           (logModal && logModal.style.display === 'flex');
 
       // 當彈窗開啟時：阻斷上下左右與空白鍵的預設行為（防止背景捲動與穿透）
@@ -989,4 +990,4 @@
     });
   </script>
 </body>
-</html>
+</html> 
