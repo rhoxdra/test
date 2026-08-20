@@ -149,13 +149,41 @@
         .hint-text { position: absolute; bottom: 18px; left: 24px; z-index: 10; font-size: 0.75rem; color: #64748b; pointer-events: none; }
 
         @media (max-width: 768px) {
-            .header-title-box { top: 10px; left: 14px; }
-            .main-title { font-size: 1.2rem; }
-            .sub-title { font-size: 0.75rem; }
-            .coords-box { top: 10px; right: 14px; font-size: 0.7rem; }
-            .layer-panel { top: 75px; right: 14px; font-size: 0.75rem; }
-            .legend-box { bottom: 10px; left: 14px; right: 14px; justify-content: space-around; }
-        }
+    /* 1. 隱藏座標顯示面板、Map Layer 圖層面板、週期表左下角圖例、右下角比例尺文字 */
+    .coords-box,
+    .layer-panel,
+    .legend-box,
+    .hint-text {
+        display: none !important;
+    }
+
+    /* 2. 頂部標題縮小微調 */
+    .header-title-box { top: 12px; left: 14px; }
+    .main-title { font-size: 1.3rem; }
+    .sub-title { font-size: 0.75rem; }
+    .view-btn { padding: 4px 10px; font-size: 0.75rem; }
+}
+
+/* 3. 限制側邊欄寬度最大不超過螢幕的 1/3，並確保可上下完整滑動 */
+.info-drawer {
+    width: 33.333vw !important; /* 不論直式或橫式，寬度固定為螢幕的三分之一 */
+    min-width: 280px;           /* 設定基本閱讀寬度，避免在窄螢幕過窄 */
+    max-width: 33.333vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow-y: auto !important; /* 確保內容超出時可上下滾動 */
+    -webkit-overflow-scrolling: touch; /* iOS 滑動順暢支援 */
+    padding-bottom: 40px !important; /* 底部保留足夠空間，避免按鈕被邊緣切到或卡住 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 4. 側邊欄內部按鈕區防止被壓縮 */
+.drawer-btn-group {
+    flex-shrink: 0 !important; /* 防止下方按鈕因內容多而被擠壓變形 */
+    margin-top: 16px !important;
+    margin-bottom: 20px !important;
+}
     </style>
 </head>
 <body>
@@ -583,12 +611,15 @@
                     ctx.moveTo(n1.x, n1.y);
                     ctx.lineTo(n2.x, n2.y);
                     ctx.strokeStyle = edge.color;
-                    ctx.lineWidth = isHighlighted ? 3.5 / scale : 1.2 / scale;
-                    if (isHighlighted) {
-                        ctx.shadowColor = edge.color;
-                        ctx.shadowBlur = 15;
-                    }
-                    ctx.stroke();
+ctx.lineWidth = isHighlighted ? 3.5 / scale : 1.2 / scale;
+if (isHighlighted) {
+    ctx.shadowColor = edge.color;
+    ctx.shadowBlur = 15;
+} else {
+    ctx.shadowBlur = 0; // 關閉未選取時的陰影計算
+}
+ctx.stroke();
+ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
 
                     ctx.beginPath();
                     ctx.moveTo(n1.x, n1.y);
@@ -613,14 +644,14 @@
                         drawArrowHead(arrowX1, arrowY1, angle + Math.PI, edge.color, scale);
                     }
 
-                    if (!isDimmed) {
-                        const midX = (n1.x + n2.x) / 2;
-                        const midY = (n1.y + n2.y) / 2;
-                        ctx.font = isHighlighted ? `${11/scale}px -apple-system` : `${9/scale}px -apple-system`;
-                        ctx.fillStyle = isHighlighted ? "#ffffff" : "#94a3b8";
-                        ctx.textAlign = "center";
-                        ctx.fillText(edge.label, midX, midY - (8/scale));
-                    }
+                    if (!isDimmed && (scale >= 0.75 || isHighlighted)) {
+    const midX = (n1.x + n2.x) / 2;
+    const midY = (n1.y + n2.y) / 2;
+    ctx.font = isHighlighted ? `${11/scale}px -apple-system` : `${9/scale}px -apple-system`;
+    ctx.fillStyle = isHighlighted ? "#ffffff" : "#94a3b8";
+    ctx.textAlign = "center";
+    ctx.fillText(edge.label, midX, midY - (8/scale));
+}
                     ctx.restore();
                 }
             });
@@ -776,7 +807,6 @@
             { text: "▲ 南方荒野 ▲", x: -70, y: -802.5, color: "rgba(100, 116, 139, 0.45)" },
             { text: "▲ 東部山區 ▲", x: 682, y: 871, color: "rgba(100, 116, 139, 0.45)" },
             { text: "▲ 中部平原 ▲", x: 647, y: 910, color: "rgba(100, 116, 139, 0.45)" },
-            { text: "▲ 北登陸點 ▲", x: 640, y: 845, color: "rgba(100, 116, 139, 0.45)" },
             { text: "▲ 西南礦區 ▲", x: 602, y: 939, color: "rgba(100, 116, 139, 0.45)" },
             { text: "▲ 西部林區 ▲", x: 606, y: 893, color: "rgba(100, 116, 139, 0.45)" },
             { text: "▲ 冰封湖區 ▲", x: -354, y: -1054, color: "rgba(100, 116, 139, 0.45)" },
@@ -863,12 +893,12 @@
         let rulerPoints = [];
 
         function resetGeoView() {
-            targetCameraX = 50;
-            targetCameraY = 150;
-            targetScale = 0.85;
-            activeGeoLocation = null;
-            closeDrawer();
-        }
+    targetCameraX = 0;
+    targetCameraY = 0;
+    targetScale = 0.85;
+    activeGeoLocation = null;
+    closeDrawer();
+}
 
         function toggleRuler() {
             rulerActive = !rulerActive;
@@ -1250,7 +1280,9 @@
             ctx.restore();
 
             // 羅盤與動態比例尺
-            drawCelestialCompass();
+            if (window.innerWidth > 768) {
+    drawCelestialCompass();
+}
         }
 
         function drawCelestialCompass() {
@@ -1438,26 +1470,30 @@
             if (e.touches.length === 1 && isDragging) {
                 handleMove(e.touches[0].clientX, e.touches[0].clientY);
             } else if (e.touches.length === 2 && initialPinchDist !== null) {
-                const currentDist = Math.hypot(
-                    e.touches[0].clientX - e.touches[1].clientX,
-                    e.touches[0].clientY - e.touches[1].clientY
-                );
-                const factor = currentDist / initialPinchDist;
-                targetScale *= (factor > 1 ? 1.03 : 0.97);
-                targetScale = Math.max(0.2, Math.min(targetScale, 2.8));
-                initialPinchDist = currentDist;
-            }
+    const currentDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+    );
+    const factor = currentDist / initialPinchDist;
+    targetScale *= (factor > 1 ? 1.03 : 0.97);
+    // 地理圖最小 0.35；週期表最小 0.6
+    const minScale = currentMode === 'geo' ? 0.35 : 0.6;
+    targetScale = Math.max(minScale, Math.min(targetScale, 2.8));
+    initialPinchDist = currentDist;
+}
         }, { passive: true });
 
         window.addEventListener('touchend', handleEnd);
 
         canvas.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            const zoomAmount = e.deltaY > 0 ? 0.9 : 1.1;
-            targetScale *= zoomAmount;
-            targetScale = Math.max(0.2, Math.min(targetScale, 2.8));
-            updateCoords(e.clientX, e.clientY);
-        }, { passive: false });
+    e.preventDefault();
+    const zoomAmount = e.deltaY > 0 ? 0.9 : 1.1;
+    targetScale *= zoomAmount;
+    // 地理圖允許縮小到 0.35 以綜觀全貌；週期表限制在 0.6 避免人物過多 LAG
+    const minScale = currentMode === 'geo' ? 0.35 : 0.6;
+    targetScale = Math.max(minScale, Math.min(targetScale, 2.8));
+    updateCoords(e.clientX, e.clientY);
+}, { passive: false });
 
         window.addEventListener('keydown', (e) => {
             if (currentMode === 'geo' && (e.code === 'Space' || e.key === 'r' || e.key === 'R')) {
@@ -1548,17 +1584,17 @@
                 });
 
                 if (clickedLoc) {
-                    activeGeoLocation = clickedLoc;
-                    openGeoDrawer(clickedLoc);
+    activeGeoLocation = clickedLoc;
+    openGeoDrawer(clickedLoc);
 
-                    const drawerWidth = window.innerWidth <= 768 ? window.innerWidth : 420;
-                    const screenOffsetX = (drawerWidth / 2) / scale;
-
-                    targetCameraX = -clickedLoc.x + screenOffsetX;
-                    targetCameraY = -clickedLoc.y;
-                } else {
-                    closeDrawer();
-                }
+    // 🌟 完全對齊元素週期表的鏡頭偏移與縮放模式 🌟
+    targetCameraX = -clickedLoc.x - (100 / scale);
+    targetCameraY = -clickedLoc.y;
+    targetScale = Math.max(1.2, targetScale);
+} else {
+    activeGeoLocation = null;
+    closeDrawer();
+}
             }
         });
 
