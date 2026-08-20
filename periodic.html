@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>《無限元素》元素週期表與世界地理</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: #080b12; color: #ffffff; overflow: hidden; width: 100vw; height: 100vh;
+            position: relative;
+        }
+
+        /* 遮暗濾鏡背景圖片 (週期表模式) */
+        .bg-overlay-periodic {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('images/bg_per.jpg');
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            filter: brightness(0.5) contrast(1.1) blur(2px);
+            z-index: 0; pointer-events: none; transition: opacity 0.4s ease; opacity: 1;
+        }
+        .bg-overlay-periodic.hidden { opacity: 0; }
+
+        /* 遮暗濾鏡背景圖片 (地理圖模式) */
+        .bg-overlay-geo {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('images/bg_geo.jpg');
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            filter: brightness(0.4) contrast(1.1) blur(2px);
+            z-index: 0; pointer-events: none; transition: opacity 0.4s ease; opacity: 0;
+        }
+        .bg-overlay-geo.active { opacity: 1; }
+
+        #main-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; cursor: grab; touch-action: none; }
+        #main-canvas:active { cursor: grabbing; }
+
+        /* 頂部標題與模式切換按鈕 */
+        .header-title-box { position: absolute; top: 20px; left: 24px; z-index: 10; pointer-events: none; }
+        .main-title { font-size: 1.8rem; font-weight: 800; color: #ffffff; letter-spacing: 2px; text-shadow: 0 0 14px rgba(56, 189, 248, 0.6); }
+        .sub-title { font-size: 0.85rem; color: #38bdf8; margin-top: 4px; letter-spacing: 1px; }
+
+        .view-switch-box {
+            margin-top: 10px; pointer-events: auto; display: flex; gap: 8px;
+        }
+        .view-btn {
+            background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 6px; padding: 6px 14px; font-size: 0.82rem; font-weight: 700; color: #cbd5e1;
+            cursor: pointer; backdrop-filter: blur(8px); transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .view-btn:hover { color: #ffffff; border-color: #38bdf8; }
+        .view-btn.active {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: #ffffff; border-color: #38bdf8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+        }
+
+        /* 座標顯示面板 */
+        .coords-box {
+            position: absolute; top: 20px; right: 24px; z-index: 10;
+            background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 8px; padding: 8px 12px; backdrop-filter: blur(8px);
+            font-size: 0.8rem; font-family: monospace; color: #38bdf8; pointer-events: none;
+            display: flex; flex-direction: column; gap: 4px; text-align: right;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .coords-item { display: flex; justify-content: space-between; gap: 12px; }
+        .coords-label { color: #94a3b8; }
+
+        /* 地理圖層控制面板 (僅在地理模式顯示) */
+        .layer-panel {
+            position: absolute; top: 85px; right: 24px; z-index: 10;
+            background: rgba(15, 23, 42, 0.88); border: 1px solid rgba(56, 189, 248, 0.3);
+            backdrop-filter: blur(10px); border-radius: 8px; padding: 14px 18px;
+            font-size: 0.8rem; color: #94a3b8; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            max-width: 220px; transition: opacity 0.3s ease;
+        }
+        .layer-panel.hidden { display: none; }
+        .layer-panel div.panel-title { font-weight: 700; color: #38bdf8; margin-bottom: 8px; letter-spacing: 1px; border-bottom: 1px solid rgba(56, 189, 248, 0.2); padding-bottom: 4px; }
+        .layer-panel label { display: flex; align-items: center; margin-bottom: 6px; cursor: pointer; color: #cbd5e1; }
+        .layer-panel label:hover { color: #ffffff; }
+        .layer-panel input { margin-right: 8px; accent-color: #38bdf8; cursor: pointer; }
+
+        .btn-group { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+        .action-btn {
+            width: 100%; padding: 6px 0; background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 4px; color: #38bdf8;
+            font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+        }
+        .action-btn:hover { background: rgba(56, 189, 248, 0.25); color: #ffffff; }
+        .action-btn.active { background: #38bdf8; color: #0f172a; box-shadow: 0 0 10px #38bdf8; }
+
+        /* 週期表圖例 (僅在週期表模式顯示) */
+        .legend-box {
+            position: absolute; bottom: 20px; left: 24px; z-index: 10;
+            background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 12px; padding: 12px 16px; backdrop-filter: blur(8px);
+            font-size: 0.78rem; display: flex; gap: 16px; align-items: center;
+            max-width: 90vw; overflow-x: auto; transition: opacity 0.3s ease;
+        }
+        .legend-box.hidden { display: none; }
+        .legend-item { display: flex; align-items: center; gap: 6px; color: #cbd5e1; white-space: nowrap; }
+        .legend-line { width: 20px; height: 3px; border-radius: 2px; }
+
+        /* 側邊欄抽屜 */
+        .info-drawer {
+            position: absolute; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100%;
+            background: rgba(15, 23, 42, 0.95); border-left: 1px solid rgba(56, 189, 248, 0.4);
+            backdrop-filter: blur(12px); z-index: 20; padding: 30px 24px;
+            display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5); overflow-y: auto;
+        }
+        .info-drawer.open { right: 0; }
+        .close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; padding: 10px; z-index: 30; }
+        .close-btn:hover { color: #ffffff; }
+
+        .drawer-avatar {
+            width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
+            border: 2px solid #38bdf8; box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+            margin-bottom: 12px;
+        }
+
+        .drawer-badge {
+            display: inline-block; background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #38bdf8; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-bottom: 8px; align-self: flex-start;
+        }
+        .drawer-title { font-size: 1.5rem; font-weight: 800; color: #ffffff; margin-bottom: 6px; }
+        .drawer-quote {
+            font-size: 0.88rem; font-style: italic; color: #7dd3fc; margin: 10px 0 16px; padding: 8px 12px;
+            background: rgba(15, 23, 42, 0.5); border-left: 3px solid #38bdf8; border-radius: 0 6px 6px 0; line-height: 1.5;
+        }
+        .drawer-content { font-size: 0.92rem; line-height: 1.7; color: #e2e8f0; white-space: pre-line; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 16px; margin-bottom: 24px; }
+        
+        .drawer-btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
+        .buy-book-btn {
+            display: block; width: 100%; padding: 12px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            border: 1px solid rgba(56, 189, 248, 0.5); border-radius: 10px; color: #ffffff; font-size: 0.95rem; font-weight: 700;
+            text-align: center; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;
+        }
+        .buy-book-btn:hover { background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); transform: translateY(-2px); }
+
+        .home-btn {
+            display: block; width: 100%; padding: 12px; background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.4); border-radius: 10px; color: #e2e8f0; font-size: 0.95rem; font-weight: 700;
+            text-align: center; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;
+        }
+        .home-btn:hover { background: rgba(51, 65, 85, 0.9); color: #ffffff; transform: translateY(-2px); }
+
+        .hint-text { position: absolute; bottom: 18px; left: 24px; z-index: 10; font-size: 0.75rem; color: #64748b; pointer-events: none; }
+
+        @media (max-width: 768px) {
+            .header-title-box { top: 10px; left: 14px; }
+            .main-title { font-size: 1.2rem; }
+            .sub-title { font-size: 0.75rem; }
+            .coords-box { top: 10px; right: 14px; font-size: 0.7rem; }
+            .layer-panel { top: 75px; right: 14px; font-size: 0.75rem; }
+            .legend-box { bottom: 10px; left: 14px; right: 14px; justify-content: space-around; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 週期表背景圖 -->
+    <div id="bg-overlay-periodic" class="bg-overlay-periodic"></div>
+    <!-- 地理圖背景圖 -->
+    <div id="bg-overlay-geo" class="bg-overlay-geo"></div>
+
+    <canvas id="main-canvas"></canvas>
+
+    <div class="header-title-box">
+        <div id="header-main-title" class="main-title">《無限元素》元素週期表</div>
+        <div id="header-sub-title" class="sub-title">收錄全體角色關係圖譜</div>
+        <div class="view-switch-box">
+            <button id="btn-mode-periodic" class="view-btn active" onclick="switchView('periodic')">❖ 元素週期表</button>
+            <button id="btn-mode-geo" class="view-btn" onclick="switchView('geo')">🗺️ 世界地理圖</button>
+        </div>
+    </div>
+
+    <!-- 座標 HUD -->
+    <div class="coords-box">
+        <div class="coords-item"><span class="coords-label">世界座標:</span> <span id="world-coords">X: 0, Y: 0</span></div>
+        <div class="coords-item"><span class="coords-label">螢幕座標:</span> <span id="screen-coords">X: 0, Y: 0</span></div>
+    </div>
+
+    <!-- 週期表圖例 -->
+    <div id="periodic-legend" class="legend-box">
+        <div class="legend-item"><div class="legend-line" style="background: #38bdf8;"></div>野性之聲</div>
+        <div class="legend-item"><div class="legend-line" style="background: #ffffff;"></div>艾瑞爾軍</div>
+        <div class="legend-item"><div class="legend-line" style="background: #f43f5e;"></div>詛碼團</div>
+        <div class="legend-item"><div class="legend-line" style="background: #c084fc;"></div>誓奪爪盟</div>
+        <div class="legend-item"><div class="legend-line" style="background: #fbbf24;"></div>上古元素</div>
+        <div class="legend-item"><div class="legend-line" style="background: #34d399;"></div>聚學舍</div>
+        <div class="legend-item"><div class="legend-line" style="background: #94a3b8;"></div>外傳與中立陣營</div>
+    </div>
+
+    <!-- 地理圖圖層面板 -->
+    <div id="geo-layers" class="layer-panel hidden">
+        <div class="panel-title">MAP LAYERS</div>
+        <label><input type="checkbox" id="layer-continents" checked> 大陸與自然地形</label>
+        <label><input type="checkbox" id="layer-ocean" checked> 海域洋流標示</label>
+        <label><input type="checkbox" id="layer-routes" checked> 航線與道路</label>
+        <label><input type="checkbox" id="layer-tier12" checked> 核心與大型據點</label>
+        <label><input type="checkbox" id="layer-tier34" checked> 村落與遺跡</label>
+        <label><input type="checkbox" id="layer-labels" checked> 區域名稱標示</label>
+        <div class="btn-group">
+            <button id="ruler-btn" class="action-btn" onclick="toggleRuler()">📏 空間測距工具 [關閉]</button>
+            <button class="action-btn" onclick="resetGeoView()">⟲ 全景復位 (Space / R)</button>
+        </div>
+    </div>
+
+    <!-- 側邊抽屜 -->
+    <div id="info-drawer" class="info-drawer">
+        <button class="close-btn" onclick="closeDrawer()">✕</button>
+        <img id="drawer-avatar" class="drawer-avatar" src="" alt="頭像" style="display: none;">
+        <span id="drawer-badge" class="drawer-badge">元素記錄 ✦ 陣營</span>
+        <h2 id="drawer-title" class="drawer-title">人物名稱</h2>
+        <div id="drawer-quote" class="drawer-quote">「經典對白...」</div>
+        <div id="drawer-content" class="drawer-content">詳細內容解說...</div>
+        
+        <div id="drawer-btn-group" class="drawer-btn-group">
+            <a href="https://www.bookwalker.com.tw/search?v=1147&series_display=1" target="_blank" class="buy-book-btn">📚 前往 BookWalker 查看本傳與外傳</a>
+            <a href="https://rhoxdra.github.io/intro/" target="_blank" class="home-btn">🌐 返回《無限元素》首頁</a>
+        </div>
+    </div>
+
+    <div id="hint-box" class="hint-text">拖曳平移 ｜ 滾輪縮放 ｜ 點擊節點檢視詳細</div>
+
+    <script>
+        // ==========================================
+        // 🌟 1. 共有與模式控制狀態 🌟
+        // ==========================================
+        let currentMode = 'periodic'; // 'periodic' | 'geo'
+        const canvas = document.getElementById('main-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let scale = 1.0, targetScale = 1.0;
+        let cameraX = 0, cameraY = 0;
+        let targetCameraX = 0, targetCameraY = 0;
+        let isDragging = false;
+        let startX, startY;
+        let totalMoved = 0;
+
+        const screenCoordsEl = document.getElementById('screen-coords');
+        const worldCoordsEl = document.getElementById('world-coords');
+        let currentMouseX = 0, currentMouseY = 0;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function switchView(mode) {
+            currentMode = mode;
+            closeDrawer();
+
+            document.getElementById('btn-mode-periodic').classList.toggle('active', mode === 'periodic');
+            document.getElementById('btn-mode-geo').classList.toggle('active', mode === 'geo');
+
+            const bgPeriodic = document.getElementById('bg-overlay-periodic');
+            const bgGeo = document.getElementById('bg-overlay-geo');
+            const periodicLegend = document.getElementById('periodic-legend');
+            const geoLayers = document.getElementById('geo-layers');
+            const mainTitle = document.getElementById('header-main-title');
+            const subTitle = document.getElementById('header-sub-title');
+            const hintBox = document.getElementById('hint-box');
+
+            if (mode === 'periodic') {
+                bgPeriodic.classList.remove('hidden');
+                bgGeo.classList.remove('active');
+                periodicLegend.classList.remove('hidden');
+                geoLayers.classList.add('hidden');
+                mainTitle.innerText = "《無限元素》元素週期表";
+                subTitle.innerText = "收錄全體角色關係圖譜";
+                hintBox.innerText = "拖曳平移 ｜ 滾輪縮放 ｜ 點擊節點檢視詳細";
+                
+                targetCameraX = 0;
+                targetCameraY = 0;
+                targetScale = 1.0;
+            } else {
+                bgPeriodic.classList.add('hidden');
+                bgGeo.classList.add('active');
+                periodicLegend.classList.add('hidden');
+                geoLayers.classList.remove('hidden');
+                mainTitle.innerText = "《無限元素》世界地理脈絡";
+                subTitle.innerText = "星球「一切」自然地形與空間相對輪廓";
+                hintBox.innerText = "拖曳平移 ｜ 滾輪縮放 ｜ 點擊地點檢視詳細與高亮航線";
+                
+                targetCameraX = 50;
+                targetCameraY = 150;
+                targetScale = 0.85;
+            }
+        }
+
+        // ==========================================
+        // 🌟 2. 元素週期表數據與邏輯 🌟
+        // ==========================================
+        const cWild = "#38bdf8";  // 野性之聲
+        const cBeast = "#10b981"; // 獸人族群
+        const cArea = "#ffffff";  // 艾瑞爾軍 
+        const cZoma = "#f43f5e";  // 詛碼團
+        const cAnci = "#fbbf24";  // 上古/無盡/核心
+        const cClaw = "#c084fc";  // 誓奪爪盟
+        const cAcad = "#34d399";  // 聚學舍
+        const cOuts = "#94a3b8";  // 外界/其他
+
+        const rawNodes = [
+            { id: "roar", name: "零(洛爾)", faction: "野性之聲", x: -158, y: -65, color: cWild, quote: "「我一定要結束這一切的爭端，創造一個我們能夠安心居住的地方。」", desc: "零元素賦形者，夥伴們多半習慣稱他為阿洛。\n\n童年時，他與幾位摯友一同生活在嵐光村，平凡而安穩的日子卻在詛碼團的一次襲擊中徹底消失。村落被焚毀、生命瀕臨終結之際，他因五十嵐的出手相救而倖存，也在那一刻覺醒了自身的元素之力。自此，他成立了組織「野性之聲」，踏上復興故鄉、對抗詛碼團的艱險征途。" },
+            { id: "lanlan", name: "嵐懶(無名)", faction: "無盡元素", x: 0, y: 0, color: cAnci, quote: "「還是等我不懶的時候吧……」", desc: "前身為紅焰與無名，與眾人有著跨越千年的情感共鳴。\n\n在洛爾等人的協助與賈瑞斯最終一搏的賦形下取得實體，成功挫敗阿爾提瑪的野心，將世界從傾覆的邊緣拉回。" },
+            { id: "jareth", name: "創(賈瑞斯)", faction: "上古元素", x: 76, y: -145, color: cAnci, quote: "「我只想讓你記得一件事，你值得我的重視，這是我沒有後悔過的選擇。」", desc: "創元素賦形者，擁有金色鱗片、包容力廣大的龍人。\n\n他是這顆星球上所有元素結晶的創造者，也是親自賦形「十三元素」形象與本質的黃龍龍神。千年前，他是元素一族中第一位因「好奇心」而主動走出外界、嘗試與人類接觸的先驅，因而獲得族群授予的卓越稱號「賈瑞昂斯」。\n\n在無名與星球契選失敗後，他接任成為第二任星球意識，於漫長歲月裡忍受著極端的孤獨與阿爾提瑪的執著，以廣大的包容力引導整個世界的運行。" },
+            { id: "ultima", name: "阿爾提瑪", faction: "詛碼團", x: -70, y: 284, color: cZoma, quote: "「這……這就是掌控世界的感覺嗎？」", desc: "首位成功發現元素存在的救世學者，實際年齡超過數百歲。\n\n他曾是為了拯救世界而獻身的偉大先驅，成功將其從崩壞邊緣挽回，為世人開啟了嶄新的時代。他以無上的元素知識創造了一顆漆黑的「究極元素」，並藉此獲得較一般人類更長的壽命。\n\n然而，因求知心切與對力量的執著，他對龍神賈瑞斯伸出充滿野心的魔爪，擊碎了祂的腹部，使其分裂出十三元素，並在之後成功奪取數顆作為實現野心的第一步。" },
+            { id: "kulu", name: "融(克爾)", faction: "野性之聲", x: -300, y: -80, color: cWild, quote: "「你們這些人類，我恨死了！」", desc: "融元素賦形者，出身於尼爾桑狼人村，亦是村中威名赫赫的狩獵頭領。\n\n他性格衝動、行事直接，卻也因此在征途中迷失了自我，直到意外獲得紅焰之力，才在紛亂中找回一絲自我存在的意義。" },
+            { id: "arc", name: "震(亞爾克)", faction: "野性之聲", x: -236, y: 75, color: cWild, quote: "「我害怕再度失去夥伴，所以現在才只認你一個……」", desc: "震元素賦形者。\n\n原是野獸之身的他，最初與同伴一同生活在艾瑞爾大陸的自然保留區，卻在詛碼團的襲擊中全數被捕，送往實驗室成為研究創造「元素使用者」的素材。同伴們在殘酷的實驗中相繼喪命，唯有亞爾克撐過了那段幾乎將意志碾碎的日子。他的身體構成變為獸人之軀，並成功轉化為「元素賦形者」。\n\n於暴風雨肆虐之中即將力竭之時，他遇見正在旅途中的洛爾與克爾。兩人及時伸出的援手讓他得以存活下來。" },
+            { id: "takawa", name: "恆(高和)", faction: "野性之聲", x: -250, y: -155, color: cWild, quote: "「創造希望的人，怎麼可以放棄希望？我不會再讓你離開我們了！」", desc: "恆元素賦形者，自幼便與洛爾相伴成長。\n\n他喜愛書本，沉浸於學習與新知研究之中，在結識博學多聞的五十嵐後便成為其最得意的門生。隨後，他與洛爾共同創立復興組織「野性之聲」，在旅途中不斷發掘恆定權能的多樣運用方式，並發展出與洛爾高度配合、結合元素操作的急救手術技術。" },
+            { id: "koushou", name: "極(高翔)", faction: "野性之聲", x: -450, y: 60, color: cWild, quote: "「上次我讓你離我而去。但這一次……我要把你帶回身邊！」", desc: "極元素賦形者。\n\n自幼成長於嵐光村。與性格沉穩的兄長高和不同，他天性外向，熱衷於野外活動。年少時便經常與普洛特學長一同離村探險，在一次次踏入未知的過程中，逐漸愛上了自由而粗獷的野外生活，也因此在村中幾乎難得一見他的身影，總是把時間花在山林與荒野之間。" },
+            { id: "kokumei", name: "沌(克明)", faction: "野性之聲", x: -328, y: 36, color: cWild, quote: "「我會盡村長之責攜手抵抗威脅，也會開啟與外族共存的新時代！」", desc: "沌元素賦形者，是克爾的弟弟。\n\n他個性溫和而沉穩，與狼人村內狩獵派獵者對人類普遍抱持警戒的態度不同，克明對人類懷有純粹而強烈的好奇心。他率先向身為人類的高翔伸出友誼之手，跨出打破種族隔閡的第一步。" },
+            { id: "tia", name: "提婭", faction: "獸人族群", x: -436, y: -120, color: cBeast, quote: "「我很期待屬於你自己的音樂會是怎麼樣的，之後一定要讓我聽聽看喔！」", desc: "狼人村狩獵派，是克爾信賴的左膀右臂。\n\n當克爾不在村中時，由她全權統籌防衛與指揮事務，處事冷靜而果斷。" },
+            { id: "arashiyama", name: "嵐山", faction: "獸人族群", x: -487, y: 225, color: cBeast, quote: "「歡迎回來。」", desc: "貓族村現任村長。\n\n他將非親生的五十嵐視如己出，對於村民當年以冷酷態度放逐這位兒子的決定始終耿耿於懷，心中藏著難以言說的痛與愧疚。" },
+            { id: "cat", name: "瑟莉雅", faction: "獸人族群", x: -443, y: 336, color: cBeast, quote: "「大家都很恐懼、害怕，深怕自己所認知的一切都是虛構，是假的，是別人口中所訴說的故事而已！我不知道該相信什麼！」", desc: "灰虎斑貓族少女。\n\n平日裡在市集協助家人經營擺攤生意。她曾是五十嵐在貓族村開設學堂時的學生，對曾經親近的「老師」懷有複雜而深沉的情感。" },
+            { id: "rub", name: "劫", faction: "誓奪爪盟", x: 307, y: -197, color: cClaw, quote: "「真是悲慘的下場呢，這就是和你扯上關係的後果，你的存在，根本不會帶給任何人幸福！」", desc: "劫元素賦形者。\n\n體幹高大、肩膀寬闊，身披深黑色長大衣，一舉一動皆散發著冷冽、高傲且不容置疑的絕對領袖威嚴。\n\n在《無盡探途》中，他曾是最為怯懦退縮、極度依賴戴爾莫格的少年。在無名引導下克服心魔，並正式開啟探索隊的探尋之途。" },
+            { id: "osae", name: "制", faction: "誓奪爪盟", x: 407, y: -81, color: cClaw, quote: "「看好了——這可是集結我鬣制工藝匠魂的結晶——《無垠號》！」", desc: "制元素賦形者。\n\n身形精悍，常年帶著招牌的壞笑，語調輕快瀟灑。\n\n在《無盡探途》中，身為上古菁英的他對各式載具、機械工藝與器械研發有著近乎痴迷的改裝熱情。在千年前便與劫一同完成了高性能的「原界庫」設備，在團隊中展現出無可挑剔的工藝匠魂與執行力。" },
+            { id: "kuzure", name: "崩", faction: "誓奪爪盟", x: 550, y: -80, color: cClaw, quote: "「或許那時……我該回頭看你一眼的。」", desc: "崩元素賦形者。\n\n體格肉壯結實，個性剛毅木訥。行言自信且嚴肅正經，凡事堅守原則，甚至常因不會讀空氣而讓身邊的人覺得難以親近。看似什麼都不在乎、內心實則完全被深沉的情感所主導。\n\n不論外界的局勢如何變幻，脖子上依然時刻戴著那條千年前出發前、由「埒」親手為他圍上的紅色圍巾，那雙綠色的冷峻眼眸也因對那份守望與承諾的執著而變得益發深沉。" },
+            { id: "kage", name: "影", faction: "誓奪爪盟", x: 443, y: -287, color: cClaw, quote: "「那只是因為我們有點相似罷了，都是享樂至上的玩家。」", desc: "影元素賦形者。\n\n個性高挑優雅、放蕩不羈，總愛尋找刺激與混亂的樂子，平日裡以玩世不恭、玩世砥流的態度遊走於各方勢力之間。\n\n在《無盡探途》所追溯的千年前歷史中，他是上古探索隊「無盡元素」的菁英成員，與無名共同經歷無數次死生交關的考驗。雖然他在揮霍與探聽情報上總是我行我素，更熱衷於灰色地帶與霸潮盟的賭場，卻也在與同伴們的漫長旅途中漸漸加深羈絆。" },
+            { id: "electric", name: "伊蕾琪", faction: "誓奪爪盟", x: 564, y: -226, color: cClaw, quote: "「方便替我簽個名嗎？」", desc: "元素使用者，出身背景成謎。\n\n她是首領劫為了補強誓奪爪盟戰力與宣傳聲量，特地重金聘請而來的王牌幫手。在各大影音平台與裏網直播頻道中，她是備受矚目、擁有龐大粉絲群「蕾寶」的高人氣主播，主持節目《蕾寶來電》。\n\n她擅長掌控話語權與節目節奏，言談間自帶鋒芒、美艷與極致的言語魅力，能在各種場合遊刃有餘，迅速吸引群眾目光並帶動輿論風向。" },
+            { id: "gorilla", name: "烈塵巡衛", faction: "砧鍛坊", x: 696, y: -112, color: cClaw, quote: "「少廢話。快從我眼前消失，我還有事要忙。」", desc: "元素使用者。\n\n曾自聚學舍畢業，並獲得僅授予少數人的榮譽校友稱號。\n\n然而，在過去與聚學舍相關的一場事件中，他選擇與現任的雇主一同脫離體制，自此隱沒於檯面之下，從事著外界難以窺探的事業。如今唯一較為明確的線索，是誓奪爪盟所取得的共鳴石礦，最終皆流入他們手中。而這股勢力，似乎同時掌握著石材加工與武器製造的關鍵環節。" },
+            { id: "boar", name: "鍛魂獷牙", faction: "砧鍛坊", x: 767, y: -183, color: cClaw, quote: "「因為科學、因為效率，就能把我的心血這樣端走？這種事太不講理了。」", desc: "元素使用者。\n\n他曾是聚學舍的校友與技術精湛的工匠，可是在某件事情後脫離聚學舍並隨後加入誓奪爪盟，自此在鍛鐵鎮私下開設了一間專屬於自己的工坊──「砧鍛坊」。" },
+            { id: "raku", name: "埒", faction: "上古元素", x: 398, y: 14, color: cAnci, quote: "「我會在無數的時空中庇佑你。戴上它，不管你在哪裡……我都能找到你。」", desc: "埒元素賦形者，綠狼族獸人，澤里恩私下稱他為「綠毛」。\n\n在外傳《無盡探途》中，他與崩相識後便長時間陪伴在側，行事一向沉穩內斂；崩脖子上所圍的圍巾，亦是出自他親手製作。對於無名率領族人前往外界的決定，他始終抱持保留與觀望的態度。\n\n於本傳中，嵐懶因一次意外誤入族人殘存的意識流，並再次見到了他，在其引導下得以離開。" },
+            { id: "garoz", name: "犺", faction: "上古元素", x: 230, y: 44, color: cAnci, quote: "「你知道，我不會背叛你的……」", desc: "犺元素賦形者，，澤里恩私下稱他為「灰毛」。\n\n在外傳《無盡探途》中，他與年幼的劫一同生活，關係親近。其權能尚未完全明朗，目前僅知能製作書寫預言的「詠示日記」，裁所使用的《亞榭洛》正源於此。\n\n無名率領族人出發前夕，犺曾在劫棲身的大樹下與無名發生爭執，隨後分道揚鑣；出發當日，他亦獨自離開聚落，手中似乎攜帶著與《亞榭洛》極為相似的書籍。" },
+            { id: "zarion", name: "耀(澤里恩)", faction: "無盡元素", x: 180, y: -62, color: cAnci, quote: "「我……我不會停止閃耀的！」", desc: "耀元素賦形者。\n\n體型肉胖結實，性格害羞、怕生且缺乏自信。極度由情感主導、習慣壓抑情緒並慣性說自己「沒事」，但肢體反應與耳尖的微紅總會洩漏內心。\n\n在《無盡探途》中，千年前因無名將他視為「無限可能的綠蔭生機」而深受觸動，進而跨越了被族群視為無能的孤獨跟隨其踏上探索外界的漫長旅途。" },
+            { id: "area", name: "斷(艾瑞爾)", faction: "艾瑞爾軍", x: -193, y: 280, color: cArea, quote: "「我是暗夜中展翅翱翔的恐怖，自奈落之淵而來的『黑夜魔君』。所有徬徨、心懷歹念的惡徒啊，接受我的睥睨吧！」", desc: "斷元素賦形者，他是艾瑞爾城的掌權總督，亦為遊走於城內各大實驗室的科學家。\n\n原本只是一隻小山貓族的他，藉由自己發明的「賦形晶」獲得了人類的「外設」形貌，得以從容遊走於政商往來之間，與官員與各方勢力周旋，將真實的自己隱沒在一層沉穩又冷靜的外殼之下。" },
+            { id: "igarashi", name: "嵐(五十嵐)", faction: "艾瑞爾軍", x: -271, y: 207, color: cArea, quote: "「或許，你們早就準備好要啟程離開這座燈塔，而真正沒準備好放手的……竟然是我。」", desc: "嵐元素賦形者。\n\n在一次獨自旅行的途中，他意外捲入嵐光村遭受詛碼團襲擊的事件，挺身而出擊退幹部，並救下了尚未成熟的洛爾與高和。察覺兩人正值元素權能覺醒初期後，五十嵐選擇陪伴他們踏上復興城鎮、對抗詛碼團的漫長征途。" },
+            { id: "wakima", name: "位(瓦奇瑪)", faction: "艾瑞爾軍", x: -375, y: 248, color: cArea, quote: "「你這個甜點叛徒，接受本大明神的制裁吧！」", desc: "位元素賦形者。\n\n他是眾人與賈瑞斯意志溝通的渠道，負責將龍神的心念連結、轉化為現世行動的媒介。\n\n自「薄明之戰」落幕後，瓦奇瑪選擇了與眾不同的道路——他將自身對甜點的極致熱愛與推廣野心昇華為大眾信仰，建立起獨樹一格的「豐漁甘神教」並廣納信徒，以天真又驕傲的「本大明神」自居。" },
+            { id: "rofena", name: "羅菲娜", faction: "艾瑞爾軍", x: -295, y: 321, color: cArea, quote: "「有客人啊？怎麼沒有事先遞交申請書，還偏偏選這麼冷僻的入口來拜訪呢？」", desc: "元素使用者，畢業於聚學舍並以首席之姿脫穎而出，專精於政治與法學。\n\n原本她計畫先累積更多實務經驗，再逐步進入艾瑞爾城市政廳任職。然而一場機緣巧合的邀約，卻讓她得以提前入職，成為這個世界最大證物機關的一員，肩負起比同齡人更為沉重的責任。" },
+            { id: "zoma", name: "詛碼", faction: "詛碼團", x: -123, y: 371, color: cZoma, quote: "「這是我的獨到美學。」", desc: "究極元素賦形者，詛碼團的領導者，也是阿爾提瑪麾下的第一衛士。\n\n於「薄明之戰」中，他曾在洛爾一行人合力一擊之下解除賦形，短暫自戰場上消失。然而，在賈瑞斯與阿爾提瑪達成和解之後，他藉由嵐懶的權能再次復甦，得以重返世界。" },
+            { id: "proto", name: "毀(普洛特)", faction: "詛碼團", x: -223, y: 456, color: cZoma, quote: "「沒有人可以阻擋我的去路！」", desc: "毀元素賦形者，曾與洛爾、高和等人一同生活於嵐光村。\n\n然而，一場意外讓他窺見被扭曲的記憶——那份動搖信念的虛假真相迫使他選擇離開，轉而投身詛碼團。自此，他成為襲擊狼人村的主導者，不僅重創克爾亦擄走克明。\n\n之後的多次交鋒中，他總是站在昔日同伴的對立面，出手毫不留情，彷彿執意將過去的一切斬斷。" },
+            { id: "volt", name: "滅(弗爾特)", faction: "詛碼團", x: -207, y: 374, color: cZoma, quote: "「這裡是任我支配的世界，想耍的花招全都會化為徒勞無用！」", desc: "滅元素賦形者。\n\n身為詛碼團的幹部，他向來習慣獨自行動，任憑本能中的破壞慾驅使，遊走於人類城鎮與獸人聚落之間肆意毀滅。那段無差別的侵襲，不僅留下遍地殘痕，也促成了洛爾與高和踏上復興之路的契機。" },
+            { id: "veil", name: "命(白珥)", faction: "詛碼團", x: -88, y: 459, color: cZoma, quote: "「哎呀，真是精采的表演啊。」", desc: "命元素賦形者。\n\n原本的他並非賦形者，只以命元素結晶的原始形態持續運作、存在。\n\n作為詛碼團的軍師，白珥沉穩老練、心思縝密，長於策劃與謀略。無論戰術佈局，或組織運作的方針制定，他皆居於最核心的位置。\n\n在詛碼靈活運用白珥的形象之下，本人也能藉此徹底隱身於暗影之中，成為無人能察覺的幕後策動者。" },
+            { id: "sinn", name: "泊信", faction: "詛碼團", x: -155, y: 491, color: cZoma, quote: "「今天還沒和你好好喝過呢，這陣子我可想死你了。」", desc: "新生詛碼團的第一分隊長。\n\n老練的他，過去不過只是普洛特麾下的一名小兵，卻也在「薄明之戰」中參與過對人類城鎮與獸人部落的多次襲擊，逐步累積實戰經驗與功績。" },
+            { id: "fox", name: "睿策樺霖", faction: "聚學舍", x: 104, y: 177, color: cAcad, quote: "「希望我們能合作愉快，共創生靈與元素和諧共存的新未來。」", desc: "元素使用者，創校三巨頭之一。\n\n現任最高學府「聚學舍」的校長。憑藉著博識的學問、縝密的思維以及宏觀的政治智慧，他在眾人與評議會的一致推舉下坐上高位，成為掌管全星球最高知識殿堂的關鍵核心。" },
+            { id: "racoon", name: "影識秘爪", faction: "聚學舍", x: 337, y: 123, color: cAcad, quote: "「紀錄只呈現可能性，評價與推論則由觀察者決定。」", desc: "元素使用者，創校三巨頭之一。\n\n在「薄明之戰」後的動盪重組期，他與另外兩位志同道合的故友接手學府，為這座如今匯聚全星球知識與精英的搖籃立下了不可動搖的基石，因而被後世尊稱為給予聚學舍「第二任生命」的創校者。" },
+            { id: "sugar", name: "霜糖紗母", faction: "聚學舍", x: 197, y: 277, color: cAcad, quote: "「我並不是『決定』它們該成為什麼樣子，而是『聽』它們想變成什麼模樣。」", desc: "元素使用者，烘焙教授。\n\n她擅長細緻的元素操控，能靈巧地引導水與火的結合，製作出如晨霧般輕柔的香氣與氤氳，在烘焙過程中為食材增添獨有的層次與溫度。" },
+            { id: "deer", name: "繪靈鹿茲", faction: "聚學舍", x: 260, y: 171, color: cAcad, quote: "「有謎題的地方，就必定有偵探。只要有我的智慧與優雅，懸而未決的謎團便無所遁形，因為——我是繪靈鹿茲！」", desc: "元素使用者，藝術教授。\n\n擁有傲人藝術天賦與多元創作才華的他，無論在學界或藝壇都享有極高聲譽，並同時兼任嵐光城鎮間的博物館要職。" },
+            { id: "owl", name: "夜瞳梟賢", faction: "聚學舍", x: 312, y: 231, color: cAcad, quote: "「我不一定能成為那個最萬能、實力最驚天動地的強者，但我希望能成為那種在世界陷入失序之際，仍能讓身旁的人找到方向、引導他們回歸正途的存在。」", desc: "元素使用者，醫學教授。\n\n長年授課於學舍的同時，也是於艾瑞爾城附設醫院的外科主治醫師。" },
+            { id: "teiner", name: "翠芽泰納", faction: "聚學舍", x: 291, y: 300, color: cAcad, quote: "「這麼多雙眼睛盯著我，我會不會一不小心先變成你們的午餐啦？」", desc: "元素使用者，農藝與環境教授。\n\n精通各類作物的栽培與特性，無論是耐旱的荒地植物，還是需精細呵護的珍稀作物，都能在他手中茁壯生長。" },
+            { id: "doutou", name: "怒濤銳步", faction: "聚學舍", x: 382, y: 296, color: cAcad, quote: "「然後……在最後的最後，由我一舉奪走勝利。那將會是落在我掌握之中的美味，一場從頭到尾都為我所設計的饗宴。」", desc: "元素使用者，體育教授。\n\n他的速度如風一般鋒利，手中握有現今最快的競賽紀錄，是學生們體能訓練與調整上的無可取代的顧問。但在那份光環之下，他卻隱藏著另一張難以窺見的面孔，肩負著不為人知的使命與秘密。" },
+            { id: "kaiden", name: "凱登", faction: "聚學舍", x: 42, y: 287, color: cAcad, quote: "「那種入學資格，咱到時候對著校長擠擠肌肉、展現一下，或許是他求著咱進去都來不及呢。」", desc: "元素使用者，聚學舍中與洛爾一行同屆的新生。\n\n他出身於尼爾桑大陸南端的海岸，性格豪放直率，兼具無比驚人的肌力。\n\n在舉重隊外，他也與克爾同時加入獸人族籃球隊「炙海獵者」，成為少數能讓克爾認可（或者說拿他沒轍）的死對頭。" },
+            { id: "gousuke", name: "豪助", faction: "聚學舍", x: 81, y: 403, color: cAcad, quote: "「什麼時候……我也能夠像凱登哥那樣呢？」", desc: "克爾同屆新生。\n\n他雖然擁有熊族天賜的壯碩肉體，性格卻文質彬彬、極具智性，是個心思細膩的溫和優等生。" },
+            { id: "chitar", name: "瞬介", faction: "聚學舍", x: 167, y: 346, color: cAcad, quote: "「我不想讓颯太的堅持到頭來只是一場空，我不想讓他的奉獻變成白費力氣！」", desc: "克爾同屆新生。\n\n他是個自信、高傲、卻又無比隨性的運動好手，對自己經由千錘百鍊的肉體有著絕對的驕傲。他的生活與個性一樣十分隨心所欲，常常不按牌理出牌，在嚴肅的氣氛裡往往是那個能輕鬆打破緊繃的那位存在。" },
+            { id: "horse", name: "颯太", faction: "聚學舍", x: 166, y: 446, color: cAcad, quote: "「在這種情況下，如果能保住你的速度……讓你衝完這段，一定可以拿到非常可觀的積分。這樣一來，我們就能反超那些元素使用者了吧？難得的機會……我可不想放過。」", desc: "克爾同屆新生。\n\n他是個豪爽、踏實、且不服輸的體力怪傑。他的生活步調與為人正如馬族給人的信賴感一般，顯得大氣而沉穩。" },
+            { id: "reva", name: "雷瓦維那", faction: "維那嶺", x: 42, y: -293, color: cOuts, quote: "「看起來只是石頭，但也許它們和你們元素一族原本的型態一樣，是以我們人類無法理解的方式活著的。」", desc: "地脈操流者，維那嶺的前任領主，亦是奧法魯斯的平輩舊識。\n\n他氣度不凡、舉止從容，隨身攜帶一根質樸卻雕刻精細的魔法法杖。\n\n在《無盡探途》外傳中，他在城堡宴會廳熱情接待了遠道而來的「無盡元素」探索隊，不僅大方提供荒廢的地下避難所供鬣制改造成「科學工坊」，更毫無保留地分享自己對地脈魔法的研究，並以「等價交換」的信任態度，委託探索隊討伐威脅西方大陸的禍源「熔岩龍」。" },
+            { id: "leon", name: "萊昂維那", faction: "維那嶺", x: -42, y: -282, color: cOuts, quote: "「這真的很厲害……你們的技術水平遠超出我們的想像。」", desc: "維那嶺的現任領主，雷瓦・維那之子。\n\n在《無盡探途》外傳中，他與父親雷瓦一同在城堡接待遠道而來的「無盡元素」探索隊，展現出遠超同齡者的果斷決策力與治理領地的責任感。" },
+            { id: "whissel", name: "旭言", faction: "晝光時報", x: 603, y: 24, color: cOuts, quote: "「我們可以一起旅行。我們去聽嵐光的演唱會，去看尼爾桑的環輝樹脊，用兩雙不同的眼睛看同樣的事物！」", desc: "晝光時報的記者。\n\n這間發跡於艾瑞爾城的報社，一直以揭露真相為宗旨，在媒體與資訊流通劇烈變動的時代中完成轉型，得以延續至今。" },
+            { id: "rin", name: "嶙安", faction: "砧鍛坊", x: 733, y: -31, color: cOuts, quote: "「如果有一天真的離開這裡，我……」", desc: "鍛魂獷牙開設的「砧鍛坊」裡不起眼的底層雜工。\n\n他長年在充斥著鐵鏽與煤灰的工坊過著忍耐又壓抑生活，連一次重要工作也沒被指名過，甚至在工坊裡遭到同事搶功、推搡與無情嘲弄。長期的壓榨與羞辱在他心底埋下了極深自卑，讓他無數次否定自己，卻又無比渴望能被看見與承認。" },
+            { id: "tormunn", name: "拓穆恩", faction: "霸潮盟", x: -80, y: -380, color: cOuts, quote: "「請帶著這份秘密繼續前進吧。我想有朝一日，會出現那個讓我們霸潮盟足以買下這份情報的契機。」", desc: "「霸潮盟」艾瑞拉分會的分會長。\n\n他擁有極其高明且敏銳的商業頭腦，全身上下散發著精明的商賈氣場。在弱肉強食且資源匱乏的極北之地，拓穆恩憑藉著對規則的洞察與出色的管理手腕，將艾瑞拉打造成一座秩序井然、擁有先進保溫與防風設施的繁榮要塞，是個能憑一己之力維繫龐大都市運作的厲害人物。" },
+            { id: "grossa", name: "格洛薩", faction: "霸潮盟", x: 17, y: -429, color: cOuts, quote: "「居然敢在我面前耍這種連手法都看不出來的老千啊，膽子真不小。被你算計了一道，不過——我很欣賞你，這反而讓我越來越中意你們了。」", desc: "掌控該區域地下秩序與商業運作的大勢力「霸潮盟」的老大。\n\n他體型龐大、全身覆著黑色毛髮，全身上下散發著一股歷經江湖與商業滄桑的沉穩威嚴。身為掌握海陸交通樞紐、貿易樞紐與暗處規則的核心人物，他行事冷酷、講求極致的務實與秩序，任何試圖在他地盤上賴帳或破壞規矩的人，都會被他毫不留情地教訓甚至「送去海底觀光」。" },
+            { id: "igrahhan", name: "伊格拉罕", faction: "白原行族", x: 105, y: -419, color: cOuts, quote: "「此地不容迷途者。爾等為何帶著罪人的氣息而來？」", desc: "地脈操流者，白原行族的現任族長，同時也是塔芙琳的父親。\n\n他擁有歷經風霜的雪白毛皮與深邃敏銳的狼瞳，體型高大威嚴，全身上下散發著一股令人生畏的上位者氣場。作為這個歷史悠久的游牧部族最高掌權者與精神領袖，伊格拉罕恪守部族世代相傳的規矩，對地脈信仰抱持著絕對的敬畏，始終堅信唯有遵循自然的法則與先祖的智慧，族群才能在嚴酷的極北風雪中得以延續。" },
+            { id: "touphrin", name: "塔芙琳", faction: "白原行族", x: 173, y: -374, color: cOuts, quote: "「沒有啦！我只是開個玩笑，想看看你們的反應而已啦！」", desc: "地脈操流者，白原行族繼承人。\n\n她擁有一身潔白無瑕的深白色毛皮與一雙冰藍色且充滿靈氣的澄澈雙眼，全身上下配戴著諸多骨製飾品與引流晶，走起路來總是伴隨着輕柔的微弱嗡鳴。\n\n不同於父親與長老們的保守固執，塔芙琳性格開朗外向、大大咧咧且富有些許狂氣，時常展露出活潑俏皮的一面，但也因為這份直來直往與理想派的性格，讓她有時顯得有些傲嬌與不服輸。" }
+        ];
+
+        const nodes = rawNodes.map(node => {
+            const img = new Image();
+            img.src = `images/${node.id}.jpg`;
+            return { ...node, avatarImg: img, isImgLoaded: false };
+        });
+        nodes.forEach(node => {
+            node.avatarImg.onload = () => { node.isImgLoaded = true; };
+        });
+
+        const rawEdges = [
+            { from: "kulu", to: "roar", direction: "to", label: "心懷愧疚", color: cWild, desc: "【克爾 ✦ 洛爾】：薄明之戰後一同經營餐館與樂團，洛爾始終包容克爾，但克爾從未自相遇時的愧疚中走出來。" },
+            { from: "arc", to: "roar", direction: "to", label: "救贖依從", color: cWild, desc: "【亞爾克 ✦ 洛爾】：亞爾克將救命恩人洛爾視為精神支柱，全心協助、陪伴，並在危機時捨命護衛。" },
+            { from: "roar", to: "takawa", direction: "both", label: "摯友搭檔", color: cWild, desc: "【洛爾 ✦ 高和】：自幼相伴成長，共同創立野性之聲，一同開發出元素急救手術。" },
+            { from: "lanlan", to: "roar", direction: "both", label: "重生與日常", color: cAnci, desc: "【嵐懶 ✦ 洛爾】：藉由賈瑞斯二次賦形降生於世的嵐懶，在日常中與洛爾等夥伴度過慵懶耍廢的時光。" },
+            { from: "lanlan", to: "jareth", direction: "both", label: "千年知己", color: cAnci, desc: "【嵐懶 ✦ 賈瑞斯】：跨越千年的故友，彼此間承載著深遠的記憶與陣線情感。" },
+            { from: "jareth", to: "ultima", direction: "both", label: "宿命對立與和解", color: cAnci, desc: "【賈瑞斯 ✦ 阿爾提瑪】：從弒神奪權到和解，兩人如今在聯合陣線策劃對抗誓奪爪盟的戰略。" },
+            { from: "kulu", to: "arc", direction: "both", label: "較勁夥伴", color: cWild, desc: "【克爾 ✦ 亞爾克】：脾氣迥異又最懂彼此的犬科拍檔，在競爭與生死交戰中建立深刻的同理心。" },
+            { from: "kulu", to: "lanlan", direction: "both", label: "理解調和", color: cAnci, desc: "【克爾 ✦ 嵐懶】：因彼此的境遇相似產生調和，克爾也僅在單獨與嵐懶相處時會傾訴內心話語。" },
+            { from: "kulu", to: "kokumei", direction: "both", label: "血脈兄弟", color: cWild, desc: "【克爾 ✦ 克明】：行事粗獷的哥哥與溫和的弟弟，一起以村長與頭領之位守護家園。" },
+            { from: "takawa", to: "koushou", direction: "both", label: "血脈兄弟", color: cWild, desc: "【高和 ✦ 高翔】：沉穩的學者哥哥與熱愛野外的弟弟，在遺跡調查中一同揭開再契選序幕。" },
+            { from: "kokumei", to: "tia", direction: "both", label: "村落門柱", color: cBeast, desc: "【克明 ✦ 提婭】：溫和村長與理性狩獵派副官，共同推動狼人村的復興與改革。" },
+            { from: "kokumei", to: "koushou", direction: "both", label: "跨族情誼", color: cWild, desc: "【克明 ✦ 高翔】：高翔作為外族融入狼人村，在冒險中兩人感情關係日漸升溫密切。" },
+            { from: "igarashi", to: "roar", direction: "to", label: "恩師與傳承", color: cArea, desc: "【五十嵐 ✦ 洛爾】：在戰火中拯救洛爾並收為門生，於薄明之戰當時其意志被洛爾完整繼承。" },
+            { from: "takawa", to: "igarashi", direction: "to", label: "得意門生", color: cArea, desc: "【五十嵐 ✦ 高和】：高和繼承了導師的學者風範，一同在聚學舍與艾瑞爾實驗室中進行各種學術研究。" },
+            { from: "igarashi", to: "area", direction: "both", label: "陣線戰友", color: cArea, desc: "【五十嵐 ✦ 艾瑞爾】：總督與戰術官，在市政廳與聚學舍間維持著默契配合。" },
+            { from: "arashiyama", to: "igarashi", direction: "to", label: "深沉父愛與愧疚", color: cBeast, desc: "【五十嵐 ✦ 嵐山】：嵐山長老將被放逐的五十嵐視如己出，靜靜守候著兒子的歸來。" },
+            { from: "area", to: "wakima", direction: "both", label: "甜食搶奪戰", color: cArea, desc: "【艾瑞爾 ✦ 瓦奇瑪】：黑夜魔君常仗著權勢偷吃大明神的甜點，私下卻是能互相託付背後的死黨。" },
+            { from: "area", to: "volt", direction: "to", label: "創造與失控的產物", color: cZoma, desc: "【艾瑞爾 ✦ 弗爾特】：艾瑞爾親手創造的人造人，曾失控為禍，現回歸裏網維護系統。" },
+            { from: "area", to: "rofena", direction: "to", label: "破格提拔", color: cArea, desc: "【艾瑞爾 ✦ 羅菲娜】：艾瑞爾因樂團事件，又賞識羅菲娜的法政才華，隨將其拔擢入市政廳核心。" },
+            { from: "zoma", to: "veil", direction: "both", label: "雙生", color: cZoma, desc: "【詛碼 ✦ 白珥】：白珥曾是詛碼的外設，現獲得賦形身軀，成為雙生於世的詛碼團幕後策動者。" },
+            { from: "proto", to: "ultima", direction: "to", label: "扭曲效忠", color: cZoma, desc: "【詛碼 ✦ 普洛特】：普洛特曾受扭曲記憶效忠詛碼團，這段過去成為他與洛爾、克爾間複雜的結。" },
+            { from: "proto", to: "kulu", direction: "both", label: "昔日仇敵 / 今日粉絲", color: cZoma, desc: "【普洛特 ✦ 克爾】：曾摧毀狼人村重創克爾，洗心革面後卻成為荒野焰嵐粉絲團會長。" },
+            { from: "sinn", to: "proto", direction: "to", label: "堅定追隨", color: cZoma, desc: "【普洛特 ✦ 泊信】：泊信將普洛特視為戰神大哥，在新生詛碼團中誓死追隨這位幹部。" },
+            { from: "rub", to: "lanlan", direction: "to", label: "恨意宿命", color: cClaw, desc: "【劫 ✦ 嵐懶】：千年前極度依賴無名；如今將孤獨轉化為偏執，試圖剝離嵐懶權能打回廢物。" },
+            { from: "rub", to: "osae", direction: "both", label: "無條件信任", color: cClaw, desc: "【劫 ✦ 制】：制將劫視為家人盡力協助契選；劫亦給予絕對信任，不容任何人傷害。" },
+            { from: "rub", to: "kuzure", direction: "both", label: "領袖與主力", color: cClaw, desc: "【劫 ✦ 崩】：崩為誓奪爪盟的霸道肉搏主力，剛毅傻勁卻全心為盟征戰。" },
+            { from: "rub", to: "kage", direction: "both", label: "特務玩家", color: cClaw, desc: "【劫 ✦ 影】：影以 DJ 身分為幫派籌措資金，優雅玩世遊走於各方為劫獲取情報。" },
+            { from: "electric", to: "kage", direction: "both", label: "特務搭檔", color: cClaw, desc: "【伊蕾琪 ✦ 影】：知名主播與夜店 DJ，兩人在市政廳潛入戰中完美配合竊取極密資料。" },
+            { from: "electric", to: "rofena", direction: "both", label: "菲羅蕾寶大對決", color: cClaw, desc: "【伊蕾琪 ✦ 羅菲娜】：分屬兩大陣營的頂流主播，在場場轉播台上展開精彩絕倫的嘴砲攻防。" },
+            { from: "boar", to: "gorilla", direction: "both", label: "工坊夥伴", color: cClaw, desc: "【鍛魂獷牙 ✦ 烈塵巡衛】：信差巡衛隱密運送物資交由獷牙鍛造，一同於燼鐵鎮生活。" },
+            { from: "boar", to: "rin", direction: "to", label: "壓榨", color: cOuts, desc: "【鍛魂獷牙 ✦ 嶙安】：嶙安在砧鍛坊底層受盡壓榨，渴望能被看見。" },
+            { from: "whissel", to: "rin", direction: "to", label: "溫暖救贖", color: cOuts, desc: "【旭言 ✦ 嶙安】：充滿正義感的記者是嶙安在燼鐵鎮唯一的寄託，期盼帶他坐跑車離開。" },
+            { from: "raku", to: "kuzure", direction: "to", label: "紅色圍巾的守望", color: cAnci, desc: "【埒 ✦ 崩】：千年前埒親手為崩製作圍巾，崩至今仍誓死守護這份承諾與羈絆。" },
+            { from: "garoz", to: "kokumei", direction: "to", label: "潛伏的意識", color: cAnci, desc: "【犺 ✦ 克明】：背叛者犺潛伏在克明意識深處，是沌元素反噬的根源。" },
+            { from: "zarion", to: "lanlan", direction: "to", label: "跨越千年的守候", color: cAnci, desc: "【澤里恩 ✦ 嵐懶】：因無名走出孤獨，如今希望可以守護現在的嵐懶。" },
+            { from: "kaiden", to: "gousuke", direction: "both", label: "熱血與沉穩", color: cAcad, desc: "【凱登 ✦ 豪助】：兩人在襲擊熊族村的脈殤受事件中建立起深厚的友誼，豪助也因此十分仰慕凱登。" },
+            { from: "zarion", to: "gousuke", direction: "both", label: "熊族村同鄉", color: cAcad, desc: "【豪助 ✦ 澤里恩】：曾一起在熊族村生活過，澤里恩自製的藥膏也成了豪助協助凱登的契機。" },
+            { from: "horse", to: "gousuke", direction: "both", label: "社區鄰居", color: cAcad, desc: "【颯太 ✦ 豪助】：兩人住在艾瑞爾城同一個社區，父母也因工作互相認識。" },
+            { from: "kaiden", to: "kulu", direction: "both", label: "勁敵夥伴", color: cAcad, desc: "【凱登 ✦ 克爾】：凱登是少數讓克爾認可又拿他沒轍的肌力怪物對手。" },
+            { from: "chitar", to: "horse", direction: "both", label: "田徑摯友", color: cAcad, desc: "【瞬介 ✦ 颯太】：在田徑跑道上亦敵亦友，隨後一同被凱登拉入籃球隊。" },
+            { from: "reva", to: "leon", direction: "both", label: "父子傳承", color: cOuts, desc: "【雷瓦 ✦ 萊昂】：兩人一同治理維那嶺，並接納元素一族。" },
+            { from: "tormunn", to: "grossa", direction: "both", label: "霸潮盟權力雙核", color: cOuts, desc: "【拓穆恩 ✦ 格洛薩】：理性弱氣的分會長與講求道義的老大，共同掌控北方龐大地下秩序。" },
+            { from: "igrahhan", to: "touphrin", direction: "both", label: "嚴父與理想派女兒", color: cOuts, desc: "【伊格拉罕 ✦ 塔芙琳】：嚴守傳統的族長與渴望探索未來的女兒，在冰谷中相互衝突與深愛。" },
+            { from: "garoz", to: "lanlan", direction: "to", label: "背離", color: cAnci, desc: "【嵐懶 ✦ 犺】：面對犺的決絕，這段情誼最終走向了背離與無奈。" },
+            { from: "lanlan", to: "raku", direction: "both", label: "故友", color: cAnci, desc: "【嵐懶 ✦ 埒】：千年前於聚落的好友，至今仍如靜靜留存在記憶底層。" },
+            { from: "arc", to: "lanlan", direction: "to", label: "有點像阿洛", color: cAnci, desc: "【嵐懶 ✦ 亞爾克】：亞爾克證實嵐懶身上有一點點洛爾的氣息，使他感到熟悉與親切。" },
+            { from: "lanlan", to: "veil", direction: "to", label: "懼怕", color: cZoma, desc: "【嵐懶 ✦ 白珥】：面對深不可測且曾猛追著他的白珥，使他本能地感到忌憚與懼怕。" },
+            { from: "lanlan", to: "kuzure", direction: "both", label: "無盡元素", color: cAnci, desc: "【嵐懶 ✦ 崩】：千年前無盡元素探索隊的夥伴。即便如今立場相異，那段一同旅行的記憶依然刻在心頭。" },
+            { from: "lanlan", to: "osae", direction: "both", label: "無盡元素", color: cAnci, desc: "【嵐懶 ✦ 制】：千年前探索隊的機械匠人。曾一同並肩作戰的深厚默契，至今在機械齒輪的轉動中隱隱呼應。" },
+            { from: "lanlan", to: "kage", direction: "both", label: "無盡元素", color: cAnci, desc: "【嵐懶 ✦ 影】：千年前探索隊的情報一哥。那些隱匿在暗影與夜色中的談笑與冒險，是兩人共有的喧鬧回憶。" },
+            { from: "kulu", to: "tia", direction: "both", label: "狩獵派雙柱", color: cWild, desc: "【克爾 ✦ 提婭】：狼人村中同樣崇尚實戰與狩獵的左右手，彼此在戰術與村落防衛上配合默契。" },
+            { from: "kulu", to: "koushou", direction: "to", label: "看不順眼", color: cWild, desc: "【克爾 ✦ 高翔】：克爾總是對高翔看不順眼，不肯放下成見接納。" },
+            { from: "kulu", to: "igarashi", direction: "both", label: "貓草與菸草", color: cWild, desc: "【克爾 ✦ 五十嵐】：一個叼著特製藥草菸，一個對貓草頗有研究，兩人之間有著奇妙的聞香默契。" },
+            { from: "rub", to: "kulu", direction: "to", label: "刑求", color: cClaw, desc: "【克爾 ✦ 劫】：在尋找誓奪爪盟下落時，克爾被劫所擄獲受到拷打並剝奪能力，促使洛爾與劫的對立。" },
+            { from: "kulu", to: "zarion", direction: "to", label: "拜託你別唱了", color: cWild, desc: "【克爾 ✦ 澤里恩】：身為樂團主唱的克爾，每當聽到澤里恩的放縱歌聲總會感到頭痛。" },
+            { from: "arc", to: "area", direction: "to", label: "好可愛", color: cWild, desc: "【亞爾克 ✦ 艾瑞爾】：儘管曾遭受他所指使的實驗，亞爾克對艾瑞爾的小山貓外表，依舊感到無法自拔的可愛。" },
+            { from: "arc", to: "wakima", direction: "to", label: "好可愛", color: cWild, desc: "【亞爾克 ✦ 瓦奇瑪】：對於瓦奇瑪的鯰魚精形象與氣噗噗的樣貌，亞爾克總是覺得很逗趣可愛。" },
+            { from: "doutou", to: "arc", direction: "to", label: "期待", color: cAcad, desc: "【亞爾克 ✦ 怒濤銳步】：怒濤銳步對於同樣能追上自己比世的亞爾克有著深切的期待。" },
+            { from: "roar", to: "area", direction: "both", label: "戰略夥伴", color: cWild, desc: "【洛爾 ✦ 艾瑞爾】：為了維護世界的和平與平衡，兩方組織建立起密切的的冒險與戰略合作。" },
+            { from: "roar", to: "koushou", direction: "both", label: "兒時夥伴", color: cWild, desc: "【洛爾 ✦ 高翔】：兩人自小一同在嵐光村成長，有著深厚的交情。" },
+            { from: "roar", to: "proto", direction: "both", label: "學長學弟", color: cWild, desc: "【洛爾 ✦ 普洛特】：兩人自小一同在嵐光村成長，即便後來經歷風雨，這份情感連結仍未完全斷絕。" },
+            { from: "roar", to: "zoma", direction: "to", label: "仇敵", color: cZoma, desc: "【洛爾 ✦ 詛碼】：為了守護嵐光鎮與夥伴們的未來，洛爾必須挺身對抗這個企圖吞噬一切的領導者。" },
+            { from: "volt", to: "roar", direction: "to", label: "滅村", color: cZoma, desc: "【洛爾 ✦ 弗爾特】：弗爾特曾當面摧毀洛爾故鄉，這道慘痛傷痕如今終被洛爾放下。" },
+            { from: "roar", to: "rub", direction: "to", label: "仇敵", color: cClaw, desc: "【洛爾 ✦ 劫】：劫無情傷害了克爾，使洛爾難得發火，誓言必定要擊敗劫。" },
+            { from: "owl", to: "roar", direction: "to", label: "師生", color: cAcad, desc: "【洛爾 ✦ 夜瞳梟賢】：在聚學舍修習醫學與急救時，夜瞳梟賢是教導洛爾無數專業知識的恩師。" },
+            { from: "fox", to: "sugar", direction: "both", label: "聚學舍教職", color: cAcad, desc: "【睿策樺霖 ✦ 霜糖紗母】：校長對這位將元素融入烘焙的教授極其器重，自己也是紗母的忠實粉絲。" },
+            { from: "fox", to: "deer", direction: "both", label: "聚學舍教職", color: cAcad, desc: "【睿策樺霖 ✦ 繪靈鹿茲】：校長信任的藝術權威，並派遣至學識之庫協助記錄。" },
+            { from: "fox", to: "owl", direction: "both", label: "聚學舍教職", color: cAcad, desc: "【睿策樺霖 ✦ 夜瞳梟賢】：醫療與急救權威，是校長在校內處理突發危機時的左右手。" },
+            { from: "fox", to: "teiner", direction: "both", label: "聚學舍教職", color: cAcad, desc: "【睿策樺霖 ✦ 翠芽泰納】：負責農藝與環境改革的教授，以重披荒原綠意的信念深得校長賞識。" },
+            { from: "fox", to: "doutou", direction: "both", label: "聚學舍教職", color: cAcad, desc: "【睿策樺霖 ✦ 怒濤銳步】：兼任田徑與各式體育的教授，並派遣其赴任艾瑞爾軍指派的機密事項。" },
+            { from: "fox", to: "racoon", direction: "both", label: "三巨頭", color: cAcad, desc: "【睿策樺霖 ✦ 影識秘爪】：聚學舍三巨頭摯友。" },
+            { from: "kaiden", to: "chitar", direction: "both", label: "熾海獵者夥伴", color: cAcad, desc: "【凱登 ✦ 瞬介】：在籃球隊伍中負責凶猛突擊與極速破局的組合。" },
+            { from: "kaiden", to: "horse", direction: "both", label: "熾海獵者夥伴", color: cAcad, desc: "【凱登 ✦ 颯太】：憑藉過人肌力與速度，於比賽中前後攻防。" },
+            { from: "kokumei", to: "teiner", direction: "both", label: "狩牙沃野", color: cWild, desc: "【克明 ✦ 翠芽泰納】：為了狼人村周邊土地的農作進展，而展開實質合作。" },
+            { from: "kokumei", to: "arashiyama", direction: "both", label: "族群友好契約", color: cBeast, desc: "【克明 ✦ 嵐山】：狼人村與貓族村兩大聚落，一同與人族締結和平與守望相助的重要契約。" },
+            { from: "proto", to: "kokumei", direction: "to", label: "俘虜", color: cWild, desc: "【克明 ✦ 普洛特】：在過去滅村衝突中曾被捕獲，加入詛碼團。" },
+            { from: "deer", to: "kokumei", direction: "to", label: "師生", color: cWild, desc: "【克明 ✦ 繪靈鹿茲】：在聚學舍進修的藝術課程，以及於遊樂園一同挑戰設施解謎的過程中，建立起深厚的師生情誼。" },
+            { from: "volt", to: "takawa", direction: "to", label: "滅村", color: cZoma, desc: "【高和 ✦ 弗爾特】：高和對滅村的弗爾特曾抱持高度警戒，隨著洛爾的放下也一併釋懷。" },
+            { from: "takawa", to: "proto", direction: "both", label: "學長學弟", color: cWild, desc: "【高和 ✦ 普洛特】：兩人自小一同在嵐光村成長，即便後來經歷風雨，這份情感連結仍未完全斷絕。" },
+            { from: "owl", to: "takawa", direction: "to", label: "師生", color: cAcad, desc: "【高和 ✦ 夜瞳梟賢】：在聚學舍修習醫學與急救時，夜瞳梟賢是教導高和無數專業知識的恩師。" },
+            { from: "tia", to: "koushou", direction: "to", label: "音樂指導", color: cWild, desc: "【高翔 ✦ 提婭】：提婭在高翔參與外族守護者的試煉中逐漸認可。後來在樂團排練時，高翔向提婭求教過許多音樂方面的指導與協助。" },
+            { from: "koushou", to: "proto", direction: "both", label: "學長學弟", color: cWild, desc: "【高翔 ✦ 普洛特】：兩人自小一同在嵐光村成長，即便曾親手擊倒敬重的學長，這份情感連結仍未完全斷絕。" },
+            { from: "area", to: "zoma", direction: "to", label: "雇傭", color: cArea, desc: "【艾瑞爾 ✦ 詛碼】：出於大局考量，艾瑞爾軍與詛碼團之間有不少檯面下的雇傭互動。" },
+            { from: "area", to: "ultima", direction: "to", label: "詭笑老頭", color: cArea, desc: "【艾瑞爾 ✦ 阿爾提瑪】：艾瑞爾對這位總是積壓重重任務給他的控制者沒有任何好感。" },
+            { from: "area", to: "fox", direction: "both", label: "學術夥伴", color: cArea, desc: "【艾瑞爾 ✦ 睿策樺霖】：總督與校長在政務與改革陣線上，是最堅實的學術夥伴。" },
+            { from: "jareth", to: "area", direction: "to", label: "十三元素賦形", color: cArea, desc: "【艾瑞爾 ✦ 賈瑞斯】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中賦形而成的新生代元素族人。" },
+            { from: "area", to: "rub", direction: "both", label: "對立組織", color: cArea, desc: "【艾瑞爾 ✦ 劫】：艾瑞爾所代表的市政防術與劫的誓奪爪盟處於水火不容的對立狀態。" },
+            { from: "jareth", to: "kulu", direction: "to", label: "十三元素賦形", color: cAnci, desc: "【賈瑞斯 ✦ 克爾】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中賦形而成的新生代元素族人。" },
+            { from: "jareth", to: "kokumei", direction: "to", label: "十三元素賦形", color: cAnci, desc: "【賈瑞斯 ✦ 克明】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中賦形而成的新生代元素族人。" },
+            { from: "jareth", to: "takawa", direction: "to", label: "十三元素賦形", color: cAnci, desc: "【賈瑞斯 ✦ 高和】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中賦形而成的新生代元素族人。" },
+            { from: "jareth", to: "koushou", direction: "to", label: "十三元素賦形", color: cAnci, desc: "【賈瑞斯 ✦ 高翔】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中賦形而成的新生代元素族人。" },
+            { from: "jareth", to: "roar", direction: "to", label: "十三元素賦形", color: cAnci, desc: "【賈瑞斯 ✦ 洛爾】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中賦形而成的新生代元素族人。" },
+            { from: "jareth", to: "proto", direction: "to", label: "十三元素賦形", color: cAnci, desc: "【賈瑞斯 ✦ 普洛特】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中賦形而成的新生代元素族人。" },
+            { from: "jareth", to: "wakima", direction: "to", label: "十三元素賦形", color: cAnci, desc: "【賈瑞斯 ✦ 瓦奇瑪】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中賦形而成的新生代元素族人。" },
+            { from: "jareth", to: "igarashi", direction: "to", label: "十三元素賦形", color: cAnci, desc: "【賈瑞斯 ✦ 五十嵐】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中賦形而成的新生代元素族人。" },
+            { from: "jareth", to: "rub", direction: "to", label: "仇敵", color: cAnci, desc: "【賈瑞斯 ✦ 劫】：因推拱人類生靈繼任星球意識，造成彼此的決裂。" },
+            { from: "ultima", to: "volt", direction: "to", label: "十三元素賦形", color: cZoma, desc: "【阿爾提瑪 ✦ 弗爾特】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中，於一次實驗賦形而成的新生代元素族人。" },
+            { from: "ultima", to: "zoma", direction: "to", label: "十三元素賦形", color: cZoma, desc: "【阿爾提瑪 ✦ 詛碼】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中賦形而成的新生代元素族人。" },
+            { from: "ultima", to: "veil", direction: "to", label: "十三元素賦形", color: cZoma, desc: "【阿爾提瑪 ✦ 白珥】：於再契選期間，阿爾提瑪利用詛碼身為白珥時的記憶與個性情報，成功賦形的新生代元素族人" },
+            { from: "ultima", to: "arc", direction: "to", label: "十三元素賦形", color: cZoma, desc: "【阿爾提瑪 ✦ 亞爾克】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中，於一次實驗賦形而成的新生代元素族人。" },
+            { from: "proto", to: "volt", direction: "both", label: "勁敵", color: cZoma, desc: "【普洛特 ✦ 弗爾特】：同屬詛碼團幹部，互相有著強烈的競爭意識。" },
+            { from: "proto", to: "deer", direction: "both", label: "博物館同事", color: cZoma, desc: "【普洛特 ✦ 繪靈鹿茲】：在睿智之龍雕像於艾瑞爾博物館出展期間，意外建立的職場同事關係。" },
+            { from: "proto", to: "veil", direction: "to", label: "效忠", color: cZoma, desc: "【普洛特 ✦ 白珥】：對深謀慮的白珥展現出高度的服從與效忠。" },
+            { from: "volt", to: "kage", direction: "to", label: "裏網較勁", color: cZoma, desc: "【弗爾特 ✦ 影】：駭客與情報特務曾在市政廳潛入戰中大肆交鋒。" },
+            { from: "volt", to: "zoma", direction: "to", label: "效忠", color: cZoma, desc: "【弗爾特 ✦ 詛碼】：以破滅之名，將忠誠奉獻給組織領導者詛碼。" },
+            { from: "zoma", to: "kage", direction: "both", label: "對立", color: cZoma, desc: "【詛碼 ✦ 影】：影看不起阿爾提瑪老爺，使組碼為了名譽與信念而對立。" },
+            { from: "zoma", to: "ultima", direction: "to", label: "效忠", color: cZoma, desc: "【詛碼 ✦ 阿爾提瑪】：在賈瑞斯身受阿爾提瑪背叛之際，自身上分裂出的十三個碎片中賦形而成的首位新生代元素族人。。" },
+            { from: "zoma", to: "igarashi", direction: "both", label: "勁敵", color: cZoma, desc: "【詛碼 ✦ 五十嵐】：雙方在守護賈瑞斯的最初交鋒中，成為了宿命勁敵。" },
+            { from: "sugar", to: "wakima", direction: "to", label: "師生", color: cArea, desc: "【瓦奇瑪 ✦ 霜糖紗母】：瓦奇瑪對能親身受到憧憬的甜點大師指導，感到十分光榮。" },
+            { from: "wakima", to: "whissel", direction: "both", label: "跑車夥伴", color: cArea, desc: "【瓦奇瑪 ✦ 旭言】：一同賞車、又買了同一款車的愛好者夥伴。" },
+            { from: "rofena", to: "arashiyama", direction: "both", label: "岩山親戚", color: cArea, desc: "【羅菲娜 ✦ 嵐山】：雙方家族於貓族村中是親戚關係，平時互有往來。" },
+            { from: "zarion", to: "teiner", direction: "both", label: "溫室培育", color: cAnci, desc: "【澤里恩 ✦ 翠芽泰納】：澤里恩經常與泰納一同在溫室中培育各種奇異植物，他的權能深受教授讚賞喜愛。" },
+            { from: "garoz", to: "rub", direction: "both", label: "故友", color: cAnci, desc: "【犺 ✦ 劫】：千年前曾有過生死相交的深刻情誼，如今卻再也見不到面。" },
+            { from: "garoz", to: "raku", direction: "both", label: "故友", color: cAnci, desc: "【犺 ✦ 埒】：上古時期的至交好友，見證了三人命運的巨變。" },
+            { from: "kuzure", to: "electric", direction: "to", label: "沒轍", color: cClaw, desc: "【崩 ✦ 伊蕾琪】：面對這位高人氣主播的大小姐氣場，剛毅木訥的崩總是感到沒轍。" },
+            { from: "kuzure", to: "arc", direction: "to", label: "他不會蹭我吧?", color: cClaw, desc: "【崩 ✦ 亞爾克】：崩對亞爾克的迅焰獒種族感到萬分警惕：「這傢伙該不會像小絨球一樣偷偷想著要蹭我吧？」" },
+            { from: "kuzure", to: "jareth", direction: "to", label: "仇視", color: cAnci, desc: "【崩 ✦ 賈瑞斯】：對背棄元素一族的黃龍，崩懷抱著深層的敵意與不滿。" },
+            { from: "gorilla", to: "doutou", direction: "both", label: "故友?", color: cOuts, desc: "【烈塵巡衛 ✦ 怒濤銳步】：黑猩猩信差與羚羊田徑教授之間有著一段未公開神祕過往。" },
+            { from: "gorilla", to: "electric", direction: "both", label: "戰略夥伴", color: cClaw, desc: "【烈塵巡衛 ✦ 伊蕾琪】：在物資運輸中相識的戰略盟友，而這位黑猩猩總是記不住對方的名字。" },
+            { from: "boar", to: "fox", direction: "to", label: "舊怨", color: cClaw, desc: "【鍛魂獷牙 ✦ 睿策樺霖】：兩人之間有著未公開的恩仇過往。" },
+            { from: "boar", to: "area", direction: "to", label: "舊怨", color: cArea, desc: "【鍛魂獷牙 ✦ 艾瑞爾】：兩人之間有著未公開的恩仇過往。" },
+            { from: "rub", to: "electric", direction: "to", label: "雇傭", color: cClaw, desc: "【伊蕾琪 ✦ 劫】：頂尖主播特務受雇於誓奪爪盟，執行各項高風險黑幫任務。" },
+            { from: "electric", to: "doutou", direction: "both", label: "交勁", color: cAcad, desc: "【伊蕾琪 ✦ 怒濤銳步】：在隱密任務中互相較勁的對手。" },
+            { from: "zoma", to: "doutou", direction: "to", label: "幹部", color: cZoma, desc: "【怒濤銳步 ✦ 詛碼】：田徑教授下課後的加班行程。" },
+            { from: "arc", to: "chitar", direction: "both", label: "田徑社夥伴", color: cAcad, desc: "【亞爾克 ✦ 瞬介】：一同在聚學舍田徑場上奔馳的閃電搭檔。" },
+            { from: "arc", to: "horse", direction: "both", label: "田徑社夥伴", color: cAcad, desc: "【亞爾克 ✦ 颯太】：在長跑訓練中互相打氣的田徑好友。" },
+            { from: "grossa", to: "igrahhan", direction: "both", label: "對立", color: cOuts, desc: "【格洛薩 ✦ 伊格拉罕】：黑幫地下老大與白原行族傳統，造成嚴重對立。" },
+            { from: "grossa", to: "reva", direction: "both", label: "對立", color: cOuts, desc: "【格洛薩 ✦ 雷瓦維那】：北原秩序與維那嶺勢力互為不干涉的堤防關係。" },
+            { from: "tormunn", to: "touphrin", direction: "both", label: "友好?", color: cOuts, desc: "【拓穆恩 ✦ 塔芙琳】：艾瑞拉與白原行族私底下的溝通渠道。" },
+            { from: "igarashi", to: "cat", direction: "to", label: "師生", color: cBeast, desc: "【瑟莉雅 ✦ 五十嵐】：在數十年前，瑟莉雅曾為五十嵐於村中小學堂的學生之一，卻也是揭開真相後最先害怕逃離的人。" }
+        ];
+
+        const edgeMap = new Map();
+        rawEdges.forEach(e => {
+            const key = e.from < e.to ? `${e.from}__${e.to}` : `${e.to}__${e.from}`;
+            if (!edgeMap.has(key)) {
+                edgeMap.set(key, {
+                    from: e.from, to: e.to, color: e.color, direction: e.direction,
+                    labels: [e.label], descs: [e.desc]
+                });
+            } else {
+                const existing = edgeMap.get(key);
+                if (!existing.labels.includes(e.label)) {
+                    existing.labels.push(e.label);
+                    existing.descs.push(e.desc);
+                }
+                if (e.direction === "both") existing.direction = "both";
+            }
+        });
+
+        const edges = Array.from(edgeMap.values()).map(item => ({
+            from: item.from, to: item.to, color: item.color, direction: item.direction,
+            label: item.labels.join(" / "), desc: item.descs.join("\n\n")
+        }));
+
+        let activeNode = null;
+        let activeEdge = null;
+        let dashOffset = 0;
+
+        function drawArrowHead(x, y, angle, color, scaleFactor) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-10 / scaleFactor, -5 / scaleFactor);
+            ctx.lineTo(-10 / scaleFactor, 5 / scaleFactor);
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function drawPeriodicNetwork() {
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.04)";
+            ctx.lineWidth = 1;
+            const gridSize = 60;
+            const offsetX = (width / 2 + cameraX) % gridSize;
+            const offsetY = (height / 2 + cameraY) % gridSize;
+            
+            for (let x = offsetX; x < width; x += gridSize) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+            }
+            for (let y = offsetY; y < height; y += gridSize) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+            }
+
+            ctx.save();
+            ctx.translate(width / 2, height / 2);
+            ctx.scale(scale, scale);
+            ctx.translate(cameraX, cameraY);
+
+            dashOffset -= 0.6 / scale;
+            edges.forEach(edge => {
+                const n1 = nodes.find(n => n.id === edge.from);
+                const n2 = nodes.find(n => n.id === edge.to);
+
+                if (n1 && n2) {
+                    let isHighlighted = false;
+                    let isDimmed = false;
+
+                    if (activeNode) {
+                        if (edge.from === activeNode.id || edge.to === activeNode.id) isHighlighted = true;
+                        else isDimmed = true;
+                    }
+                    if (activeEdge === edge) isHighlighted = true;
+
+                    ctx.save();
+                    ctx.globalAlpha = isDimmed ? 0.05 : (isHighlighted ? 1.0 : 0.35);
+
+                    ctx.beginPath();
+                    ctx.moveTo(n1.x, n1.y);
+                    ctx.lineTo(n2.x, n2.y);
+                    ctx.strokeStyle = edge.color;
+                    ctx.lineWidth = isHighlighted ? 3.5 / scale : 1.2 / scale;
+                    if (isHighlighted) {
+                        ctx.shadowColor = edge.color;
+                        ctx.shadowBlur = 15;
+                    }
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.moveTo(n1.x, n1.y);
+                    ctx.lineTo(n2.x, n2.y);
+                    ctx.strokeStyle = "#ffffff";
+                    ctx.lineWidth = 1.2 / scale;
+                    ctx.setLineDash([4 / scale, 16 / scale]);
+                    ctx.lineDashOffset = dashOffset;
+                    ctx.stroke();
+
+                    const angle = Math.atan2(n2.y - n1.y, n2.x - n1.x);
+                    const nodeRadius = 22; 
+                    
+                    if (edge.direction === "to" || edge.direction === "both") {
+                        const arrowX2 = n2.x - Math.cos(angle) * nodeRadius;
+                        const arrowY2 = n2.y - Math.sin(angle) * nodeRadius;
+                        drawArrowHead(arrowX2, arrowY2, angle, edge.color, scale);
+                    }
+                    if (edge.direction === "both") {
+                        const arrowX1 = n1.x + Math.cos(angle) * nodeRadius;
+                        const arrowY1 = n1.y + Math.sin(angle) * nodeRadius;
+                        drawArrowHead(arrowX1, arrowY1, angle + Math.PI, edge.color, scale);
+                    }
+
+                    if (!isDimmed) {
+                        const midX = (n1.x + n2.x) / 2;
+                        const midY = (n1.y + n2.y) / 2;
+                        ctx.font = isHighlighted ? `${11/scale}px -apple-system` : `${9/scale}px -apple-system`;
+                        ctx.fillStyle = isHighlighted ? "#ffffff" : "#94a3b8";
+                        ctx.textAlign = "center";
+                        ctx.fillText(edge.label, midX, midY - (8/scale));
+                    }
+                    ctx.restore();
+                }
+            });
+
+            nodes.forEach(node => {
+                let isHighlighted = false;
+                let isDimmed = false;
+
+                if (activeNode) {
+                    if (node.id === activeNode.id) {
+                        isHighlighted = true;
+                    } else {
+                        const isConnected = edges.some(e => 
+                            (e.from === activeNode.id && e.to === node.id) ||
+                            (e.to === activeNode.id && e.from === node.id)
+                        );
+                        if (isConnected) isHighlighted = true;
+                        else isDimmed = true;
+                    }
+                }
+
+                ctx.save();
+                ctx.globalAlpha = isDimmed ? 0.15 : 1.0;
+
+                const radius = isHighlighted ? (24 / scale) : (18 / scale);
+
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius + (2.5 / scale), 0, Math.PI * 2);
+                ctx.fillStyle = node.color;
+                ctx.shadowColor = node.color;
+                ctx.shadowBlur = isHighlighted ? 18 : 8;
+                ctx.fill();
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+                ctx.clip();
+
+                if (node.isImgLoaded) {
+                    ctx.drawImage(node.avatarImg, node.x - radius, node.y - radius, radius * 2, radius * 2);
+                } else {
+                    ctx.fillStyle = node.color;
+                    ctx.fillRect(node.x - radius, node.y - radius, radius * 2, radius * 2);
+                }
+                ctx.restore();
+
+                ctx.font = isHighlighted ? `bold ${14/scale}px -apple-system` : `${12/scale}px -apple-system`;
+                ctx.fillStyle = isHighlighted ? "#ffffff" : "#e2e8f0";
+                ctx.textAlign = "center";
+                ctx.fillText(node.name, node.x, node.y + radius + (14 / scale));
+
+                ctx.restore();
+            });
+
+            ctx.restore();
+        }
+
+        // ==========================================
+        // 🌟 3. 世界地理地圖數據與邏輯 🌟
+        // ==========================================
+        const cGeoCore = "#c084fc"; 
+        const cGeoCity = "#38bdf8"; 
+        const cGeoRuins = "#64748b"; 
+        const cGeoPort = "#34d399"; 
+        const cGeoBeast = "#f59e0b"; 
+        const cGeoNature = "#10b981"; 
+
+        const geoLocations = [
+            { id: "source", name: "元素之源", badge: "異世界中心", region: "異空間 ✦ 漂浮島嶼", x: -79.5, y: -225, color: cGeoCore, tier: 1, type: "core", desc: "位在星球中央的異空間，一座漂浮的島嶼上，是元素一族生命循環的核心。" },
+            // 嵐光大陸
+            { id: "arashimitsu_city", name: "嵐光城", badge: "政經中樞", region: "嵐光大陸 ✦ 東北部區域", x: -720, y: -275, color: cGeoCity, tier: 2, type: "city", desc: "位於嵐光大陸東北方的繁華大城，人族的市政中心，為政經的核心中樞。" },
+            { id: "aerial_floating", name: "艾瑞爾城 (浮空)", badge: "科技浮空城", region: "嵐光大陸 ✦ 嵐光城近郊空中", x: -688, y: -319, color: cGeoCity, tier: 1, type: "city", desc: "遷移後浮空於嵐光城東北方的科技大城，為全星球政經談判與新科技研發的核心。" },
+            { id: "arashimitsu_town", name: "嵐光鎮", badge: "復興新家園", region: "嵐光大陸 ✦ 嵐光城東南方近郊", x: -685, y: -204, color: cGeoCity, tier: 3, type: "village", desc: "位於嵐光城下方不遠處，由洛爾與高和帶領無家可歸的居民復興建立的新家園。" },
+            { id: "arashimitsu_port", name: "嵐光港", badge: "東部重要港口", region: "嵐光大陸 ✦ 東邊海岸", x: -510, y: 125, color: cGeoPort, tier: 2, type: "port", desc: "位於嵐光大陸東方的海岸港口，是與其他大陸間的重要樞紐。" },
+            { id: "vina_ruins", name: "維那嶺城堡廢墟", badge: "城堡廢墟", region: "嵐光大陸 ✦ 中部區域", x: -870, y: 125, color: cGeoRuins, tier: 4, type: "ruins", desc: "位於嵐光大陸內陸，曾是千年前繁華的嶺鎮。" },
+            { id: "arashimitsu_ruins", name: "嵐光村廢墟", badge: "故鄉廢墟", region: "嵐光大陸 ✦ 南部區域", x: -870, y: 525, color: cGeoRuins, tier: 4, type: "ruins", desc: "位於維那嶺城堡廢墟南方，曾是洛爾等人的故鄉。" },
+            { id: "volcano", name: "火山", badge: "地貌景觀", region: "嵐光大陸 ✦ 西側連綿山區之中", x: -1073, y: 187, color: cGeoNature, tier: 4, type: "landmark", desc: "位於嵐光大陸西方的連綿山區，曾是洛爾等人恢復元素之源連結點的地方，亦是古時熔岩龍的居處。" },
+            // 尼爾桑大陸
+            { id: "zoma_north", name: "詛碼團廢棄據點(北)", badge: "廢棄據點", region: "尼爾桑大陸 ✦ 北部區域", x: 630, y: -230, color: cGeoRuins, tier: 4, type: "base", desc: "位於尼爾桑大陸北部的詛碼團廢棄據點。" },
+            { id: "neilsan_port", name: "尼爾桑港", badge: "西岸門戶", region: "尼爾桑大陸 ✦ 西北海岸", x: 280, y: -49, color: cGeoPort, tier: 2, type: "port", desc: "位於尼爾桑大陸西邊海岸，為外界進入森林的門戶。" },
+            { id: "wolf_village", name: "狼人村", badge: "獸人村落", region: "尼爾桑大陸 ✦ 西北部區域", x: 570, y: -15, color: cGeoBeast, tier: 3, type: "village", desc: "位於尼爾桑港口東邊偏北一點的森林中央，克爾與克明的故鄉。" },
+            { id: "cat_village", name: "貓族村", badge: "獸人聚落", region: "尼爾桑大陸 ✦ 東北部區域", x: 780, y: 0, color: cGeoBeast, tier: 3, type: "village", desc: "位於狼人村東邊、環輝樹脊西北邊的隱秘村落。" },
+            { id: "wolf_ruins", name: "水之遺跡", badge: "叢林遺跡", region: "尼爾桑大陸 ✦ 樹脊西北邊近郊", x: 600, y: 120, color: cGeoRuins, tier: 4, type: "ruins", desc: "克明與高翔曾經探險的水之遺跡。" },
+            { id: "cat_sacred", name: "貓族聖地", badge: "傳統聖地", region: "尼爾桑大陸 ✦ 貓族村東邊近郊", x: 820, y: -32, color: cGeoBeast, tier: 4, type: "sacred", desc: "位於貓族村東邊不遠處山區的傳統聖地，保有紅焰壁畫。" },
+            { id: "tree_ridge", name: "環輝樹脊", badge: "奇觀地貌", region: "尼爾桑大陸 ✦ 中央地區", x: 720, y: 93, color: cGeoNature, tier: 4, type: "landmark", desc: "位於狼人村相對東南方的雄偉自然奇觀。" },
+            { id: "wolf_domain", name: "狼人神域", badge: "傳統聖地", region: "尼爾桑大陸 ✦ 樹脊下方近郊", x: 639, y: 200, color: cGeoBeast, tier: 4, type: "sacred", desc: "位於環輝樹脊西南方，為狼人村祭拜先祖的神域雕像群。" },
+            { id: "library_vault", name: "學識之庫", badge: "古老寶庫", region: "尼爾桑大陸 ✦ 樹脊與神域近郊", x: 600, y: 210, color: cGeoCore, tier: 1, type: "sacred", desc: "位於環輝樹脊西南方，狼族神域的入口，由影識秘爪駐守保存星球真實歷史。" },
+            { id: "fishing_village", name: "西南漁村", badge: "沿海聚落", region: "尼爾桑大陸 ✦ 西南方海岸", x: 468, y: 519, color: cGeoBeast, tier: 3, type: "village", desc: "位於尼爾桑大陸西南方的平靜漁村，凱登的故鄉。" },
+            { id: "underwater_lab", name: "海底實驗室", badge: "深海遺址", region: "尼爾桑大陸 ✦ 漁村外海", x: 275, y: 376, color: cGeoRuins, tier: 4, type: "ruins", desc: "位於西南漁村外海的海底，為聚學舍過去的秘密實驗室遺址。" },
+            { id: "bear_village", name: "熊族村", badge: "獸人聚落", region: "尼爾桑大陸 ✦ 下方森林中", x: 600, y: 375, color: cGeoBeast, tier: 3, type: "village", desc: "位於神域南方森林之中，豪助與澤里恩的故鄉。" },
+            { id: "zoma_south", name: "詛碼團廢棄據點(南)", badge: "廢棄據點", region: "尼爾桑大陸 ✦ 南海岸線", x: 643, y: 738, color: cGeoRuins, tier: 4, type: "base", desc: "位於尼爾桑大陸最南邊海岸線附近的廢棄據點。" },
+            { id: "south_island", name: "南方小島", badge: "隔海小島", region: "尼爾桑大陸 ✦ 南邊隔海處", x: 650, y: 890, color: cGeoNature, tier: 4, type: "landmark", desc: "位於尼爾桑大陸隔海南邊不遠處的獨立小島。" },
+            { id: "beach", name: "北登陸點", badge: "隔海小島", region: "尼爾桑大陸 ✦ 南邊隔海處", x: 643, y: 840, color: cGeoPort, tier: 2, type: "port", desc: "南部小島的隱密門戶。" },
+            // 艾瑞爾大陸
+            { id: "aerial_port", name: "艾瑞爾港", badge: "南岸門戶", region: "艾瑞爾大陸 ✦ 南邊海岸", x: -65, y: -646, color: cGeoPort, tier: 2, type: "port", desc: "艾瑞爾大陸南邊海岸港口，為北方邊境門戶。" },
+            { id: "aerial_crater", name: "星脈天軌 (艾瑞爾城遺址)", badge: "巨大坑洞遺址", region: "艾瑞爾大陸 ✦ 中央區域", x: -95, y: -965, color: cGeoRuins, tier: 1, type: "ruins", desc: "艾瑞爾城大規模城市遷移後留下的如隕石般巨大空洞殘跡，現已改建為星脈天軌。" },
+            { id: "west_nature_reserve", name: "自然保留區(西)", badge: "自然保護區", region: "艾瑞爾大陸 ✦ 遺址西側", x: -440, y: -973, color: cGeoNature, tier: 4, type: "landmark", desc: "位於星脈天軌遺址西邊的廣袤自然保留區。" },
+            { id: "nature_reserve", name: "自然保留區(東)", badge: "自然保護區", region: "艾瑞爾大陸 ✦ 冰原附近", x: 35, y: -1053, color: cGeoNature, tier: 4, type: "landmark", desc: "位於冰原不遠處的自然保留區，亞爾克的故鄉。" },
+            { id: "zoma_base", name: "詛碼團基地", badge: "敵對基地", region: "艾瑞爾大陸 ✦ 東南區域", x: 220, y: -731, color: cGeoRuins, tier: 4, type: "base", desc: "位於艾瑞爾大陸東南的詛碼團秘密基地。" },
+            { id: "jin_iron_town", name: "燼鐵鎮", badge: "重工鍛造鎮", region: "艾瑞爾大陸 ✦ 東部區域", x: 150, y: -912, color: cGeoCity, tier: 2, type: "city", desc: "位於艾瑞爾大陸東部區域，砧鍛坊所在地。" },
+            { id: "north_town", name: "北鎮", badge: "山區邊境鎮", region: "艾瑞爾大陸 ✦ 北方區域", x: -215, y: -1172, color: cGeoCity, tier: 2, type: "city", desc: "位於北方靠山區的邊境城鎮。" },
+            { id: "clock", name: "永刻之塔", badge: "鐘塔聚落", region: "艾瑞爾大陸 ✦ 北方深處區域", x: -20, y: -1213, color: cGeoNature, tier: 3, type: "landmark", desc: "北方山區深處隱密的觀光小鎮，有座記錄宿命的古老鐘塔。" },
+            { id: "clone_factory_ruins", name: "複製核心工廠", badge: "工廠廢墟", region: "艾瑞爾大陸 ✦ 西方區域", x: -300, y: -1111, color: cGeoRuins, tier: 4, type: "ruins", desc: "位於北鎮附近湖區，詛碼團曾經的複製工廠廢墟。" },
+            { id: "wind_ruin", name: "大樓遺跡", badge: "城市廢墟", region: "艾瑞爾大陸 ✦ 西方區域", x: -257, y: -900, color: cGeoRuins, tier: 4, type: "ruins", desc: "艾瑞爾等人曾探索的風之遺跡大樓廢墟。" },
+            { id: "hidden_port", name: "北港", badge: "隱密港口", region: "艾瑞爾大陸 ✦ 北鎮近郊", x: -172, y: -1218, color: cGeoPort, tier: 3, type: "port", desc: "位於北鎮東北極近處的隱密港口，是北鎮的交易門戶。" }
+        ];
+
+        const geoRoutes = [
+            { from: "arashimitsu_port", to: "neilsan_port", type: "sea", note: "約 7 天航程" },
+            { from: "neilsan_port", to: "fishing_village", type: "sea", note: "約 4 天" },
+            { from: "neilsan_port", to: "aerial_port", type: "sea", note: "約 5 天" },
+            { from: "arashimitsu_port", to: "aerial_port", type: "sea", note: "約 6 天" },
+            { from: "aerial_port", to: "hidden_port", type: "sea", note: "約 4 天" },
+            { from: "aerial_floating", to: "aerial_crater", type: "teleport", note: "即時傳送" },
+            { from: "arashimitsu_city", to: "aerial_floating", type: "teleport", note: "即時傳送" },
+            { from: "aerial_floating", to: "aerial_port", type: "teleport", note: "即時傳送" },
+            { from: "arashimitsu_city", to: "arashimitsu_town", type: "road" },
+            { from: "arashimitsu_town", to: "arashimitsu_port", type: "road" },
+            { from: "arashimitsu_town", to: "vina_ruins", type: "road" },
+            { from: "volcano", to: "vina_ruins", type: "road" },
+            { from: "arashimitsu_ruins", to: "vina_ruins", type: "road" },
+            { from: "neilsan_port", to: "wolf_village", type: "road" },
+            { from: "wolf_village", to: "wolf_ruins", type: "road" },
+            { from: "wolf_domain", to: "wolf_ruins", type: "road" },
+            { from: "wolf_village", to: "cat_village", type: "road" },
+            { from: "cat_village", to: "cat_sacred", type: "road" },
+            { from: "wolf_domain", to: "library_vault", type: "road" },
+            { from: "bear_village", to: "fishing_village", type: "road" },
+            { from: "aerial_port", to: "aerial_crater", type: "road" },
+            { from: "aerial_crater", to: "jin_iron_town", type: "road" },
+            { from: "clone_factory_ruins", to: "north_town", type: "road" },
+            { from: "aerial_crater", to: "north_town", type: "road" },
+            { from: "jin_iron_town", to: "nature_reserve", type: "road" },
+            { from: "clock", to: "north_town", type: "road" },
+            { from: "north_town", to: "hidden_port", type: "road" },
+            { from: "beach", to: "zoma_south", type: "sea" },
+            { from: "source", to: "volcano", type: "core" },
+            { from: "source", to: "wolf_ruins", type: "core" },
+            { from: "source", to: "wind_ruin", type: "core" }
+        ];
+
+        const landscapeLabels = [
+            { text: "▲▲ 西側連綿山脈 ▲▲", x: -1065, y: 64, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 東側山脈 ▲", x: -691, y: 334, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 內陸平原 ▲", x: -812, y: -112, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 密林深處 ▲", x: 495, y: 210, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 北部林帶 ▲", x: 590, y: -120, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 南方林地 ▲", x: 680, y: 362, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 東部山區 ▲", x: 820, y: 203, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 南端高地 ▲", x: 665, y: 640, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 極北冰原 ▲", x: -166, y: -1113, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 冰川山脈 ▲", x: 153, y: -1121, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 南方荒野 ▲", x: -70, y: -802.5, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 東部山區 ▲", x: 682, y: 871, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 中部平原 ▲", x: 647, y: 910, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 北登陸點 ▲", x: 640, y: 845, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 西南礦區 ▲", x: 602, y: 939, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 西部林區 ▲", x: 606, y: 893, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 冰封湖區 ▲", x: -354, y: -1054, color: "rgba(100, 116, 139, 0.45)" },
+            { text: "▲ 北境邊山 ▲", x: -345, y: -1186, color: "rgba(100, 116, 139, 0.45)" }
+        ];
+
+        const coastalFeatures = [
+            { text: "• 風息之岬", x: -777, y: 725 },
+            { text: "• 黑曜石灣", x: -1196, y: 66 },
+            { text: "• 銀鱗海灣", x: 323, y: -144 },
+            { text: "• 落葉角", x: 730, y: 728 },
+            { text: "• 斷砧岬", x: 399, y: -962 },
+            { text: "• 霜裂灣", x: -444, y: -1189 }
+        ];
+
+        const marineHazards = [
+            { text: "+ + + 暗礁海域", x: 281, y: 433 },
+            { text: "+ + 碎冰帶", x: -400, y: -1350 },
+            { text: "✦ 未探明遠洋深淵 ✦", x: -1400, y: 0 }
+        ];
+
+        const oceanLabels = [
+            { text: "✦ 天嵐洋", x: -305, y: -515, color: "rgba(56, 189, 248, 0.16)" },
+            { text: "✦ 北境凍海", x: -70, y: -1380, color: "rgba(56, 189, 248, 0.16)" },
+            { text: "✦ 深綠海槽", x: 352, y: -524, color: "rgba(52, 211, 153, 0.16)" },
+            { text: "✦ 靜息海盆", x: 130, y: 598, color: "rgba(56, 189, 248, 0.16)" }
+        ];
+
+        const oceanCurrents = [
+            { path: [{x: -300, y: 150}, {x: -100, y: 350}, {x: 200, y: 300}], label: "天嵐暖流 →" },
+            { path: [{x: 450, y: -350}, {x: 100, y: -450}, {x: -200, y: -380}], label: "← 內海回流" },
+            { path: [{x: 150, y: 600}, {x: 350, y: 800}, {x: 500, y: 880}], label: "南方環流 →" }
+        ];
+
+        const continentWatermarks = [
+            { text: "ARASHIMITSU", sub: "嵐光大陸", x: -879, y: 40 },
+            { text: "NILSAN", sub: "尼爾桑大陸", x: 640, y: 190 },
+            { text: "AREA", sub: "艾瑞爾大陸", x: -70, y: -920 }
+        ];
+
+        const arashimitsuPoints = [
+            { x: -1160, y: -80 }, { x: -1120, y: -300 }, { x: -960, y: -470 }, { x: -840, y: -430 },
+            { x: -740, y: -570 }, { x: -550, y: -500 }, { x: -430, y: -340 }, { x: -520, y: -190 },
+            { x: -440, y: -30 },  { x: -480, y: 180 },  { x: -420, y: 260 },  { x: -560, y: 380 },
+            { x: -660, y: 550 },  { x: -760, y: 730 },  { x: -880, y: 710 },  { x: -980, y: 640 },
+            { x: -1140, y: 440 }, { x: -1190, y: 200 }
+        ];
+        const arashimitsuIslands = [
+            { x: -400, y: 50, r: 16 }, { x: -380, y: 350, r: 12 }, { x: -1170, y: 520, r: 14 }
+        ];
+
+        const neilsanPoints = [
+            { x: 310, y: -190 }, { x: 420, y: -290 }, { x: 620, y: -280 }, { x: 760, y: -240 },
+            { x: 910, y: -120 }, { x: 1020, y: 40 }, { x: 980, y: 190 }, { x: 910, y: 360 },
+            { x: 820, y: 530 }, { x: 740, y: 730 }, { x: 630, y: 790 }, { x: 470, y: 710 },
+            { x: 370, y: 590 }, { x: 430, y: 430 }, { x: 270, y: 320 }, { x: 310, y: 130 },
+            { x: 280, y: -30 }
+        ];
+        const neilsanIslands = [
+            { x: 260, y: 40, r: 15 }, { x: 290, y: 470, r: 18 }, { x: 880, y: 620, r: 14 }
+        ];
+
+        const aerialPoints = [
+            { x: -640, y: -860 }, { x: -490, y: -740 }, { x: -280, y: -710 }, { x: -90, y: -610 },
+            { x: 130, y: -650 },  { x: 290, y: -690 },  { x: 430, y: -780 },  { x: 510, y: -910 },
+            { x: 440, y: -1080 }, { x: 270, y: -1200 }, { x: 30, y: -1250 },   { x: -170, y: -1240 },
+            { x: -420, y: -1220 }, { x: -620, y: -1130 }, { x: -690, y: -990 }
+        ];
+        const aerialIslands = [
+            { x: 240, y: -590, r: 15 }, { x: -680, y: -760, r: 18 }, { x: -480, y: -1270, r: 16 }
+        ];
+
+        const sourcePoints = [
+            { x: -145, y: -280 }, { x: -25, y: -290 }, { x: 15, y: -190 }, { x: -110, y: -155 }
+        ];
+
+        const southIslandPoints = [
+            { x: 550, y: 865 }, { x: 685, y: 840 }, { x: 710, y: 940 }, { x: 575, y: 965 }
+        ];
+
+        let activeGeoLocation = null;
+        let hoveredGeoLocation = null;
+        let rulerActive = false;
+        let rulerPoints = [];
+
+        function resetGeoView() {
+            targetCameraX = 50;
+            targetCameraY = 150;
+            targetScale = 0.85;
+            activeGeoLocation = null;
+            closeDrawer();
+        }
+
+        function toggleRuler() {
+            rulerActive = !rulerActive;
+            rulerPoints = [];
+            const btn = document.getElementById('ruler-btn');
+            btn.classList.toggle('active', rulerActive);
+            btn.innerText = rulerActive ? "📏 測距模式中 (點選兩點)" : "📏 空間測距工具 [關閉]";
+            document.getElementById('hint-box').innerText = rulerActive 
+                ? "【測距模式】點擊地圖任意兩點，計算直線航行距離。"
+                : "拖曳平移 ｜ 滾輪縮放 ｜ 點擊地點檢視詳細與高亮航線";
+        }
+
+        function getCoastlineNoise(x, y, seed) {
+            const f1 = Math.sin(x * 0.015 + seed) * Math.cos(y * 0.015 - seed);
+            const f2 = Math.sin(x * 0.045 - seed * 2) * Math.cos(y * 0.045 + seed * 1.5) * 0.5;
+            const f3 = Math.sin(x * 0.12 + seed * 3.7) * Math.cos(y * 0.12 - seed * 2.1) * 0.25;
+            return (f1 + f2 + f3) * 16;
+        }
+
+        function generateFractalCoastline(points, iterations = 3, roughness = 0.45, seed = 1.0) {
+            let pts = [...points];
+            for (let it = 0; it < iterations; it++) {
+                const newPts = [];
+                const len = pts.length;
+                for (let i = 0; i < len; i++) {
+                    const p1 = pts[i];
+                    const p2 = pts[(i + 1) % len];
+                    newPts.push(p1);
+
+                    const midX = (p1.x + p2.x) / 2;
+                    const midY = (p1.y + p2.y) / 2;
+                    const dx = p2.x - p1.x;
+                    const dy = p2.y - p1.y;
+                    const dist = Math.hypot(dx, dy);
+
+                    const nx = -dy / dist;
+                    const ny = dx / dist;
+                    const disp = (getCoastlineNoise(midX, midY, seed + it * 10) / 16) * dist * roughness;
+
+                    newPts.push({ x: midX + nx * disp, y: midY + ny * disp });
+                }
+                pts = newPts;
+            }
+            return pts;
+        }
+
+        function drawNaturalContinent(basePoints, fillColor, shelfColor, strokeColor, shadowColor, seed, islands = []) {
+            const coastline = generateFractalCoastline(basePoints, 3, 0.42, seed);
+            const len = coastline.length;
+
+            ctx.beginPath();
+            ctx.moveTo(coastline[0].x, coastline[0].y);
+            for (let i = 0; i < len; i++) ctx.lineTo(coastline[i].x, coastline[i].y);
+            ctx.closePath();
+            ctx.lineWidth = 28 / scale;
+            ctx.strokeStyle = shelfColor;
+            ctx.lineJoin = "round";
+            ctx.stroke();
+
+            ctx.lineWidth = 12 / scale;
+            ctx.strokeStyle = strokeColor.replace(/[\d\.]+\)$/, "0.22)");
+            ctx.stroke();
+
+            ctx.fillStyle = fillColor;
+            ctx.fill();
+
+            ctx.shadowColor = shadowColor;
+            ctx.shadowBlur = 12;
+            ctx.lineWidth = 1.8 / scale;
+            ctx.strokeStyle = strokeColor;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            if (islands && islands.length > 0) {
+                islands.forEach((isle, idx) => {
+                    const islePts = [];
+                    const segments = 6;
+                    for (let a = 0; a < segments; a++) {
+                        const angle = (a / segments) * Math.PI * 2;
+                        const r = isle.r * (0.65 + 0.35 * Math.sin(angle * 3 + seed + idx));
+                        islePts.push({
+                            x: isle.x + Math.cos(angle) * r,
+                            y: isle.y + Math.sin(angle) * r
+                        });
+                    }
+                    const isleCoast = generateFractalCoastline(islePts, 2, 0.3, seed + idx * 5);
+                    ctx.beginPath();
+                    ctx.moveTo(isleCoast[0].x, isleCoast[0].y);
+                    for (let i = 1; i < isleCoast.length; i++) ctx.lineTo(isleCoast[i].x, isleCoast[i].y);
+                    ctx.closePath();
+                    
+                    ctx.lineWidth = 4 / scale;
+                    ctx.strokeStyle = shelfColor;
+                    ctx.stroke();
+                    ctx.fillStyle = fillColor;
+                    ctx.fill();
+                    ctx.lineWidth = 1.2 / scale;
+                    ctx.strokeStyle = strokeColor;
+                    ctx.stroke();
+                });
+            }
+        }
+
+        function drawGeoMap() {
+            ctx.save();
+            ctx.translate(width / 2, height / 2);
+            ctx.scale(scale, scale);
+            ctx.translate(cameraX, cameraY);
+
+            // 經緯網格
+            ctx.lineWidth = 1 / scale;
+            const step = 200;
+            for (let x = -2000; x <= 2000; x += step) {
+                ctx.strokeStyle = "rgba(56, 189, 248, 0.028)";
+                ctx.beginPath();
+                ctx.moveTo(x, -2000);
+                ctx.quadraticCurveTo(x + 100 * Math.sin(x/500), 0, x, 2000);
+                ctx.stroke();
+            }
+            for (let y = -2000; y <= 2000; y += step) {
+                const isEquator = (y === 0);
+                const isArctic = (y === -1000);
+                if (isEquator) {
+                    ctx.strokeStyle = "rgba(56, 189, 248, 0.12)";
+                    ctx.setLineDash([12 / scale, 6 / scale, 3 / scale, 6 / scale]);
+                } else if (isArctic) {
+                    ctx.strokeStyle = "rgba(52, 211, 153, 0.1)";
+                    ctx.setLineDash([8 / scale, 6 / scale]);
+                } else {
+                    ctx.strokeStyle = "rgba(56, 189, 248, 0.028)";
+                    ctx.setLineDash([]);
+                }
+                ctx.beginPath();
+                ctx.moveTo(-2000, y);
+                ctx.quadraticCurveTo(0, y + 100 * Math.cos(y/500), 2000, y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                if (isEquator) {
+                    ctx.font = `600 ${9 / scale}px monospace`;
+                    ctx.fillStyle = "rgba(56, 189, 248, 0.3)";
+                    ctx.textAlign = "left";
+                    ctx.fillText("✦ EQUATORIAL LINE (赤道)", -1900, y - 6 / scale);
+                } else if (isArctic) {
+                    ctx.font = `600 ${9 / scale}px monospace`;
+                    ctx.fillStyle = "rgba(52, 211, 153, 0.25)";
+                    ctx.textAlign = "left";
+                    ctx.fillText("✦ ARCTIC CIRCLE (北極圈)", -1900, y - 6 / scale);
+                }
+            }
+
+            // 十字節點
+            ctx.fillStyle = "rgba(56, 189, 248, 0.12)";
+            ctx.font = `${8 / scale}px monospace`;
+            ctx.textAlign = "center";
+            for (let x = -1600; x <= 1600; x += 400) {
+                for (let y = -1600; y <= 1600; y += 400) {
+                    ctx.fillText("+", x, y + 3 / scale);
+                }
+            }
+
+            const showContinents = document.getElementById('layer-continents').checked;
+            if (showContinents) {
+                drawNaturalContinent(arashimitsuPoints, "rgba(14, 116, 144, 0.28)", "rgba(56, 189, 248, 0.08)", "rgba(56, 189, 248, 0.85)", "rgba(56, 189, 248, 0.45)", 2.3, arashimitsuIslands);
+                drawNaturalContinent(neilsanPoints, "rgba(180, 83, 9, 0.28)", "rgba(245, 158, 11, 0.08)", "rgba(245, 158, 11, 0.85)", "rgba(245, 158, 11, 0.45)", 4.8, neilsanIslands);
+                drawNaturalContinent(southIslandPoints, "rgba(180, 83, 9, 0.28)", "rgba(245, 158, 11, 0.08)", "rgba(245, 158, 11, 0.85)", "rgba(245, 158, 11, 0.45)", 6.1);
+                drawNaturalContinent(aerialPoints, "rgba(6, 95, 70, 0.28)", "rgba(52, 211, 153, 0.08)", "rgba(52, 211, 153, 0.85)", "rgba(52, 211, 153, 0.45)", 3.4, aerialIslands);
+                drawNaturalContinent(sourcePoints, "rgba(126, 34, 206, 0.45)", "rgba(192, 132, 252, 0.12)", "rgba(192, 132, 252, 0.95)", "rgba(192, 132, 252, 0.7)", 8.7);
+
+                continentWatermarks.forEach(wm => {
+                    ctx.font = `800 ${46 / scale}px -apple-system`;
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.04)";
+                    ctx.textAlign = "center";
+                    ctx.fillText(wm.text, wm.x, wm.y);
+
+                    ctx.font = `600 ${16 / scale}px -apple-system`;
+                    ctx.fillStyle = "rgba(56, 189, 248, 0.07)";
+                    ctx.fillText(wm.sub, wm.x, wm.y + (24 / scale));
+                });
+
+                const showLabels = document.getElementById('layer-labels').checked;
+                if (showLabels) {
+                    landscapeLabels.forEach(l => {
+                        ctx.font = `bold ${12 / scale}px -apple-system`;
+                        ctx.fillStyle = l.color;
+                        ctx.textAlign = "center";
+                        ctx.fillText(l.text, l.x, l.y);
+                    });
+                }
+            }
+
+            const showOcean = document.getElementById('layer-ocean').checked;
+            if (showOcean) {
+                oceanLabels.forEach(ol => {
+                    ctx.font = `italic 700 ${18 / scale}px -apple-system`;
+                    ctx.fillStyle = ol.color;
+                    ctx.textAlign = "center";
+                    ctx.fillText(ol.text, ol.x, ol.y);
+                });
+
+                oceanCurrents.forEach((oc) => {
+                    ctx.beginPath();
+                    ctx.moveTo(oc.path[0].x, oc.path[0].y);
+                    for (let i = 1; i < oc.path.length; i++) ctx.lineTo(oc.path[i].x, oc.path[i].y);
+                    ctx.strokeStyle = "rgba(56, 189, 248, 0.2)";
+                    ctx.lineWidth = 1.5 / scale;
+                    ctx.setLineDash([8 / scale, 6 / scale]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    const mid = oc.path[Math.floor(oc.path.length / 2)];
+                    ctx.font = `${10 / scale}px -apple-system`;
+                    ctx.fillStyle = "rgba(56, 189, 248, 0.35)";
+                    ctx.fillText(oc.label, mid.x, mid.y - 8 / scale);
+                });
+
+                coastalFeatures.forEach(cf => {
+                    ctx.font = `${9.5 / scale}px -apple-system`;
+                    ctx.fillStyle = "rgba(148, 163, 184, 0.4)";
+                    ctx.textAlign = "center";
+                    ctx.fillText(cf.text, cf.x, cf.y);
+                });
+
+                marineHazards.forEach(mh => {
+                    ctx.font = `italic 600 ${10 / scale}px monospace`;
+                    ctx.fillStyle = "rgba(56, 189, 248, 0.25)";
+                    ctx.textAlign = "center";
+                    ctx.fillText(mh.text, mh.x, mh.y);
+                });
+            }
+
+            const showRoutes = document.getElementById('layer-routes').checked;
+            if (showRoutes) {
+                const locMap = {};
+                geoLocations.forEach(l => locMap[l.id] = l);
+
+                geoRoutes.forEach((r) => {
+                    const p1 = locMap[r.from];
+                    const p2 = locMap[r.to];
+                    if (!p1 || !p2) return;
+
+                    const isTarget = activeGeoLocation || hoveredGeoLocation;
+                    const isHighlighted = isTarget && (
+                        (activeGeoLocation && (activeGeoLocation.id === r.from || activeGeoLocation.id === r.to)) ||
+                        (hoveredGeoLocation && (hoveredGeoLocation.id === r.from || hoveredGeoLocation.id === r.to))
+                    );
+
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+
+                    if (r.type === 'sea') {
+                        ctx.strokeStyle = isHighlighted ? "rgba(52, 211, 153, 0.95)" : "rgba(52, 211, 153, 0.38)";
+                        ctx.lineWidth = (isHighlighted ? 2.5 : 1.5) / scale;
+                        ctx.setLineDash([5 / scale, 5 / scale]);
+                    } else if (r.type === 'teleport') {
+                        ctx.strokeStyle = isHighlighted ? "rgba(56, 189, 248, 1)" : "rgba(56, 189, 248, 0.65)";
+                        ctx.lineWidth = (isHighlighted ? 2.8 : 1.8) / scale;
+                        ctx.setLineDash([3 / scale, 6 / scale]);
+                    } else if (r.type === 'road') {
+                        ctx.strokeStyle = isHighlighted ? "rgba(255, 255, 255, 0.85)" : "rgba(226, 232, 240, 0.25)";
+                        ctx.lineWidth = (isHighlighted ? 2.2 : 1.2) / scale;
+                        ctx.setLineDash([]);
+                    } else if (r.type === 'core') {
+                        ctx.strokeStyle = isHighlighted ? "rgba(216, 180, 254, 0.95)" : "rgba(192, 132, 252, 0.45)";
+                        ctx.lineWidth = (isHighlighted ? 3 : 2) / scale;
+                        ctx.setLineDash([8 / scale, 4 / scale]);
+                    }
+
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    if (r.note && (scale > 0.65 || isHighlighted)) {
+                        const midX = (p1.x + p2.x) / 2;
+                        const midY = (p1.y + p2.y) / 2;
+                        ctx.font = `600 ${9 / scale}px -apple-system`;
+                        ctx.fillStyle = isHighlighted ? "#ffffff" : (r.type === 'teleport' ? "rgba(56, 189, 248, 0.7)" : "rgba(52, 211, 153, 0.5)");
+                        ctx.textAlign = "center";
+                        ctx.fillText(r.note, midX, midY - 5 / scale);
+                    }
+                });
+            }
+
+            const showTier12 = document.getElementById('layer-tier12').checked;
+            const showTier34 = document.getElementById('layer-tier34').checked;
+
+            geoLocations.forEach(loc => {
+                if (loc.tier <= 2 && !showTier12) return;
+                if (loc.tier >= 3 && !showTier34) return;
+
+                let showName = true;
+                if (scale < 0.6 && loc.tier > 2) showName = false;
+                if (scale < 0.4 && loc.tier > 1) showName = false;
+
+                const isActive = activeGeoLocation && activeGeoLocation.id === loc.id;
+                const isHovered = hoveredGeoLocation && hoveredGeoLocation.id === loc.id;
+                const r = (isActive || isHovered) ? (11 / scale) : (7 / scale);
+
+                ctx.strokeStyle = loc.color + "44";
+                ctx.lineWidth = 1 / scale;
+                ctx.beginPath();
+                ctx.moveTo(loc.x - r * 2.2, loc.y); ctx.lineTo(loc.x + r * 2.2, loc.y);
+                ctx.moveTo(loc.x, loc.y - r * 2.2); ctx.lineTo(loc.x, loc.y + r * 2.2);
+                ctx.stroke();
+
+                ctx.fillStyle = loc.color;
+                ctx.shadowColor = loc.color;
+                ctx.shadowBlur = (isActive || isHovered) ? 20 : 8;
+
+                ctx.beginPath();
+                if (loc.type === 'city') {
+                    ctx.moveTo(loc.x, loc.y - r * 1.3);
+                    ctx.lineTo(loc.x + r * 1.3, loc.y);
+                    ctx.lineTo(loc.x, loc.y + r * 1.3);
+                    ctx.lineTo(loc.x - r * 1.3, loc.y);
+                } else if (loc.type === 'port') {
+                    ctx.arc(loc.x, loc.y, r, 0, Math.PI * 2);
+                } else if (loc.type === 'ruins' || loc.type === 'base') {
+                    ctx.rect(loc.x - r, loc.y - r, r * 2, r * 2);
+                } else if (loc.type === 'sacred' || loc.type === 'core') {
+                    ctx.moveTo(loc.x, loc.y - r * 1.5);
+                    ctx.quadraticCurveTo(loc.x, loc.y, loc.x + r * 1.5, loc.y);
+                    ctx.quadraticCurveTo(loc.x, loc.y, loc.x, loc.y + r * 1.5);
+                    ctx.quadraticCurveTo(loc.x, loc.y, loc.x - r * 1.5, loc.y);
+                    ctx.quadraticCurveTo(loc.x, loc.y, loc.x, loc.y - r * 1.5);
+                } else {
+                    ctx.arc(loc.x, loc.y, r * 0.85, 0, Math.PI * 2);
+                }
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                if (showName || isActive || isHovered) {
+                    ctx.font = (isActive || isHovered) ? `bold ${14 / scale}px -apple-system` : `${11.5 / scale}px -apple-system`;
+                    ctx.fillStyle = (isActive || isHovered) ? "#ffffff" : "#cbd5e1";
+                    ctx.textAlign = "center";
+                    ctx.fillText(loc.name, loc.x, loc.y + ((isActive || isHovered) ? (28 / scale) : (22 / scale)));
+                }
+            });
+
+            // 測距繪製
+            if (rulerActive && rulerPoints.length > 0) {
+                ctx.beginPath();
+                ctx.arc(rulerPoints[0].x, rulerPoints[0].y, 5 / scale, 0, Math.PI * 2);
+                ctx.fillStyle = "#38bdf8";
+                ctx.fill();
+
+                if (rulerPoints.length === 2) {
+                    ctx.beginPath();
+                    ctx.arc(rulerPoints[1].x, rulerPoints[1].y, 5 / scale, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.beginPath();
+                    ctx.moveTo(rulerPoints[0].x, rulerPoints[0].y);
+                    ctx.lineTo(rulerPoints[1].x, rulerPoints[1].y);
+                    ctx.strokeStyle = "#38bdf8";
+                    ctx.lineWidth = 2 / scale;
+                    ctx.setLineDash([6 / scale, 4 / scale]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    const midX = (rulerPoints[0].x + rulerPoints[1].x) / 2;
+                    const midY = (rulerPoints[0].y + rulerPoints[1].y) / 2;
+                    const distPx = Math.hypot(rulerPoints[1].x - rulerPoints[0].x, rulerPoints[1].y - rulerPoints[0].y);
+                    const km = Math.round((distPx / 140) * 500);
+
+                    ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+                    ctx.fillRect(midX - 45 / scale, midY - 14 / scale, 90 / scale, 24 / scale);
+                    ctx.strokeStyle = "#38bdf8";
+                    ctx.lineWidth = 1 / scale;
+                    ctx.strokeRect(midX - 45 / scale, midY - 14 / scale, 90 / scale, 24 / scale);
+
+                    ctx.font = `bold ${11 / scale}px -apple-system`;
+                    ctx.fillStyle = "#38bdf8";
+                    ctx.textAlign = "center";
+                    ctx.fillText(`≈ ${km} km`, midX, midY + 4 / scale);
+                }
+            }
+
+            ctx.restore();
+
+            // 羅盤與動態比例尺
+            drawCelestialCompass();
+        }
+
+        function drawCelestialCompass() {
+            const cx = width - 85;
+            const cy = height - 80;
+
+            ctx.save();
+            ctx.translate(cx, cy);
+
+            ctx.beginPath();
+            ctx.arc(0, 0, 28, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(15, 23, 42, 0.75)";
+            ctx.fill();
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.35)";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(0, 0, 18, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.15)";
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(0, -26); ctx.lineTo(-5, -4); ctx.lineTo(0, -8);
+            ctx.fillStyle = "#38bdf8"; ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(0, -26); ctx.lineTo(5, -4); ctx.lineTo(0, -8);
+            ctx.fillStyle = "#0284c7"; ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(0, 18); ctx.lineTo(-4, -4); ctx.lineTo(0, 0);
+            ctx.fillStyle = "#475569"; ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(0, 18); ctx.lineTo(4, -4); ctx.lineTo(0, 0);
+            ctx.fillStyle = "#64748b"; ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(18, -4); ctx.lineTo(0, -7); ctx.lineTo(0, -1);
+            ctx.fillStyle = "#64748b"; ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(-18, -4); ctx.lineTo(0, -7); ctx.lineTo(0, -1);
+            ctx.fillStyle = "#64748b"; ctx.fill();
+
+            ctx.fillStyle = "#38bdf8";
+            ctx.font = "bold 10px -apple-system";
+            ctx.textAlign = "center";
+            ctx.fillText("N", 0, -31);
+
+            ctx.restore();
+
+            const targetKmList = [2000, 1000, 500, 200, 100, 50];
+            let chosenKm = 500;
+            let barPx = (chosenKm / 500) * 140 * scale;
+
+            for (let km of targetKmList) {
+                let testPx = (km / 500) * 140 * scale;
+                if (testPx >= 60 && testPx <= 180) {
+                    chosenKm = km;
+                    barPx = testPx;
+                    break;
+                }
+            }
+
+            const barRight = width - 20;
+            const barLeft = barRight - barPx;
+            const barY = height - 25;
+
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(barLeft, barY); ctx.lineTo(barRight, barY);
+            ctx.moveTo(barLeft, barY - 4); ctx.lineTo(barLeft, barY + 4);
+            ctx.moveTo(barRight, barY - 4); ctx.lineTo(barRight, barY + 4);
+            ctx.stroke();
+
+            ctx.fillStyle = "#94a3b8";
+            ctx.font = "10px -apple-system";
+            ctx.textAlign = "center";
+            ctx.fillText(`${chosenKm} km`, (barLeft + barRight) / 2, barY - 8);
+        }
+
+        // ==========================================
+        // 🌟 4. 全域渲染迴圈 🌟
+        // ==========================================
+        function draw() {
+            cameraX += (targetCameraX - cameraX) * 0.15;
+            cameraY += (targetCameraY - cameraY) * 0.15;
+            scale += (targetScale - scale) * 0.15;
+
+            if (currentMouseX !== 0 || currentMouseY !== 0) {
+                updateCoords(currentMouseX, currentMouseY);
+            }
+
+            ctx.clearRect(0, 0, width, height);
+
+            if (currentMode === 'periodic') {
+                drawPeriodicNetwork();
+            } else {
+                drawGeoMap();
+            }
+
+            requestAnimationFrame(draw);
+        }
+        draw();
+
+        // ==========================================
+        // 🌟 5. 互動與事件監聽 (滑鼠、觸控、鍵盤) 🌟
+        // ==========================================
+        let downClientX = 0, downClientY = 0;
+        let initialPinchDist = null;
+
+        function updateCoords(clientX, clientY) {
+            currentMouseX = clientX;
+            currentMouseY = clientY;
+
+            const rect = canvas.getBoundingClientRect();
+            const screenX = Math.round(clientX - rect.left);
+            const screenY = Math.round(clientY - rect.top);
+
+            const worldX = Math.round((screenX - width / 2) / scale - cameraX);
+            const worldY = Math.round((screenY - height / 2) / scale - cameraY);
+
+            screenCoordsEl.innerText = `X: ${screenX}, Y: ${screenY}`;
+            worldCoordsEl.innerText = `X: ${worldX}, Y: ${worldY}`;
+        }
+
+        function handleStart(clientX, clientY) {
+            isDragging = true;
+            startX = clientX - targetCameraX * scale;
+            startY = clientY - targetCameraY * scale;
+            downClientX = clientX;
+            downClientY = clientY;
+            totalMoved = 0;
+            updateCoords(clientX, clientY);
+        }
+
+        function handleMove(clientX, clientY) {
+            updateCoords(clientX, clientY);
+            if (isDragging) {
+                targetCameraX = (clientX - startX) / scale;
+                targetCameraY = (clientY - startY) / scale;
+                totalMoved += Math.hypot(clientX - downClientX, clientY - downClientY);
+                downClientX = clientX;
+                downClientY = clientY;
+            }
+
+            if (currentMode === 'geo') {
+                const rect = canvas.getBoundingClientRect();
+                const worldX = (clientX - rect.left - width / 2) / scale - cameraX;
+                const worldY = (clientY - rect.top - height / 2) / scale - cameraY;
+
+                let foundHover = null;
+                geoLocations.forEach(loc => {
+                    const dist = Math.hypot(worldX - loc.x, worldY - loc.y);
+                    if (dist < 20 / scale) foundHover = loc;
+                });
+                hoveredGeoLocation = foundHover;
+                canvas.style.cursor = isDragging ? "grabbing" : (hoveredGeoLocation ? "pointer" : (rulerActive ? "crosshair" : "grab"));
+            }
+        }
+
+        function handleEnd() {
+            isDragging = false;
+            initialPinchDist = null;
+        }
+
+        canvas.addEventListener('mousedown', (e) => handleStart(e.clientX, e.clientY));
+        window.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+        window.addEventListener('mouseup', handleEnd);
+
+        canvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                initialPinchDist = null;
+                handleStart(e.touches[0].clientX, e.touches[0].clientY);
+            } else if (e.touches.length === 2) {
+                isDragging = false;
+                initialPinchDist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1 && isDragging) {
+                handleMove(e.touches[0].clientX, e.touches[0].clientY);
+            } else if (e.touches.length === 2 && initialPinchDist !== null) {
+                const currentDist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                const factor = currentDist / initialPinchDist;
+                targetScale *= (factor > 1 ? 1.03 : 0.97);
+                targetScale = Math.max(0.2, Math.min(targetScale, 2.8));
+                initialPinchDist = currentDist;
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchend', handleEnd);
+
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomAmount = e.deltaY > 0 ? 0.9 : 1.1;
+            targetScale *= zoomAmount;
+            targetScale = Math.max(0.2, Math.min(targetScale, 2.8));
+            updateCoords(e.clientX, e.clientY);
+        }, { passive: false });
+
+        window.addEventListener('keydown', (e) => {
+            if (currentMode === 'geo' && (e.code === 'Space' || e.key === 'r' || e.key === 'R')) {
+                resetGeoView();
+            }
+        });
+
+        canvas.addEventListener('click', (e) => {
+            if (totalMoved > 5) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+            const worldX = (clickX - width / 2) / scale - cameraX;
+            const worldY = (clickY - height / 2) / scale - cameraY;
+
+            if (currentMode === 'periodic') {
+                let clickedNode = null;
+                let clickedEdge = null;
+
+                nodes.forEach(node => {
+                    const dist = Math.hypot(worldX - node.x, worldY - node.y);
+                    if (dist < 28 / scale) clickedNode = node;
+                });
+
+                if (!clickedNode) {
+                    const candidateEdges = activeNode 
+                        ? edges.filter(e => e.from === activeNode.id || e.to === activeNode.id)
+                        : edges;
+
+                    candidateEdges.forEach(edge => {
+                        const n1 = nodes.find(n => n.id === edge.from);
+                        const n2 = nodes.find(n => n.id === edge.to);
+                        if (n1 && n2) {
+                            const A = worldX - n1.x, B = worldY - n1.y;
+                            const C = n2.x - n1.x, D = n2.y - n1.y;
+                            const dot = A * C + B * D;
+                            const len_sq = C * C + D * D;
+                            let param = -1;
+                            if (len_sq !== 0) param = dot / len_sq;
+
+                            let xx, yy;
+                            if (param < 0) { xx = n1.x; yy = n1.y; }
+                            else if (param > 1) { xx = n2.x; yy = n2.y; }
+                            else { xx = n1.x + param * C; yy = n1.y + param * D; }
+
+                            const dist = Math.hypot(worldX - xx, worldY - yy);
+                            if (dist < 15 / scale) clickedEdge = edge;
+                        }
+                    });
+                }
+
+                if (clickedNode) {
+                    activeNode = clickedNode;
+                    activeEdge = null;
+                    openNodeDrawer(clickedNode);
+                    targetCameraX = -clickedNode.x - (100 / scale);
+                    targetCameraY = -clickedNode.y;
+                    targetScale = Math.max(1.2, targetScale);
+                } else if (clickedEdge) {
+                    activeEdge = clickedEdge;
+                    openEdgeDrawer(clickedEdge);
+                    const n1 = nodes.find(n => n.id === clickedEdge.from);
+                    const n2 = nodes.find(n => n.id === clickedEdge.to);
+                    targetCameraX = -(n1.x + n2.x) / 2 - (100 / scale);
+                    targetCameraY = -(n1.y + n2.y) / 2;
+                    targetScale = Math.max(1.2, targetScale);
+                } else {
+                    activeNode = null;
+                    activeEdge = null;
+                    targetCameraX = 0;
+                    targetCameraY = 0;
+                    targetScale = 1.0;
+                    closeDrawer();
+                }
+            } else {
+                // 地理模式點擊邏輯
+                if (rulerActive) {
+                    if (rulerPoints.length >= 2) rulerPoints = [];
+                    rulerPoints.push({ x: worldX, y: worldY });
+                    return;
+                }
+
+                let clickedLoc = null;
+                geoLocations.forEach(loc => {
+                    const dist = Math.hypot(worldX - loc.x, worldY - loc.y);
+                    if (dist < 24 / scale) clickedLoc = loc;
+                });
+
+                if (clickedLoc) {
+                    activeGeoLocation = clickedLoc;
+                    openGeoDrawer(clickedLoc);
+
+                    const drawerWidth = window.innerWidth <= 768 ? window.innerWidth : 420;
+                    const screenOffsetX = (drawerWidth / 2) / scale;
+
+                    targetCameraX = -clickedLoc.x + screenOffsetX;
+                    targetCameraY = -clickedLoc.y;
+                } else {
+                    closeDrawer();
+                }
+            }
+        });
+
+        // ==========================================
+        // 🌟 6. 抽屜面板控制 🌟
+        // ==========================================
+        function openNodeDrawer(node) {
+            const avatar = document.getElementById('drawer-avatar');
+            avatar.style.display = 'block';
+            avatar.src = `images/${node.id}.jpg`;
+            document.getElementById('drawer-badge').innerText = `元素記錄 ✦ ${node.faction}`;
+            document.getElementById('drawer-badge').style.color = node.color;
+            document.getElementById('drawer-badge').style.borderColor = node.color;
+            document.getElementById('drawer-title').innerText = node.name;
+            document.getElementById('drawer-quote').style.display = 'block';
+            document.getElementById('drawer-quote').innerText = node.quote;
+            document.getElementById('drawer-content').innerText = node.desc;
+            document.getElementById('drawer-btn-group').style.display = 'flex';
+            document.getElementById('info-drawer').classList.add('open');
+        }
+
+        function openEdgeDrawer(edge) {
+            const n1 = nodes.find(n => n.id === edge.from);
+            const avatar = document.getElementById('drawer-avatar');
+            avatar.style.display = 'block';
+            avatar.src = `images/${n1.id}.jpg`;
+            document.getElementById('drawer-badge').innerText = `情感羈絆 ✦ ${edge.label}`;
+            document.getElementById('drawer-badge').style.color = edge.color;
+            document.getElementById('drawer-badge').style.borderColor = edge.color;
+            document.getElementById('drawer-title').innerText = "關係對局解析";
+            document.getElementById('drawer-quote').style.display = 'block';
+            document.getElementById('drawer-quote').innerText = "「交織於小說本傳與外傳中的核心感情線」";
+            document.getElementById('drawer-content').innerText = edge.desc;
+            document.getElementById('drawer-btn-group').style.display = 'flex';
+            document.getElementById('info-drawer').classList.add('open');
+        }
+
+        function openGeoDrawer(loc) {
+            document.getElementById('drawer-avatar').style.display = 'none';
+            document.getElementById('drawer-badge').innerText = loc.badge;
+            document.getElementById('drawer-badge').style.color = '#38bdf8';
+            document.getElementById('drawer-badge').style.borderColor = 'rgba(56, 189, 248, 0.4)';
+            document.getElementById('drawer-title').innerText = loc.name;
+            document.getElementById('drawer-quote').style.display = 'block';
+            document.getElementById('drawer-quote').innerText = loc.region;
+            document.getElementById('drawer-content').innerText = loc.desc;
+            document.getElementById('drawer-btn-group').style.display = 'flex'; // 同步顯示底部跳轉按鈕組
+            document.getElementById('info-drawer').classList.add('open');
+        }
+
+        function closeDrawer() {
+            document.getElementById('info-drawer').classList.remove('open');
+            activeNode = null;
+            activeEdge = null;
+            activeGeoLocation = null;
+        }
+    </script>
+</body>
+</html>
