@@ -1091,8 +1091,8 @@
         color: #fff;
         transform: scale(1.08);
     }
-    @media (max-width: 768px) {
-      /* 如果希望進入 VN 閱讀器時才隱藏，可搭配 body.vn-open 選擇器： */
+    /* 🌟 只有在打開視覺小說閱讀器 (body.vn-open) 時，手機與各類平板才隱藏音樂播放器 🌟 */
+    @media (max-width: 1024px), (hover: none) and (pointer: coarse) {
       body.vn-open .music-player-container,
       body.vn-open .back-to-top-btn {
         display: none !important;
