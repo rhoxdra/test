@@ -38,7 +38,7 @@
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      outline: none; /* 移除點擊時的藍色框線 */
+      outline: none;
       background-color: #0f172a;
     }
 
@@ -75,20 +75,6 @@
       background: rgba(30, 41, 59, 0.85);
       color: #38bdf8;
       border: 1px solid rgba(56, 189, 248, 0.4);
-      padding: 5px 10px; /* 手機直式微調按鈕內距 */
-      border-radius: 20px;
-      font-size: 11px;    /* 稍微縮小字體避免擠壓 */
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      white-space: nowrap;
-    }
-
-    .ctrl-btn {
-      background: rgba(30, 41, 59, 0.85);
-      color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.4);
       padding: 6px 14px;
       border-radius: 20px;
       font-size: 12px;
@@ -96,6 +82,7 @@
       backdrop-filter: blur(8px);
       transition: all 0.2s ease;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      white-space: nowrap;
     }
 
     .ctrl-btn:hover, .ctrl-btn.active {
@@ -103,9 +90,10 @@
       color: #ffffff;
       border-color: #38bdf8;
     }
-    
 
-    /* 視覺小說對話框 */
+    /* ====================================================
+       1. 視覺小說對話框 - 預設（PC 電腦大螢幕）
+       ==================================================== */
     #dialogue-box {
       position: absolute;
       bottom: 130px;
@@ -144,7 +132,7 @@
       word-break: break-word;
     }
 
-    /* 🌟 修正：當沒有說話者時，自動隱藏說話者並讓對話框內容往上靠齊 */
+    /* 無說話者時的排版 */
     #dialogue-box.no-speaker {
       justify-content: flex-start !important;
     }
@@ -174,32 +162,36 @@
       100% { transform: translateY(-5px); opacity: 1; }
     }
 
+    /* PC 版對話框下方資訊列 */
     #dialogue-outer-footer {
       position: absolute;
-      bottom: 95px; /* 剛好接在 bottom: 180px 的對話框下方 */
+      bottom: 95px; /* 剛好接在 PC 對話框下方 */
       width: 90%;
       max-width: 960px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 10;
-      padding: 0 4px; /* 稍微內縮對齊對話框邊距 */
-      pointer-events: none; /* 點擊穿透，不影響舞台點擊 */
+      padding: 0 4px;
+      pointer-events: none;
     }
 
-    /* 讓進度標籤脫離原本的絕對定位 */
     #progress-tag {
       position: static !important;
-      bottom: auto !important;
-      left: auto !important;
       font-size: 11px;
       color: rgba(255, 255, 255, 0.5);
     }
-   
 
+    #pc-controls-tip {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 0.5px;
+    }
+
+    /* 介面隱藏時的狀態 */
     body.vn-ui-hidden #dialogue-box,
     body.vn-ui-hidden #controls-bar,
-    body.vn-ui-hidden #progress-tag {
+    body.vn-ui-hidden #dialogue-outer-footer {
       opacity: 0 !important;
       visibility: hidden !important;
       pointer-events: none !important;
@@ -317,37 +309,50 @@
       border: 1px solid rgba(56, 189, 248, 0.4);
     }
 
-    @media (max-width: 1024px) {
+    /* 左右半邊點擊導覽（手機版專用） */
+    .click-zone-left, .click-zone-right {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      z-index: 5;
+      display: none;
+    }
+    .click-zone-left { left: 0; }
+    .click-zone-right { right: 0; }
+
+    /* ====================================================
+       2. 平板專屬尺寸（769px ~ 1024px，直向與橫向）
+       ==================================================== */
+    @media (min-width: 769px) and (max-width: 1024px) {
       #dialogue-box {
-        /* 🌟 距離底邊 48px（保留約一行句子的舒適呼吸感，絕不貼底） */
-        bottom: 48px !important;
+        bottom: 60px !important;       /* 下調並保留約一行字的呼吸空間 */
         width: 92% !important;
-        max-width: 820px !important;
-        min-height: 125px !important;
+        max-width: 840px !important;
+        min-height: 135px !important;
         padding: 16px 22px !important;
       }
 
-      #content-text {
-        font-size: 1.1rem !important;
-        line-height: 1.65 !important;
-      }
-
-      /* 平板上將進度資訊列收合或隱藏，避免重疊 */
       #dialogue-outer-footer {
-        display: none !important;
+        bottom: 25px !important;       /* 資訊列緊隨在對話框下方 */
+        width: 92% !important;
+        max-width: 840px !important;
       }
     }
 
     /* ====================================================
-       3. 手機直式（寬度 768px 以下）
+       3. 手機直式（768px 以下）：完全還原原版最佳高度
        ==================================================== */
     @media (max-width: 768px) {
+      .click-zone-left, .click-zone-right {
+        display: block;
+      }
+
       #dialogue-box {
-        /* 🌟 手機直式同樣保留 42px 邊距，給予適當留白 */
-        bottom: 42px !important;
-        width: 94% !important;
+        bottom: 30px !important;       /* 原版設定：高度適中不切字 */
+        width: 95% !important;
         min-height: 110px !important;
-        padding: 14px 16px !important;
+        padding: 12px 16px !important;
       }
 
       #speaker-name {
@@ -357,7 +362,16 @@
 
       #content-text {
         font-size: 0.95rem !important;
-        line-height: 1.55 !important;
+        line-height: 1.5 !important;
+      }
+
+      #dialogue-outer-footer {
+        bottom: 10px !important;       /* 手機版進度條緊貼在對話框下方，不被切掉 */
+        width: 95% !important;
+      }
+
+      #pc-controls-tip {
+        display: none !important;      /* 手機版隱藏鍵盤提示 */
       }
 
       #controls-bar .ctrl-btn:last-child {
@@ -366,79 +380,28 @@
     }
 
     /* ====================================================
-       4. 手機/平板 橫向極窄螢幕（高度小於 550px）
+       4. 手機/平板 橫向極窄螢幕（高度小於 500px）
        ==================================================== */
-    @media (max-height: 550px) {
+    @media (max-height: 500px) and (max-width: 900px) {
       #dialogue-box {
-        /* 🌟 極窄橫向螢幕保留 28px 留白，防止畫面壓迫 */
-        bottom: 28px !important;
+        bottom: 20px !important;
         min-height: 95px !important;
-        padding: 10px 16px !important;
+        padding: 8px 14px !important;
       }
       
-      #speaker-name {
-        font-size: 0.9rem !important;
-        margin-bottom: 2px !important;
-      }
-
       #content-text {
-        font-size: 0.88rem !important;
+        font-size: 0.85rem !important;
         line-height: 1.4 !important;
       }
-    }
-    /* 🌟 左右半邊點擊導覽提示（透明分區，不影響視覺） 🌟 */
-    .click-zone-left, .click-zone-right {
-      position: absolute;
-      top: 0;
-      width: 50%;
-      height: 100%;
-      z-index: 5;
-      display: none; /* 預設隱藏，透過 JS 或手機版啟用 */
-    }
-    .click-zone-left { left: 0; }
-    .click-zone-right { right: 0; }
 
-    /* 手機版啟用左右分區點擊 */
-    @media (max-width: 768px) {
-      .click-zone-left, .click-zone-right {
-        display: block;
-      }
-    }
-    /* 當介面隱藏時，讓整個畫面變成隨時可點擊恢復的觸發區 */
-    body.vn-ui-hidden #stage {
-      cursor: pointer;
-    }
-   
-
-    #dialogue-footer-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 14px;
-      padding-top: 8px;
-      border-top: 1px solid rgba(56, 189, 248, 0.15);
-    }
-
-    #progress-tag {
-      position: static !important;
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    #pc-controls-tip {
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.75);
-      letter-spacing: 0.5px;
-    }
-
-    /* 🌟 手機版自動隱藏鍵盤提示與外側資訊列 🌟 */
-    @media (max-width: 768px) {
       #dialogue-outer-footer {
+        bottom: 3px !important;
+      }
+
+      #controls-bar .ctrl-btn:last-child {
         display: none !important;
       }
     }
-   
-   
   </style>
 </head>
 <body>
@@ -467,11 +430,12 @@
       <div id="next-indicator">▼</div>
     </div>
 
-    <!-- 🌟 新增：貼在對話框下方的固定資訊列（包含進度與提示） 🌟 -->
+    <!-- 貼在對話框下方的固定資訊列（包含進度與提示） -->
     <div id="dialogue-outer-footer">
       <div id="progress-tag">1 / --</div>
       <div id="pc-controls-tip">提示：使用 ⬅ ➡ 鍵或空白鍵快速翻頁</div>
     </div>
+  </div>
 
   <!-- 歷史履歷 Log 彈窗 -->
   <div id="log-modal" onclick="event.stopPropagation()">
@@ -495,17 +459,14 @@
     // 原始 15 篇回聲殘響文章庫
     const announcements = [
     {
-        title: "學園祭　啟幕",
+        title: "學園祭 啟幕",
         badge: "主題進展",
         bgImage: "images/background.webp",
         story: [
-          // 旁白不用寫 speaker
-          { speaker: "■學園祭　啟幕", text: "聚學舍的學園祭，是這座頂尖學府向世人展示力量的絕佳舞台。科展與園遊會的喧鬧人群間，能聽見此起彼落的歡呼與驚嘆聲。", bgUrl: "images/bg_school.webp"},
+          { speaker: "■學園祭 啟幕", text: "聚學舍的學園祭，是這座頂尖學府向世人展示力量的絕佳舞台。科展與園遊會的喧鬧人群間，能聽見此起彼落的歡呼與驚嘆聲。", bgUrl: "images/bg_school.webp"},
           { text: "然而，今年的慶典中卻流動著一股不尋常的暗湧。" },
           { text: "由於「荒野焰嵐」與「豹飲豹食」即將舉行現場樂團對邦，作為主辦方的「誓奪爪盟」因此獲得潛入艾瑞爾城的機會。儘管總督嚴格限制了入場名單、排除所有可能的幕後威脅，但這群「特殊人士」的現身，依然在平靜的學園裡投下了震撼彈。" },
           { text: "當他們一行人踏入校門，無人機便灑下漫天花瓣，伊蕾琪隨即被粉絲重重包圍，展開了全程直播。" },
-         
-          // 有人名的對話
           { speaker: "伊蕾琪", text: "嘿，各位蕾寶們！沒想到大家這麼熱情，連校門都快被堵住了啊！" },
           { text: "緊接著，DJ巨星影、身為伴舞的劫，以及曾被迫推銷「甜心果飆飲」而火紅的崩，也紛紛成為眾人追逐的焦點。" },
           { speaker: "崩", text: "……它的口感，像是戀愛初吻那樣——酸甜交織、令人心跳不已……" },
@@ -517,7 +478,7 @@
           { text: "影大喊一聲，隨即發動權能精準破解了克爾的偽裝，將他暴露在無數歌迷眼前。" },
           { speaker: "克爾", text: "什麼……？喂！你們到底想搞什麼鬼！" },
           { speaker: "影", text: "為了回饋大家，現在『豹飲豹食』與『荒野焰嵐』將舉辦突發的聯合粉絲簽名會！地點就在中庭喔！" },
-          { speaker: "群眾",　text: "哇！" },
+          { speaker: "群眾", text: "哇！" },
           { text: "伴隨著無人機撒下的號碼牌，原本擁擠的人潮瞬間被成功轉移，留下了一片空地。" },
           { speaker: "克爾", text: "我可沒興趣陪你們這群瘋子瞎混！我下午還有比賽要打，少來煩我。" },
           { speaker: "洛爾", text: "冷靜點，就跟去一趟吧。順便……近距離監視誓奪爪盟的動作。別忘了，我們今天必須分別盯好他們的每一個成員。" },
@@ -544,8 +505,6 @@
           { text: "同伴與敵人都漸漸遠去後，艾瑞爾站在原地，看著天空中緩緩飄落的無人機花瓣，長長地嘆了一口氣。" },
           { speaker: "艾瑞爾", text: "能做的防範都做了，剩下的……就祈禱這份脆弱的和平能撐到日落吧。" },
           { text: "※※※" },
-         
-          // 這裡切換背景為 bg2.webp
           { text: "踏入「沉浸之門」的瞬間，眼前隨即出現宏偉的萬人運動場。這裏舉辦的是對地形起伏與體能有著極致苛求的「無限量級」田徑賽。", bgUrl: "images/bg_run.webp" },
           { speaker: "亞爾克", text: "這就是……最高水準的競賽起點嗎？" },
           { text: "亞爾克琥珀色的雙眸倒映著天空中無數翻騰的班旗。五顏六色的布條在護欄上颯颯作響，像要將那股狂熱全數捲入一般。" },
@@ -633,7 +592,6 @@
           { text: "與嵐懶那種如野火燎原般的氣場截然不同，洛爾神色自若地走上台。目光看著同樣沉靜的對手神情，氣勢十足地抽出起始手牌。" },
           { speaker: "洛爾", text: "決鬥！" },
           { text: "——待續——" }
-
         ]
       },
       {
@@ -658,7 +616,7 @@
         title: "誓奪爪盟",
         badge: "回聲殘響",
         bgImage: "images/OC.webp",
-        rawText: `■歷史淵源：誓奪爪盟是由元素一族的強大賦形者「劫」所一手創立的組織。據熱愛考究與探詢歷史的愛好者所言，這個組織與千年前在艾瑞拉大陸崛起的「霸潮盟」有不少相似之處，行事作風多能看見霸潮盟當年的影子。\n\n箇中原因在於劫千年前曾深受霸潮盟老大的統帥風格影響，使在管理現今的誓奪爪盟時，劫也採用「黑幫家族」的江湖風格進行人才徵召。他看重組織成員的階級實力，卻也將彼此視為不可背叛的「家人」。這種兼具野性、殘酷卻又重視羈絆的凝聚力，正是繼承自霸潮盟的教條遺產。而霸潮盟當年的部分子嗣，在千年後的今日也因緣際會地於暗中提供協助，讓其古老意志得以在現世中重新復甦。\n\n■分崩離析與千年的休眠：誓奪爪盟最初是由劫主導，並召集昔日探索隊「無盡元素」中、同時甦醒的四位元素賦形者共同成立。\n\n在千年前那場遙遠的旅途終點，曾發生過一件令所有成員痛徹心扉的遺憾──探索隊與星球的溝通宣告失敗，並直接導致「無名隊長」喪失性命。群龍無首之下，原本團結的探索隊頓時失去前進的未來與方向。此時，悲憤交加的「劫」主動擔起了統帥權責，自行繼任了隊長職務。\n\n只是，探索隊成員之一的「創」卻有自己的想法而與幾人走了不同的路。他率先接下殘局並自願擔負起與星球溝通的職責，繼任為新一代的星球意識，於往後的數百年裡不斷試圖持續星球進行對話。\n\n由於大家對創的抉擇與行為抱持著極度不信任、卻沒有更好的打算情況下，一行人最終決定進入漫長的「休眠」，以期在未來的某一天重新醒來、繼續完成這場未竟的目標。\n\n■薄明之戰後的甦醒與背叛：千年的時光轉瞬即逝。在近代的「薄明之戰」尾聲，由於救世學者阿爾提瑪的瘋狂行為，導致星球陷入前所未有的毀滅危機。阿爾提瑪在戰敗之際使用「回歸」權能企圖改寫結局；這逼得創不得不將隕落的無名前隊長重新賦形，並在其全力出擊下平定薄明之戰。\n\n然而，這場大戰所引發的權能波動也使正在休眠的劫等人就此甦醒。起初，他們面對這個陌生的新世界尚未有明確的長遠目標，於是眾人以各自探索、融入新社會為短期方針各自活動。\n\n沒想到在經歷並調查現狀後，劫與夥伴們發現，創在薄明之戰後的行為更加背離元素一族當年的初衷──居然挺立造成星球危機的阿爾提瑪繼任新一屆星球意識，這對劫等人而言是比擅自繼任還更無法接受的背叛行為。\n\n「無盡元素」是為了讓正統的元素一族去擔負、引導星球意識，而非讓一位陌生的人族生靈來染指特權。在悲憤與信仰坍塌下，劫決心將探索隊改組為「誓奪爪盟」，正式與創的陣線決裂，並制定了三個明確的方針：\n\n一．尋找出重生的無名前隊長下落，並試著將他拉攏進同一陣線。\n\n二．在民間收集資源與勢力再度舉辦「契選」，以期奪回與星球溝通的「星球意識」選拔特權。\n\n三．為了使契選有絕對獲勝的把握，必須收集能控制地脈能量的「共鳴石」。雖然元素一族無法直接操控地脈，但根據他們的經驗得知，共鳴石只要運用得當便能強化自身的權能，若能壟斷、掌握的話會十分有利。\n\n■同盟的組建與倒戈：在這三個方針之下，崩、制、影、劫、耀五位赋形者組成了利益同盟。他們首要之務，就是逼迫創交出舉辦契選的關鍵核心──被稱為『奧法魯斯的遺物』的萬解核。這個東西是與星球進行溝通的鑰匙，自從創當上星球意識後，便理所當然地將其保管在身。\n\n接著根據線報，他們得知重生、賦形不久的無名前隊長似乎失去了所有的過往記憶。於是重情感的「耀」主動提出由他去接觸、說服前隊長，看看能不能將這個最強戰力拉攏回誓奪爪盟的陣營。\n\n然而事情的發展卻超出劫的預料。耀在深入接觸了擁有新名字「嵐懶」的前隊長後，受到嵐懶那份不變的溫柔與羈絆影響，耀最終改變心意選擇背棄誓奪爪盟，回到屬於創「聯合陣線」的前隊長身邊，這一抉擇導致他與誓奪爪盟正式決裂。不過，由於嵐懶已不再有當時的全盛實力，劫也沒有將其放在眼裡。\n\n■暗流湧動的未來：儘管接連遭遇昔日夥伴的倒戈與背叛，冷酷的劫並沒有就此停下腳步，並將這些遭遇全數化為深沉恨意與前進動力，無所不用其極地尋找可用的勢力與棋子。\n\n首先，他將目光對準現今對艾瑞爾軍掌權體制不滿的激進分子、以及被總督艾瑞爾裁撤的前官僚暗部。劫以「推動復權」為號召在社會基層大肆吸納人才、經營民意，並獲得了如「伊蕾琪」這般實力強大的元素使用者特務協助。\n\n在明面上，他們以保護邊緣者與弱勢群體為口號，並聰明地利用娛樂產業作為掩護從社會的各個縫隙中嶄露頭角。\n\n接著，在復權派金主提供的情報中，誓奪爪盟掌握了「共鳴石」的消息，得知其藏在那些前官僚曾經管理、如今被廢棄的艾瑞爾軍舊研究部門中。自此，誓奪爪盟一面展開對共鳴石的搜索與地脈機關的暗地設置，一方面也讓「崩」去尋找能開採的共鳴石礦脈，以確保未來的戰略供應量。\n\n隨著計畫的進展，誓奪爪盟終於得到夢寐以求的共鳴石，也找到能為其進行打磨的行家。自此，他們開始透過地下管道將共鳴石作為「翻身的禁藥」流通、散佈給那些渴望力量的平民。\n\n這份散佈行為，最初的用意只是為了利用地脈去干涉契選的進行好獲得優勢。不過，與他們合作的復權派官僚金主私底下卻抱持不同的想法──他們企圖利用共鳴石的副作用，替自己打造另一批「私人勢力」，以此顛覆現任總督的政權。對此，劫雖然早已察覺到金主們的意圖，但在彼此「攪亂軍方資源、奪取地脈」著眼點相近情況下，劫選擇冷眼旁觀、默許復權派的行徑。\n\n而今，元素一族之間的契選已進入火熱的後半戰，誓奪爪盟該如何應對這場由他們一手點燃的風暴，將成為決定未來命運的重要分水嶺。`
+        rawText: `■歷史淵源：誓奪爪盟是由元素一族的強大賦形者「劫」所一手創立的組織。據熱愛考究與探詢歷史的愛好者所言，這個組織與千年前在艾瑞拉大陸崛起的「霸潮盟」有不少相似之處，行事作風多能看見霸潮盟當年的影子。\n\n箇中原因在於劫千年前曾深受霸潮盟老大的統帥風格影響，使在管理現今的誓奪爪盟時，劫也採用「黑幫家族」的江湖風格進行人才徵召。他看重組織成員的階級實力，卻也將彼此視為不可背叛的「家人」。這種兼具野性、殘酷卻又重視羈絆的凝聚力，正是繼承自霸潮盟的教條遺產。而霸潮盟當年的部分子嗣，在千年後的今日也因緣際會地於暗中提供協助，讓其古老意志得以在現世中重新復甦。\n\n■分崩離析與千年的休眠：誓奪爪盟最初是由劫主導，並召集昔日探索隊「無盡元素」中、同時甦醒的四位元素賦形者共同成立。\n\n在千年前那場遙遠的旅途終點，曾發生過一件令所有成員痛徹心扉的遺憾──探索隊與星球的溝通宣告失敗，並直接導致「無名隊長」喪失性命。群龍無首之下，原本團結的探索隊頓時失去前進的未來與方向。此時，悲憤交加的「劫」主動擔起了統帥權責，自行繼任了隊長職務。\n\n只是，探索隊成員之一的「創」卻有自己的想法而與幾人走了不同的路。他率先接下殘局並自願擔負起與星球溝通的職責，繼任為新一代的星球意識，於往後的數百年裡不斷試圖持續星球進行對話。\n\n由於大家對創的抉擇與行為抱持著極度不信任、卻沒有更好的打算情況下，一行人最終決定進入漫長的「休眠」，以期在未來的某一天重新醒來、繼續完成這場未竟的目標。\n\n■薄明之戰後的甦醒與背叛：千年的時光轉瞬即逝。在近代的「薄明之戰」尾聲，由於救世學者阿爾提瑪的瘋狂行為，導致星球陷入前所未有的毀滅危機。阿爾提瑪在戰敗之際使用「回歸」權能企圖改寫結局；這逼得創不得不將隕落的無名前隊長重新賦形，並在其全力出擊下平定薄明之戰。\n\n然而，這場大戰所引發的權能波動也使正在休眠的劫等人就此甦醒。起初，他們面對這個陌生的新世界尚未有明確的長遠目標，於是眾人以各自探索、融入新社會為短期方針各自活動。\n\n沒想到在經歷並調查現狀後，劫與夥伴們發現，創在薄明之戰後的行為更加背離元素一族當年的初衷──居然挺立造成星球危機的阿爾提瑪繼任新一屆星球意識，這對劫等人而言是比擅自繼任還更無法接受的背叛行為。\n\n「無盡元素」是為了讓正統的元素一族去擔負、引導星球意識，而非讓一位陌生的人族生靈來染指特權。在悲憤與信仰坍塌下，劫決心將探索隊改組為「誓奪爪盟」，正式與創的陣線決裂，並制定了三個明確的方針：\n\n一．尋找出重生的無名前隊長下落，並試著將他拉攏進同一陣線。\n\n二．在民間收集資源與勢力再度舉辦「契選」，以期奪回與星球溝通的「星球意識」選拔特權。\n\n三．為了使契選有絕對獲勝的把握，必須收集能控制地脈能量的「共鳴石」。雖然元素一族無法直接操控地脈，但根據他們的經驗得知，共鳴石只要運用得當便能強化自身的權能，若能壟斷、掌握的話會十分有利。\n\n■同盟的組建與倒戈：在這三個方針之下，崩、制、影、劫、耀五位赋形者組成了利益同盟。他們首要之務，就是逼迫創交出舉辦契選的關鍵核心──被稱為『奧法魯斯的遺物』的萬解核。這個東西是與星球進行溝通的鑰匙，自從創當上星球意識後，便理所當然地將其保管在身。\n\n接著根據線報，他們得知重生、賦形不久的無名前隊長似乎失去了所有的過往記憶。於是重情感的「耀」主動提出由他去接觸、說服前隊長，看看能不能將這個最強戰力拉攏回誓奪爪盟的陣營。\n\n然而事情的發展卻超出劫的預料。耀在深入接觸了擁有新名字「嵐懶」的前隊長後，受到嵐懶那份不變的溫柔與羈絆影響，耀最終改變心意選擇背棄誓奪爪盟，回到屬於創「聯合陣線」的前隊長身邊，這一抉擇導致他與誓奪爪盟正式決裂。不過，由於嵐懶已不再有當時的全盛實力，劫也沒有將其放在眼裡。\n\n■暗流湧動的未來：儘管接連遭遇昔日夥伴的倒戈與背叛，冷酷的劫並沒有就此停下腳步，並將這些遭遇全數化為深沉恨意與前進動力，無所不用其極地尋找可用的勢力與棋子。\n\n首先，他將目光對準現今對艾瑞爾軍掌權體制不滿的激進分子、以及被總督艾瑞爾裁撤的前官僚暗部。劫以「推動復權」為號召在社會基層大肆吸納人才、經營民意，並獲得了如「伊蕾琪」這般實力強大的元素使用者特務協助。\n\n在明面上，他們以保護邊緣者與弱勢群體為口號，並聰明地利用娛樂產業作為掩護從社會的各個縫隙中嶄露頭角。\n\n接著，在復權派金主提供的情報中，誓奪爪盟掌握了「共鳴石」的消息，得知其藏在那些前官僚曾經管理、如今被廢棄的艾瑞爾軍舊研究部門中。自此，誓奪爪盟一面展開對共鳴石的搜索與地脈機關的暗地設置，一方面也讓「崩」去尋找能開採的共鳴石礦脈，以確保未來的戰略供應量。\n\n隨著計畫的進展，誓奪爪盟終於得到夢寐以求的共鳴石，也找到能為其進行打磨的行家。自此，他們開始透過地下管道將共鳴石作為「翻身的禁藥」流通、散佈給那些渴望力量的平民。\n\n這份散佈行為，最初的用意只是為了利用地脈去干涉契選的進行好獲得優勢。不過，與他們合作的復權派官僚金主私底下卻抱持不同的想法──他們企圖利用共鳴石的副作用，替自己打造另一批「私人勢力」，以此顛覆現任總督的政權。對此，劫雖然早已察查到金主們的意圖，但在彼此「攪亂軍方資源、奪取地脈」著眼點相近情況下，劫選擇冷眼旁觀、默許復權派的行徑。\n\n而今，元素一族之間的契選已進入火熱的後半戰，誓奪爪盟該如何應對這場由他們一手點燃的風暴，將成為決定未來命運的重要分水嶺。`
       },
       {
         title: "詛碼團",
@@ -733,10 +691,10 @@
       let storySteps = [];
 
       if (item.story && Array.isArray(item.story)) {
-        let lastBgUrl = item.bgImage; // 預設先用篇章的大背景
+        let lastBgUrl = item.bgImage;
         storySteps = item.story.map(s => {
           if (s.bgUrl && s.bgUrl.trim() !== "") {
-            lastBgUrl = s.bgUrl; // 記住新背景，後續自動沿用
+            lastBgUrl = s.bgUrl;
           }
           return {
             speaker: s.speaker || "",
@@ -802,14 +760,13 @@
         dialogueBox.classList.add('no-speaker');
       }
 
-      // 🌟 新增：打字機特效核心邏輯
       if (typingTimer) clearInterval(typingTimer);
       fullTextToType = data.text;
       contentTextEl.innerText = "";
       isTyping = true;
 
       let charIndex = 0;
-      const typingSpeed = 15; // 打字速度（毫秒/字）
+      const typingSpeed = 15;
 
       typingTimer = setInterval(() => {
         if (charIndex < fullTextToType.length) {
@@ -846,7 +803,6 @@
         return;
       }
 
-      // 🌟 新增：如果打字機正在跑，點擊畫面直接瞬間顯示完整文字
       if (isTyping) {
         if (typingTimer) clearInterval(typingTimer);
         document.getElementById('content-text').innerText = fullTextToType;
@@ -959,14 +915,12 @@
       document.getElementById('chapter-modal').style.display = 'none';
     }
 
-    // 🌟 全域鍵盤監聽與彈窗鎖定修正
     window.addEventListener('keydown', function(e) {
       const chapterModal = document.getElementById('chapter-modal');
       const logModal = document.getElementById('log-modal');
       const isModalOpen = (chapterModal && chapterModal.style.display === 'flex') ||
                           (logModal && logModal.style.display === 'flex');
 
-      // 當彈窗開啟時：阻斷上下左右與空白鍵的預設行為（防止背景捲動與穿透）
       if (isModalOpen) {
         if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
           e.preventDefault();
@@ -974,7 +928,6 @@
         return;
       }
 
-      // 一般閱讀時：左右鍵、Enter、空白鍵直接切換段落
       if (e.key === 'ArrowRight' || e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         handleAdvance();
@@ -1004,13 +957,11 @@
       }
     });
 
-    // 初始化第一張背景與文字
     document.getElementById('bg1').style.backgroundImage = `url('${getCurrentStory()[0].bgUrl}')`;
     renderStep();
-    // 🌟 自動偵測手機版並將按鈕文字精簡變短 🌟
+
     window.addEventListener('DOMContentLoaded', () => {
         if (window.innerWidth <= 768) {
-            // 尋找右上角控制列的所有按鈕並修改文字
             const btns = document.querySelectorAll('#controls-bar .ctrl-btn');
             btns.forEach(btn => {
                 if (btn.innerText.includes('篇章')) btn.innerText = '☰ 篇章';
@@ -1022,4 +973,4 @@
     });
   </script>
 </body>
-</html> 
+</html>
