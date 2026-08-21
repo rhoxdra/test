@@ -322,11 +322,11 @@
     .click-zone-right { right: 0; }
 
     /* ====================================================
-       2. 平板專屬尺寸（769px ~ 1024px，直向與橫向）
+       2. 平板直式（769px ~ 1024px 且為直向模式）：上調兩排高度
        ==================================================== */
-    @media (min-width: 769px) and (max-width: 1024px) {
+    @media (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
       #dialogue-box {
-        bottom: 60px !important;       /* 下調並保留約一行字的呼吸空間 */
+        bottom: 110px !important;      /* 🌟 原 60px 向上拉升 50px（約兩排文字高度） */
         width: 92% !important;
         max-width: 840px !important;
         min-height: 135px !important;
@@ -334,22 +334,39 @@
       }
 
       #dialogue-outer-footer {
-        bottom: 25px !important;       /* 資訊列緊隨在對話框下方 */
+        bottom: 75px !important;       /* 🌟 進度列跟隨對話框同步上移 */
+        width: 92% !important;
+        max-width: 840px !important;
+      }
+    }
+
+    /* 平板橫式（保持原樣） */
+    @media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+      #dialogue-box {
+        bottom: 60px !important;
+        width: 92% !important;
+        max-width: 840px !important;
+        min-height: 135px !important;
+        padding: 16px 22px !important;
+      }
+
+      #dialogue-outer-footer {
+        bottom: 25px !important;
         width: 92% !important;
         max-width: 840px !important;
       }
     }
 
     /* ====================================================
-       3. 手機直式（768px 以下）：完全還原原版最佳高度
+       3. 手機直式（768px 以下 且為直向模式）：上調兩排高度
        ==================================================== */
-    @media (max-width: 768px) {
+    @media (max-width: 768px) and (orientation: portrait) {
       .click-zone-left, .click-zone-right {
         display: block;
       }
 
       #dialogue-box {
-        bottom: 30px !important;       /* 原版設定：高度適中不切字 */
+        bottom: 80px !important;       /* 🌟 原 30px 向上拉升 50px（約兩排文字高度） */
         width: 95% !important;
         min-height: 110px !important;
         padding: 12px 16px !important;
@@ -366,12 +383,12 @@
       }
 
       #dialogue-outer-footer {
-        bottom: 10px !important;       /* 手機版進度條緊貼在對話框下方，不被切掉 */
+        bottom: 60px !important;       /* 🌟 進度列緊貼對話框下方，位置更清晰 */
         width: 95% !important;
       }
 
       #pc-controls-tip {
-        display: none !important;      /* 手機版隱藏鍵盤提示 */
+        display: none !important;
       }
 
       #controls-bar .ctrl-btn:last-child {
