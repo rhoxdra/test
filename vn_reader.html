@@ -31,16 +31,17 @@
 
     /* 遊戲舞台容器 */
     #stage {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      outline: none;
-      background-color: #0f172a;
-    }
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh; /* 🌟 確保視覺小說內部舞台永遠剛好填滿可見區域，不延伸到功能條底下 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    outline: none;
+    background-color: #0f172a;
+}
 
     /* 背景圖層 (Cross-fade 平滑淡入淡出) */
     .bg-layer {
@@ -321,12 +322,30 @@
     .click-zone-left { left: 0; }
     .click-zone-right { right: 0; }
 
+    /* 平板直式 */
+@media (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+  #dialogue-box {
+    bottom: calc(90px + env(safe-area-inset-bottom, 0px)) !important;
+    width: 92% !important;
+    max-width: 840px !important;
+    min-height: 135px !important;
+    padding: 16px 22px !important;
+  }
+
+  #dialogue-outer-footer {
+    bottom: calc(55px + env(safe-area-inset-bottom, 0px)) !important;
+    width: 92% !important;
+    max-width: 840px !important;
+  }
+}
+
     /* ====================================================
-       2. 平板直式（769px ~ 1024px 且為直向模式）：上調兩排高度
+       2. 平板模式（769px ~ 1024px）
        ==================================================== */
+    /* 平板直式：上調留白 + 避開底部功能條 */
     @media (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
       #dialogue-box {
-        bottom: 110px !important;      /* 🌟 原 60px 向上拉升 50px（約兩排文字高度） */
+        bottom: calc(90px + env(safe-area-inset-bottom, 0px)) !important;
         width: 92% !important;
         max-width: 840px !important;
         min-height: 135px !important;
@@ -334,39 +353,40 @@
       }
 
       #dialogue-outer-footer {
-        bottom: 75px !important;       /* 🌟 進度列跟隨對話框同步上移 */
+        bottom: calc(55px + env(safe-area-inset-bottom, 0px)) !important;
         width: 92% !important;
         max-width: 840px !important;
       }
     }
 
-    /* 平板橫式（保持原樣） */
+    /* 🌟 平板橫式：保留一行字舒適距離 + 避開橫向功能條與手勢列 🌟 */
     @media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
       #dialogue-box {
-        bottom: 60px !important;
-        width: 92% !important;
+        bottom: calc(50px + env(safe-area-inset-bottom, 0px)) !important;
+        width: 90% !important;
         max-width: 840px !important;
-        min-height: 135px !important;
-        padding: 16px 22px !important;
+        min-height: 130px !important;
+        padding: 14px 20px !important;
       }
 
       #dialogue-outer-footer {
-        bottom: 25px !important;
-        width: 92% !important;
+        bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+        width: 90% !important;
         max-width: 840px !important;
       }
     }
 
     /* ====================================================
-       3. 手機直式（768px 以下 且為直向模式）：上調兩排高度
+       3. 手機模式（768px 以下）
        ==================================================== */
+    /* 手機直式：適當上調 + 避開底部功能條 */
     @media (max-width: 768px) and (orientation: portrait) {
       .click-zone-left, .click-zone-right {
         display: block;
       }
 
       #dialogue-box {
-        bottom: 80px !important;       /* 🌟 原 30px 向上拉升 50px（約兩排文字高度） */
+        bottom: calc(50px + env(safe-area-inset-bottom, 0px)) !important;
         width: 95% !important;
         min-height: 110px !important;
         padding: 12px 16px !important;
@@ -383,7 +403,7 @@
       }
 
       #dialogue-outer-footer {
-        bottom: 60px !important;       /* 🌟 進度列緊貼對話框下方，位置更清晰 */
+        bottom: calc(28px + env(safe-area-inset-bottom, 0px)) !important;
         width: 95% !important;
       }
 
@@ -396,23 +416,38 @@
       }
     }
 
-    /* ====================================================
-       4. 手機/平板 橫向極窄螢幕（高度小於 500px）
-       ==================================================== */
-    @media (max-height: 500px) and (max-width: 900px) {
+    /* 🌟 手機/平板 橫向螢幕（包含高度極窄情況）：精準避開底部與兩側安全邊界 🌟 */
+    @media (max-width: 900px) and (orientation: landscape), (max-height: 520px) {
+      .click-zone-left, .click-zone-right {
+        display: block;
+      }
+
       #dialogue-box {
-        bottom: 20px !important;
+        /* 橫向模式下，基礎高度 22px 搭配安全邊界動態往上推 */
+        bottom: calc(22px + env(safe-area-inset-bottom, 0px)) !important;
+        width: 88% !important;
+        max-width: 720px !important;
         min-height: 95px !important;
         padding: 8px 14px !important;
       }
       
+      #speaker-name {
+        font-size: 0.9rem !important;
+        margin-bottom: 2px !important;
+      }
+
       #content-text {
         font-size: 0.85rem !important;
         line-height: 1.4 !important;
       }
 
       #dialogue-outer-footer {
-        bottom: 3px !important;
+        bottom: calc(4px + env(safe-area-inset-bottom, 0px)) !important;
+        width: 88% !important;
+      }
+
+      #pc-controls-tip {
+        display: none !important;
       }
 
       #controls-bar .ctrl-btn:last-child {

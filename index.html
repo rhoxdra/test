@@ -1042,16 +1042,18 @@ body.modal-open {
 
     /* 🌟 視覺小說全螢幕 Overlay 視窗 🌟 */
     .vn-modal-overlay {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        background: rgba(0, 0, 0, 0.4);
-        z-index: 150;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        touch-action: none;
-    }
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh; /* 🌟 核心：自動根據手機瀏覽器當前功能條的顯示/隱藏動態調整真實高度 */
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 150;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    touch-action: none;
+}
 
     .vn-iframe-container {
         position: relative;
