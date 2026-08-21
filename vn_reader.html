@@ -103,6 +103,34 @@
       color: #ffffff;
       border-color: #38bdf8;
     }
+    /* 🌟 平板（直向與橫向）、手機模式：對話框向下遞補貼近底部 🌟 */
+@media (max-width: 1024px) {
+    #dialogue-box {
+        bottom: 24px !important;       /* 向下沉到底部，不再懸空 */
+        width: 94% !important;
+        min-height: 110px !important;
+        padding: 14px 18px !important;
+    }
+
+    /* 對話框下方的資訊列（進度標籤等）同步隱藏或緊貼 */
+    #dialogue-outer-footer {
+        display: none !important;
+    }
+}
+
+/* 針對橫擺高度極窄（如高度小於 550px）的平板與手機加強保護 */
+@media (max-height: 550px) {
+    #dialogue-box {
+        bottom: 12px !important;
+        min-height: 90px !important;
+        padding: 10px 14px !important;
+    }
+    
+    #content-text {
+        font-size: 0.9rem !important;
+        line-height: 1.45 !important;
+    }
+}
 
     /* 視覺小說對話框 */
     #dialogue-box {

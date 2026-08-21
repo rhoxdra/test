@@ -837,9 +837,14 @@
            🌟 彈窗開啟狀態控制 🌟
            ========================================== */
         /* 1. 彈窗開啟時，鎖定後方主頁面捲動 */
-        body.modal-open {
-            overflow: hidden !important;
-        }
+        body.vn-open,
+body.modal-open {
+    overflow: hidden !important;
+    height: 100vh !important;
+    touch-action: none !important;
+    -webkit-overflow-scrolling: auto !important;
+}
+
 
         /* 2. 僅將音樂播放器淡出隱藏，保留相機按鈕供隨機切換觀圖 */
         body.modal-open .music-player-container {
@@ -1045,6 +1050,7 @@
         display: none;
         justify-content: center;
         align-items: center;
+        touch-action: none;
     }
 
     .vn-iframe-container {
@@ -4092,55 +4098,35 @@
         });
         // 🌟 視覺小說 Modal 觸發邏輯 🌟
     function openVNModal(initialChapterIndex = 0) {
-        const modal = document.getElementById('vn-modal');
-        const iframe = document.getElementById('vn-iframe');
-        
-        if (iframe.src === 'about:blank' || !iframe.src.includes('vn_reader.html')) {
-            iframe.src = 'vn_reader.html';
+    const modal = document.getElementById('vn-modal');
+    const iframe = document.getElementById('vn-iframe');
+    
+    if (iframe.src === 'about:blank' || !iframe.src.includes('vn_reader.html')) {
+        iframe.src = 'vn_reader.html';
+    }
+
+    iframe.onload = function() {
+        if (initialChapterIndex > 0) {
+            iframe.contentWindow.postMessage({ type: 'SELECT_CHAPTER_INDEX', index: initialChapterIndex }, '*');
         }
-
-        iframe.onload = function() {
-            if (initialChapterIndex > 0) {
-                iframe.contentWindow.postMessage({ type: 'SELECT_CHAPTER_INDEX', index: initialChapterIndex }, '*');
-            }
-            setTimeout(() => {
-                iframe.focus();
-                try {
-                    const innerStage = iframe.contentWindow.document.getElementById('stage');
-                    if (innerStage) innerStage.focus();
-                } catch(e) {}
-            }, 100);
-        };
-
-        modal.style.display = 'flex';
-        document.body.classList.add('ui-hidden'); // 隱藏主頁面卡片 UI
-        document.body.classList.add('vn-open');   // 強制隱藏主頁面的相機按鈕 📷
-
         setTimeout(() => {
             iframe.focus();
-        }, 150);
-    }
+        }, 100);
+    };
 
-    // ⚡ 核心關閉邏輯：關閉時自動退出全螢幕，還原主頁點擊狀態 ⚡
-    function closeVNModal() {
-        if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-            if (document.exitFullscreen) {
-                document.exitFullscreen().catch(err => console.log(err));
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
-        }
+    modal.style.display = 'flex';
+    document.body.classList.add('ui-hidden');
+    document.body.classList.add('vn-open');      // 鎖定首頁滾動並隱藏平板音樂條
+}
 
-        const modal = document.getElementById('vn-modal');
-        modal.style.display = 'none';
-        document.body.classList.remove('ui-hidden'); // 恢復主頁面卡片 UI
-        document.body.classList.remove('vn-open');   // 恢復相機按鈕 📷
-        document.body.classList.remove('modal-open'); // 確保主頁面可正常點擊與捲動
-    }
+function closeVNModal() {
+    // ...退出全螢幕邏輯保持原樣...
+    const modal = document.getElementById('vn-modal');
+    modal.style.display = 'none';
+    document.body.classList.remove('ui-hidden');
+    document.body.classList.remove('vn-open');   // 解鎖首頁
+    document.body.classList.remove('modal-open');
+}
 
     // 全螢幕開關邏輯
     function toggleVNFullscreen() {
