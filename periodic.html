@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+        <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EJ6S8VYWPY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EJ6S8VYWPY');
+</script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>《無限元素》元素週期表與世界地理</title>
@@ -15,7 +25,7 @@
         /* 遮暗濾鏡背景圖片 (週期表模式) */
         .bg-overlay-periodic {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('images/bg_per.jpg');
+            background-image: url('images/bg_per.webp');
             background-size: cover; background-position: center; background-repeat: no-repeat;
             filter: brightness(0.5) contrast(1.1) blur(2px);
             z-index: 0; pointer-events: none; transition: opacity 0.4s ease; opacity: 1;
@@ -25,7 +35,7 @@
         /* 遮暗濾鏡背景圖片 (地理圖模式) */
         .bg-overlay-geo {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('images/bg_geo.jpg');
+            background-image: url('images/bg_geo.webp');
             background-size: cover; background-position: center; background-repeat: no-repeat;
             filter: brightness(0.4) contrast(1.1) blur(2px);
             z-index: 0; pointer-events: none; transition: opacity 0.4s ease; opacity: 0;
@@ -389,7 +399,7 @@
 
         const nodes = rawNodes.map(node => {
             const img = new Image();
-            img.src = `images/${node.id}.jpg`;
+            img.src = `images/${node.id}.webp`;
             return { ...node, avatarImg: img, isImgLoaded: false };
         });
         nodes.forEach(node => {
@@ -1604,7 +1614,7 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
         function openNodeDrawer(node) {
             const avatar = document.getElementById('drawer-avatar');
             avatar.style.display = 'block';
-            avatar.src = `images/${node.id}.jpg`;
+            avatar.src = `images/${node.id}.webp`;
             document.getElementById('drawer-badge').innerText = `元素記錄 ✦ ${node.faction}`;
             document.getElementById('drawer-badge').style.color = node.color;
             document.getElementById('drawer-badge').style.borderColor = node.color;
@@ -1620,7 +1630,7 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
             const n1 = nodes.find(n => n.id === edge.from);
             const avatar = document.getElementById('drawer-avatar');
             avatar.style.display = 'block';
-            avatar.src = `images/${n1.id}.jpg`;
+            avatar.src = `images/${n1.id}.webp`;
             document.getElementById('drawer-badge').innerText = `情感羈絆 ✦ ${edge.label}`;
             document.getElementById('drawer-badge').style.color = edge.color;
             document.getElementById('drawer-badge').style.borderColor = edge.color;

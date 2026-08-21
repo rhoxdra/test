@@ -181,7 +181,7 @@
             background-color: #0f172a; 
             
             background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.35) 100%),
-                              var(--bg-image, url('images/background.jpg'));
+                              var(--bg-image, url('images/background.webp'));
             
             background-position: center top;
             background-repeat: no-repeat;
@@ -1150,7 +1150,7 @@
             
             <!-- 🌟 獨立出版與未來排程預告卡片 🌟 -->
             <div class="link-card highlight" onclick="openScheduleModal()" style="cursor: pointer;">
-                <img src="images/lanlan.jpg" alt="嵐懶" class="avatar">
+                <img src="images/lanlan.webp" alt="嵐懶" class="avatar">
                 <div class="link-info">
                     <div class="link-title">出版與活動月曆 ✦ 排程預告</div>
                     <div class="link-desc">查看 8 - 10 月本傳發售、連載、學園祭主題與周邊資訊</div>
@@ -1159,7 +1159,7 @@
             </div>
 
             <a href="https://www.bookwalker.com.tw/search?v=1147&series_display=1" target="_blank" class="link-card highlight">
-                <img src="images/kulu.jpg" alt="克爾" class="avatar">
+                <img src="images/kulu.webp" alt="克爾" class="avatar">
                 <div class="link-info">
                     <div class="link-title">BookWalker 作品專頁</div>
                     <div class="link-desc">內容豐富的本傳、免費連載的外傳一次滿足你的閱讀興致</div>
@@ -1168,7 +1168,7 @@
             </a>
             <!-- 🌟 2. 每日元素共鳴籤（已移至心理測驗上方，且移除 highlight 高光） 🌟 -->
             <div class="link-card" onclick="drawDailyFortune()" style="cursor: pointer;">
-                <img src="images/arc.jpg" alt="亞爾克" class="avatar">
+                <img src="images/arc.webp" alt="亞爾克" class="avatar">
                 <div class="link-info">
                     <div class="link-title">每日元素共鳴籤</div>
                     <div class="link-desc">點擊抽取今日幸運夥伴與元素開運指引！</div>
@@ -1176,7 +1176,7 @@
                 <div class="arrow">➔</div>
             </div>
             <a href="https://rhoxdra.github.io/endless-element-quiz/" target="_blank" class="link-card">
-                <img src="images/jareth.jpg" alt="賈瑞斯" class="avatar">
+                <img src="images/jareth.webp" alt="賈瑞斯" class="avatar">
                 <div class="link-info">
                     <div class="link-title">與你契合的夥伴心理測驗</div>
                     <div class="link-desc">測測看你在這個世界裡最適合與誰同行？</div>
@@ -1188,7 +1188,7 @@
         <div class="section-title">篇章專區</div>
         <div class="link-list">
             <div class="link-card highlight" onclick="openVNModal()" style="cursor: pointer;">
-                <img src="images/kokumei.jpg" alt="克明" class="avatar">
+                <img src="images/kokumei.webp" alt="克明" class="avatar">
                 <div class="link-info">
                     <div class="link-title">主題進展 ✦ 回聲殘響</div>
                     <div class="link-desc">進入視覺小說型閱讀體驗，查看當前篇章活動與過往內容</div>
@@ -1201,7 +1201,7 @@
         <div class="section-title">角色圖鑑</div>
         <div class="link-list">
             <a href="periodic.html" class="link-card highlight">
-                <img src="images/rub.jpg" alt="元素週期表" class="avatar">
+                <img src="images/rub.webp" alt="元素週期表" class="avatar">
                 <div class="link-info">
                     <div class="link-title">元素週期表 ✦ 世界地理脈絡</div>
                     <div class="link-desc">探索全體角色關係圖譜，與三大陸自然地理網路</div>
@@ -1210,7 +1210,7 @@
             </a>
             <details class="link-card-dropdown">
                 <summary class="link-card-summary">
-                    <img src="images/koushou_beast.jpg" alt="高翔" class="avatar">
+                    <img src="images/koushou_beast.webp" alt="高翔" class="avatar">
                     <div class="link-info">
                         <div class="link-title">角色介紹</div>
                         <div class="link-desc">展開夥伴圖鑑，點選圖像觀看簡介與專屬全幅大圖</div>
@@ -1254,56 +1254,56 @@
                 </div>
 
                 <div class="avatar-grid" id="avatar-grid">
-                    <div class="avatar-item" data-key="lanlan" onclick="openCharModal('lanlan')"><img src="images/lanlan.jpg" alt="嵐懶"><span class="avatar-label">嵐懶</span></div>
-                    <div class="avatar-item" data-key="kulu" onclick="openCharModal('kulu')"><img src="images/kulu.jpg" alt="克爾"><span class="avatar-label">克爾</span></div>
-                    <div class="avatar-item" data-key="arc" onclick="openCharModal('arc')"><img src="images/arc.jpg" alt="亞爾克"><span class="avatar-label">亞爾克</span></div>
-                    <div class="avatar-item" data-key="roar" onclick="openCharModal('roar')"><img src="images/roar.jpg" alt="洛爾"><span class="avatar-label">洛爾</span></div>
-                    <div class="avatar-item" data-key="kokumei" onclick="openCharModal('kokumei')"><img src="images/kokumei.jpg" alt="克明"><span class="avatar-label">克明</span></div>
-                    <div class="avatar-item" data-key="koushou" onclick="openCharModal('koushou')"><img src="images/koushou.jpg" alt="高翔"><span class="avatar-label">高翔</span></div>
-                    <div class="avatar-item" data-key="takawa" onclick="openCharModal('takawa')"><img src="images/takawa.jpg" alt="高和"><span class="avatar-label">高和</span></div>
-                    <div class="avatar-item" data-key="igarashi" onclick="openCharModal('igarashi')"><img src="images/igarashi.jpg" alt="五十嵐"><span class="avatar-label">五十嵐</span></div>
-                    <div class="avatar-item" data-key="area" onclick="openCharModal('area')"><img src="images/area.jpg" alt="艾瑞爾"><span class="avatar-label">艾瑞爾</span></div>
-                    <div class="avatar-item" data-key="wakima" onclick="openCharModal('wakima')"><img src="images/wakima.jpg" alt="瓦奇瑪"><span class="avatar-label">瓦奇瑪</span></div>
-                    <div class="avatar-item" data-key="volt" onclick="openCharModal('volt')"><img src="images/volt.jpg" alt="弗爾特"><span class="avatar-label">弗爾特</span></div>
-                    <div class="avatar-item" data-key="proto" onclick="openCharModal('proto')"><img src="images/proto.jpg" alt="普洛特"><span class="avatar-label">普洛特</span></div>
-                    <div class="avatar-item" data-key="zoma" onclick="openCharModal('zoma')"><img src="images/zoma.jpg" alt="詛碼"><span class="avatar-label">詛碼</span></div>
-                    <div class="avatar-item" data-key="veil" onclick="openCharModal('veil')"><img src="images/veil.jpg" alt="白珥"><span class="avatar-label">白珥</span></div>
-                    <div class="avatar-item" data-key="ultima" onclick="openCharModal('ultima')"><img src="images/ultima.jpg" alt="阿爾提瑪"><span class="avatar-label">阿爾提瑪</span></div>
-                    <div class="avatar-item" data-key="jareth" onclick="openCharModal('jareth')"><img src="images/jareth.jpg" alt="賈瑞斯"><span class="avatar-label">賈瑞斯</span></div>
-                    <div class="avatar-item" data-key="zarion" onclick="openCharModal('zarion')"><img src="images/zarion.jpg" alt="澤里恩"><span class="avatar-label">澤里恩</span></div>
-                    <div class="avatar-item" data-key="kuzure" onclick="openCharModal('kuzure')"><img src="images/kuzure.jpg" alt="崩"><span class="avatar-label">崩</span></div>
-                    <div class="avatar-item" data-key="osae" onclick="openCharModal('osae')"><img src="images/osae.jpg" alt="制"><span class="avatar-label">制</span></div>
-                    <div class="avatar-item" data-key="kage" onclick="openCharModal('kage')"><img src="images/kage.jpg" alt="影"><span class="avatar-label">影</span></div>
-                    <div class="avatar-item" data-key="rub" onclick="openCharModal('rub')"><img src="images/rub.jpg" alt="劫"><span class="avatar-label">劫</span></div>
-                    <div class="avatar-item" data-key="electric" onclick="openCharModal('electric')"><img src="images/electric.jpg" alt="伊蕾琪"><span class="avatar-label">伊蕾琪</span></div>
-                    <div class="avatar-item" data-key="tia" onclick="openCharModal('tia')"><img src="images/tia.jpg" alt="提婭"><span class="avatar-label">提婭</span></div>
-                    <div class="avatar-item" data-key="rofena" onclick="openCharModal('rofena')"><img src="images/rofena.jpg" alt="羅菲娜"><span class="avatar-label">羅菲娜</span></div>
-                    <div class="avatar-item" data-key="arashiyama" onclick="openCharModal('arashiyama')"><img src="images/arashiyama.jpg" alt="嵐山"><span class="avatar-label">嵐山</span></div>
-                    <div class="avatar-item" data-key="fox" onclick="openCharModal('fox')"><img src="images/fox.jpg" alt="睿策樺霖"><span class="avatar-label">睿策樺霖</span></div>
-                    <div class="avatar-item" data-key="sugar" onclick="openCharModal('sugar')"><img src="images/sugar.jpg" alt="霜糖紗母"><span class="avatar-label">霜糖紗母</span></div>
-                    <div class="avatar-item" data-key="deer" onclick="openCharModal('deer')"><img src="images/deer.jpg" alt="繪靈鹿茲"><span class="avatar-label">繪靈鹿茲</span></div>
-                    <div class="avatar-item" data-key="owl" onclick="openCharModal('owl')"><img src="images/owl.jpg" alt="夜瞳梟賢"><span class="avatar-label">夜瞳梟賢</span></div>
-                    <div class="avatar-item" data-key="teiner" onclick="openCharModal('teiner')"><img src="images/teiner.jpg" alt="翠芽泰納"><span class="avatar-label">翠芽泰納</span></div>
-                    <div class="avatar-item" data-key="doutou" onclick="openCharModal('doutou')"><img src="images/doutou.jpg" alt="怒濤銳步"><span class="avatar-label">怒濤銳步</span></div>
-                    <div class="avatar-item" data-key="kaiden" onclick="openCharModal('kaiden')"><img src="images/kaiden.jpg" alt="凱登"><span class="avatar-label">凱登</span></div>
-                    <div class="avatar-item" data-key="gousuke" onclick="openCharModal('gousuke')"><img src="images/gousuke.jpg" alt="豪助"><span class="avatar-label">豪助</span></div>
-                    <div class="avatar-item" data-key="chitar" onclick="openCharModal('chitar')"><img src="images/chitar.jpg" alt="瞬介"><span class="avatar-label">瞬介</span></div>
-                    <div class="avatar-item" data-key="horse" onclick="openCharModal('horse')"><img src="images/horse.jpg" alt="颯太"><span class="avatar-label">颯太</span></div>
-                    <div class="avatar-item" data-key="raku" onclick="openCharModal('raku')"><img src="images/raku.jpg" alt="埒"><span class="avatar-label">埒</span></div>
-                    <div class="avatar-item" data-key="garoz" onclick="openCharModal('garoz')"><img src="images/garoz.jpg" alt="犺"><span class="avatar-label">犺</span></div>
-                    <div class="avatar-item" data-key="sinn" onclick="openCharModal('sinn')"><img src="images/sinn.jpg" alt="泊信"><span class="avatar-label">泊信</span></div>
-                    <div class="avatar-item" data-key="gorilla" onclick="openCharModal('gorilla')"><img src="images/gorilla.jpg" alt="烈塵巡衛"><span class="avatar-label">烈塵巡衛</span></div>
-                    <div class="avatar-item" data-key="boar" onclick="openCharModal('boar')"><img src="images/boar.jpg" alt="鍛魂獷牙"><span class="avatar-label">鍛魂獷牙</span></div>
-                    <div class="avatar-item" data-key="racoon" onclick="openCharModal('racoon')"><img src="images/racoon.jpg" alt="影識秘爪"><span class="avatar-label">影識秘爪</span></div>
-                    <div class="avatar-item" data-key="whissel" onclick="openCharModal('whissel')"><img src="images/whissel.jpg" alt="旭言"><span class="avatar-label">旭言</span></div>
-                    <div class="avatar-item" data-key="rin" onclick="openCharModal('rin')"><img src="images/rin.jpg" alt="嶙安"><span class="avatar-label">嶙安</span></div>
-                    <div class="avatar-item" data-key="cat" onclick="openCharModal('cat')"><img src="images/cat.jpg" alt="瑟莉雅"><span class="avatar-label">瑟莉雅</span></div>
-                    <div class="avatar-item" data-key="reva" onclick="openCharModal('reva')"><img src="images/reva.jpg" alt="雷瓦維那"><span class="avatar-label">雷瓦維那</span></div>
-                    <div class="avatar-item" data-key="leon" onclick="openCharModal('leon')"><img src="images/leon.jpg" alt="萊昂維那"><span class="avatar-label">萊昂維那</span></div>
-                    <div class="avatar-item" data-key="tormunn" onclick="openCharModal('tormunn')"><img src="images/tormunn.jpg" alt="拓穆恩"><span class="avatar-label">拓穆恩</span></div>
-                    <div class="avatar-item" data-key="grossa" onclick="openCharModal('grossa')"><img src="images/grossa.jpg" alt="格洛薩"><span class="avatar-label">格洛薩</span></div>
-                    <div class="avatar-item" data-key="igrahhan" onclick="openCharModal('igrahhan')"><img src="images/igrahhan.jpg" alt="伊格拉罕"><span class="avatar-label">伊格拉罕</span></div>
-                    <div class="avatar-item" data-key="touphrin" onclick="openCharModal('touphrin')"><img src="images/touphrin.jpg" alt="塔芙琳"><span class="avatar-label">塔芙琳</span></div>
+                    <div class="avatar-item" data-key="lanlan" onclick="openCharModal('lanlan')"><img src="images/lanlan.webp" alt="嵐懶"><span class="avatar-label">嵐懶</span></div>
+                    <div class="avatar-item" data-key="kulu" onclick="openCharModal('kulu')"><img src="images/kulu.webp" alt="克爾"><span class="avatar-label">克爾</span></div>
+                    <div class="avatar-item" data-key="arc" onclick="openCharModal('arc')"><img src="images/arc.webp" alt="亞爾克"><span class="avatar-label">亞爾克</span></div>
+                    <div class="avatar-item" data-key="roar" onclick="openCharModal('roar')"><img src="images/roar.webp" alt="洛爾"><span class="avatar-label">洛爾</span></div>
+                    <div class="avatar-item" data-key="kokumei" onclick="openCharModal('kokumei')"><img src="images/kokumei.webp" alt="克明"><span class="avatar-label">克明</span></div>
+                    <div class="avatar-item" data-key="koushou" onclick="openCharModal('koushou')"><img src="images/koushou.webp" alt="高翔"><span class="avatar-label">高翔</span></div>
+                    <div class="avatar-item" data-key="takawa" onclick="openCharModal('takawa')"><img src="images/takawa.webp" alt="高和"><span class="avatar-label">高和</span></div>
+                    <div class="avatar-item" data-key="igarashi" onclick="openCharModal('igarashi')"><img src="images/igarashi.webp" alt="五十嵐"><span class="avatar-label">五十嵐</span></div>
+                    <div class="avatar-item" data-key="area" onclick="openCharModal('area')"><img src="images/area.webp" alt="艾瑞爾"><span class="avatar-label">艾瑞爾</span></div>
+                    <div class="avatar-item" data-key="wakima" onclick="openCharModal('wakima')"><img src="images/wakima.webp" alt="瓦奇瑪"><span class="avatar-label">瓦奇瑪</span></div>
+                    <div class="avatar-item" data-key="volt" onclick="openCharModal('volt')"><img src="images/volt.webp" alt="弗爾特"><span class="avatar-label">弗爾特</span></div>
+                    <div class="avatar-item" data-key="proto" onclick="openCharModal('proto')"><img src="images/proto.webp" alt="普洛特"><span class="avatar-label">普洛特</span></div>
+                    <div class="avatar-item" data-key="zoma" onclick="openCharModal('zoma')"><img src="images/zoma.webp" alt="詛碼"><span class="avatar-label">詛碼</span></div>
+                    <div class="avatar-item" data-key="veil" onclick="openCharModal('veil')"><img src="images/veil.webp" alt="白珥"><span class="avatar-label">白珥</span></div>
+                    <div class="avatar-item" data-key="ultima" onclick="openCharModal('ultima')"><img src="images/ultima.webp" alt="阿爾提瑪"><span class="avatar-label">阿爾提瑪</span></div>
+                    <div class="avatar-item" data-key="jareth" onclick="openCharModal('jareth')"><img src="images/jareth.webp" alt="賈瑞斯"><span class="avatar-label">賈瑞斯</span></div>
+                    <div class="avatar-item" data-key="zarion" onclick="openCharModal('zarion')"><img src="images/zarion.webp" alt="澤里恩"><span class="avatar-label">澤里恩</span></div>
+                    <div class="avatar-item" data-key="kuzure" onclick="openCharModal('kuzure')"><img src="images/kuzure.webp" alt="崩"><span class="avatar-label">崩</span></div>
+                    <div class="avatar-item" data-key="osae" onclick="openCharModal('osae')"><img src="images/osae.webp" alt="制"><span class="avatar-label">制</span></div>
+                    <div class="avatar-item" data-key="kage" onclick="openCharModal('kage')"><img src="images/kage.webp" alt="影"><span class="avatar-label">影</span></div>
+                    <div class="avatar-item" data-key="rub" onclick="openCharModal('rub')"><img src="images/rub.webp" alt="劫"><span class="avatar-label">劫</span></div>
+                    <div class="avatar-item" data-key="electric" onclick="openCharModal('electric')"><img src="images/electric.webp" alt="伊蕾琪"><span class="avatar-label">伊蕾琪</span></div>
+                    <div class="avatar-item" data-key="tia" onclick="openCharModal('tia')"><img src="images/tia.webp" alt="提婭"><span class="avatar-label">提婭</span></div>
+                    <div class="avatar-item" data-key="rofena" onclick="openCharModal('rofena')"><img src="images/rofena.webp" alt="羅菲娜"><span class="avatar-label">羅菲娜</span></div>
+                    <div class="avatar-item" data-key="arashiyama" onclick="openCharModal('arashiyama')"><img src="images/arashiyama.webp" alt="嵐山"><span class="avatar-label">嵐山</span></div>
+                    <div class="avatar-item" data-key="fox" onclick="openCharModal('fox')"><img src="images/fox.webp" alt="睿策樺霖"><span class="avatar-label">睿策樺霖</span></div>
+                    <div class="avatar-item" data-key="sugar" onclick="openCharModal('sugar')"><img src="images/sugar.webp" alt="霜糖紗母"><span class="avatar-label">霜糖紗母</span></div>
+                    <div class="avatar-item" data-key="deer" onclick="openCharModal('deer')"><img src="images/deer.webp" alt="繪靈鹿茲"><span class="avatar-label">繪靈鹿茲</span></div>
+                    <div class="avatar-item" data-key="owl" onclick="openCharModal('owl')"><img src="images/owl.webp" alt="夜瞳梟賢"><span class="avatar-label">夜瞳梟賢</span></div>
+                    <div class="avatar-item" data-key="teiner" onclick="openCharModal('teiner')"><img src="images/teiner.webp" alt="翠芽泰納"><span class="avatar-label">翠芽泰納</span></div>
+                    <div class="avatar-item" data-key="doutou" onclick="openCharModal('doutou')"><img src="images/doutou.webp" alt="怒濤銳步"><span class="avatar-label">怒濤銳步</span></div>
+                    <div class="avatar-item" data-key="kaiden" onclick="openCharModal('kaiden')"><img src="images/kaiden.webp" alt="凱登"><span class="avatar-label">凱登</span></div>
+                    <div class="avatar-item" data-key="gousuke" onclick="openCharModal('gousuke')"><img src="images/gousuke.webp" alt="豪助"><span class="avatar-label">豪助</span></div>
+                    <div class="avatar-item" data-key="chitar" onclick="openCharModal('chitar')"><img src="images/chitar.webp" alt="瞬介"><span class="avatar-label">瞬介</span></div>
+                    <div class="avatar-item" data-key="horse" onclick="openCharModal('horse')"><img src="images/horse.webp" alt="颯太"><span class="avatar-label">颯太</span></div>
+                    <div class="avatar-item" data-key="raku" onclick="openCharModal('raku')"><img src="images/raku.webp" alt="埒"><span class="avatar-label">埒</span></div>
+                    <div class="avatar-item" data-key="garoz" onclick="openCharModal('garoz')"><img src="images/garoz.webp" alt="犺"><span class="avatar-label">犺</span></div>
+                    <div class="avatar-item" data-key="sinn" onclick="openCharModal('sinn')"><img src="images/sinn.webp" alt="泊信"><span class="avatar-label">泊信</span></div>
+                    <div class="avatar-item" data-key="gorilla" onclick="openCharModal('gorilla')"><img src="images/gorilla.webp" alt="烈塵巡衛"><span class="avatar-label">烈塵巡衛</span></div>
+                    <div class="avatar-item" data-key="boar" onclick="openCharModal('boar')"><img src="images/boar.webp" alt="鍛魂獷牙"><span class="avatar-label">鍛魂獷牙</span></div>
+                    <div class="avatar-item" data-key="racoon" onclick="openCharModal('racoon')"><img src="images/racoon.webp" alt="影識秘爪"><span class="avatar-label">影識秘爪</span></div>
+                    <div class="avatar-item" data-key="whissel" onclick="openCharModal('whissel')"><img src="images/whissel.webp" alt="旭言"><span class="avatar-label">旭言</span></div>
+                    <div class="avatar-item" data-key="rin" onclick="openCharModal('rin')"><img src="images/rin.webp" alt="嶙安"><span class="avatar-label">嶙安</span></div>
+                    <div class="avatar-item" data-key="cat" onclick="openCharModal('cat')"><img src="images/cat.webp" alt="瑟莉雅"><span class="avatar-label">瑟莉雅</span></div>
+                    <div class="avatar-item" data-key="reva" onclick="openCharModal('reva')"><img src="images/reva.webp" alt="雷瓦維那"><span class="avatar-label">雷瓦維那</span></div>
+                    <div class="avatar-item" data-key="leon" onclick="openCharModal('leon')"><img src="images/leon.webp" alt="萊昂維那"><span class="avatar-label">萊昂維那</span></div>
+                    <div class="avatar-item" data-key="tormunn" onclick="openCharModal('tormunn')"><img src="images/tormunn.webp" alt="拓穆恩"><span class="avatar-label">拓穆恩</span></div>
+                    <div class="avatar-item" data-key="grossa" onclick="openCharModal('grossa')"><img src="images/grossa.webp" alt="格洛薩"><span class="avatar-label">格洛薩</span></div>
+                    <div class="avatar-item" data-key="igrahhan" onclick="openCharModal('igrahhan')"><img src="images/igrahhan.webp" alt="伊格拉罕"><span class="avatar-label">伊格拉罕</span></div>
+                    <div class="avatar-item" data-key="touphrin" onclick="openCharModal('touphrin')"><img src="images/touphrin.webp" alt="塔芙琳"><span class="avatar-label">塔芙琳</span></div>
                 </div>
             </details>
         </div>
@@ -1312,7 +1312,7 @@
         <div class="section-title">社群專題</div>
         <div class="link-list">
             <a href="https://www.facebook.com/profile.php?id=61572883663242" target="_blank" class="link-card">
-                <img src="images/zarion.jpg" alt="澤里恩" class="avatar">
+                <img src="images/zarion.webp" alt="澤里恩" class="avatar">
                 <div class="link-info">
                     <div class="link-title">Facebook 官方粉絲專頁</div>
                     <div class="link-desc">第一時間獲取最新消息</div>
@@ -1320,7 +1320,7 @@
                 <div class="arrow">➔</div>
             </a>
             <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" class="link-card">
-                <img src="images/proto_beast.jpg" alt="普洛特" class="avatar">
+                <img src="images/proto_beast.webp" alt="普洛特" class="avatar">
                 <div class="link-info">
                     <div class="link-title">7-11 賣貨便周邊賣場</div>
                     <div class="link-desc">精美透卡與限量特典貼紙現貨發售中！</div>
@@ -1328,7 +1328,7 @@
                 <div class="arrow">➔</div>
             </a>
             <a href="http://patreon.com/rhoxine" target="_blank" class="link-card">
-                <img src="images/ura.jpg" alt="克爾" class="avatar">
+                <img src="images/ura.webp" alt="克爾" class="avatar">
                 <div class="link-info">
                     <div class="link-title">Patreon 專區</div>
                     <div class="link-desc">收錄《無限元素》的相關插圖作品集，以及角色們不曾公開的一面</div>
@@ -1341,27 +1341,27 @@
         <div class="section-title">其他各大線上閱讀平台</div>
         <div class="link-list">
             <a href="https://readmoo.com/publisher/8667" target="_blank" class="link-card">
-                <img src="images/area.jpg" alt="艾瑞爾" class="avatar">
+                <img src="images/area.webp" alt="艾瑞爾" class="avatar">
                 <div class="link-info"><div class="link-title">Readmoo</div><div class="link-desc"></div></div><div class="arrow">➔</div>
             </a>
             <a href="https://www.books.com.tw/web/sys_puballb/books/?pubid=bookwalker137" target="_blank" class="link-card">
-                <img src="images/igarashi.jpg" alt="五十嵐" class="avatar">
+                <img src="images/igarashi.webp" alt="五十嵐" class="avatar">
                 <div class="link-info"><div class="link-title">博客來</div><div class="link-desc"></div></div><div class="arrow">➔</div>
             </a>            
             <a href="https://ebook.hyread.com.tw/searchList.jsp?search_field=FullText&search_input=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&search_field=PU&search_input=%E5%B5%90%E6%87%B6%E6%9B%B8" target="_blank" class="link-card">
-                <img src="images/kuzure.jpg" alt="崩" class="avatar">
+                <img src="images/kuzure.webp" alt="崩" class="avatar">
                 <div class="link-info"><div class="link-title">Hyread</div><div class="link-desc"></div></div><div class="arrow">➔</div>
             </a>            
             <a href="https://play.google.com/store/search?q=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&c=books&hl=zh-TW" target="_blank" class="link-card">
-                <img src="images/osae.jpg" alt="制" class="avatar">
+                <img src="images/osae.webp" alt="制" class="avatar">
                 <div class="link-info"><div class="link-title">Google Play</div><div class="link-desc"></div></div><div class="arrow">➔</div>
             </a>            
             <a href="https://tw.myrenta.com/search2?keyword=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&field=name" target="_blank" class="link-card">
-                <img src="images/chitar.jpg" alt="瞬介" class="avatar">
+                <img src="images/chitar.webp" alt="瞬介" class="avatar">
                 <div class="link-info"><div class="link-title">MyRenta</div><div class="link-desc"></div></div><div class="arrow">➔</div>
             </a>            
             <a href="https://www.kobo.com/tw/zh/series/1GoXVrlB21SC9am6qDfZ9Q" target="_blank" class="link-card">
-                <img src="images/gousuke.jpg" alt="豪助" class="avatar">
+                <img src="images/gousuke.webp" alt="豪助" class="avatar">
                 <div class="link-info"><div class="link-title">Kobo</div><div class="link-desc"></div></div><div class="arrow">➔</div>
             </a>
         </div>
@@ -1369,7 +1369,7 @@
         <div class="section-title">作者專區</div>
         <div class="link-list">
             <a href="https://www.facebook.com/profile.php?id=100000318845586" target="_blank" class="link-card highlight">
-                <img src="images/roar.jpg" alt="洛爾" class="avatar">
+                <img src="images/roar.webp" alt="洛爾" class="avatar">
                 <div class="link-info">
                     <div class="link-title">懶懶｜嵐懶書 Facebook</div>
                     <div class="link-desc">創作心得與日常動態</div>
@@ -1679,7 +1679,7 @@
                     type: ["無名元素賦形者", "權能：重生 / 連結"],
                     element: ["火", "風"]
                 },
-                bgImage: "images/lanlan_bg.jpg", 
+                bgImage: "images/lanlan_bg.webp", 
                 desc: `嵐懶，前身為星球傳說「紅焰」，亦是薄明之戰眾多勢力爭相探尋的關鍵。在洛爾等人的協助與賈瑞斯最終一搏的賦形下取得實體，成功挫敗阿爾提瑪的野心，將世界從傾覆的邊緣拉回。然而，嵐懶始終堅信那場逆轉的奇蹟並非出自他一人之力，而是每位夥伴以情感與理解共同成就的成果。
 
 在《無盡探途》外傳所追溯的千年前歷史中，他因右手腕刻著叉記而被族人稱為「無名」。那時的他擁有無與倫比的號召力，親自招攬並引領由崩、制、影、劫、耀、創等菁英組成的探索隊「無盡元素」遠征外界、與星球締結最初的「契選」以求共生。雖然他曾因無法發揮權能、遭到星球排斥與同儕歧見的巨大責任感而崩潰，自我干涉沉入一條無名河中逝去，但也正因這段過往讓澤里恩找到自身定位，並立誓對其追隨至終。
@@ -1701,7 +1701,7 @@
                     type: ["融元素賦形者", "權能：理解 / 迫察"],
                     element: ["火", "雷"]
                 },
-                bgImage: "images/kulu_bg.jpg", 
+                bgImage: "images/kulu_bg.webp", 
                 desc: `克爾，融元素賦形者，出身於尼爾桑狼人村，亦是村中威名赫赫的狩獵頭領。他性格衝動、行事直接，卻也因此在征途中迷失了自我，直到意外獲得紅焰之力，才在紛亂中找回一絲自我存在的意義。
 
 薄明之戰的硝煙散去後，克爾一度陷入迷惘，不知自己該何去何從；最終，他遵循夥伴洛爾的安排，暫時一同在餐館擔任櫃檯，偶爾返回村中協助弟弟克明處理村務。表面上，他雖比過去更加沉穩，但面對十三元素間錯綜複雜的人際網絡，心底那份不安與疏離感仍未完全消散。
@@ -1719,7 +1719,7 @@
                     type: ["震元素賦形者", "權能：震動、共鳴"],
                     element: ["火", "土", "風"]
                 },
-                bgImage: "images/arc_bg.jpg", 
+                bgImage: "images/arc_bg.webp", 
                 desc: `亞爾克，震元素賦形者。原是野獸之身的他，最初與同伴一同生活在艾瑞爾大陸的自然保留區，卻在詛碼團的襲擊中全數被捕，送往實驗室成為研究創造「元素使用者」的素材。同伴們在殘酷的實驗中相繼喪命，唯有亞爾克撐過了那段幾乎將意志碾碎的日子。他的身體構成變為獸人之軀，並成功轉化為「元素賦形者」。在某位研究者暗中相助下使他負傷逃離，卻也因此陷入孤立無援的境地。
 
 於暴風雨肆虐之中即將力竭之時，他遇見正在旅途中的洛爾與克爾。兩人及時伸出的援手讓他得以存活下來。之後，他加入洛爾所創立的「野性之聲」復興組織，並獲得新的暱稱──阿風。
@@ -1745,7 +1745,7 @@
                     type: ["零元素賦形者", "權能：回歸 / 徹除"],
                     element: ["風", "光"]
                 },
-                bgImage: "images/roar_bg.jpg", 
+                bgImage: "images/roar_bg.webp", 
                 desc: `洛爾——零元素賦形者，夥伴們多半習慣稱他為阿洛。童年時，他與幾位摯友一同生活在嵐光村，平凡而安穩的日子卻在詛碼團的一次襲擊中徹底消失。村落被焚毀、生命瀕臨終結之際，他因五十嵐的出手相救而倖存，也在那一刻覺醒了自身的元素之力。自此，他成立了組織「野性之聲」，踏上復興故鄉、對抗詛碼團的艱險征途。
 
 在漫長的征途中，洛爾結識了來自各族的夥伴，並在艾瑞爾城遭受襲擊時協助城民轉移，逐步揭開世界歷史與自身作為賦形者的起源真相。最終，他們在元素之源與詛碼團展開決戰，為動盪的時代劃下暫時的句點。
@@ -1760,7 +1760,7 @@
                 name: "克明", 
                 quote: "「我會盡村長之責攜手抵抗威脅，也會開啟與外族共存的新時代！」",
                 tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["野性之聲", "十三元素", "狼人村"], type: ["沌元素賦形者", "權能：混沌 / 懾魂"], element: ["闇"] },
-                bgImage: "images/kokumei_bg.jpg", 
+                bgImage: "images/kokumei_bg.webp", 
                 desc: `克明，沌元素賦形者，同時也是克爾的弟弟。他個性溫和而沉穩，與狼人村內狩獵派獵者對人類普遍抱持警戒的態度不同，克明對人類懷有純粹而強烈的好奇心。他率先向身為人類的高翔伸出友誼之手，跨出打破種族隔閡的第一步。
 
 不僅如此，克明也挑戰了狼人村長久以來以狩獵為本的傳統文化，引領村落擴增農業發展，解決受詛碼團襲擊後的復興困境，更成功吸引來自各個獸人族群的訪客前來學習，為狼人村開創出嶄新的可能性。薄明之戰結束後，他以狼人村的新任村長身份，繼續致力推動跨種族之間的合作與交流。
@@ -1775,8 +1775,8 @@
                 name: "高翔", 
                 quote: "「上次我讓你離我而去。但這一次……我要把你帶回身邊！」",
                 tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["野性之聲", "十三元素", "狼人村"], type: ["極元素賦形者", "權能：極限 / 昇華"], element: ["風", "水", "火"] },
-                bgImage: "images/koushou_bg.jpg", 
-                beastBgImage: "images/koushou_beast_bg.jpg", 
+                bgImage: "images/koushou_bg.webp", 
+                beastBgImage: "images/koushou_beast_bg.webp", 
                 desc: `高翔，極元素賦形者，自幼成長於嵐光村。與性格沉穩的兄長高和不同，他天性外向，熱衷於野外活動。年少時便經常與普洛特學長一同離村探險，在一次次踏入未知的過程中，逐漸愛上了自由而粗獷的野外生活，也因此在村中幾乎難得一見他的身影，總是把時間花在山林與荒野之間。
 
 嵐光村遭受襲擊之際，高翔因不在村內而僥倖躲過一劫，卻也因此與洛爾及兄長失去聯繫。前路未明的他，選擇前往心中嚮往已久的尼爾桑大陸展開旅程，並在途中結識狼人村的克爾克明兄弟，自此與狼人族群結下難以割捨的緣分。
@@ -1791,8 +1791,8 @@
                 name: "高和", 
                 quote: "「創造希望的人，怎麼可以放棄希望？我不會再讓你離開我們了！」",
                 tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["野性之聲", "十三元素"], type: ["恆元素賦形者", "權能：恆定 / 聚型"], element: ["水", "光"] },
-                bgImage: "images/takawa_bg.jpg", 
-                beastBgImage: "images/takawa_beast_bg.jpg", 
+                bgImage: "images/takawa_bg.webp", 
+                beastBgImage: "images/takawa_beast_bg.webp", 
                 desc: `高和，恆元素賦形者，自幼便與洛爾相伴成長。他喜愛書本，沉浸於學習與新知研究之中，在結識博學多聞的五十嵐後便成為其最得意的門生。隨後，他與洛爾共同創立復興組織「野性之聲」，在旅途中不斷發掘恆定權能的多樣運用方式，並發展出與洛爾高度配合、結合元素操作的急救手術技術。
 
 嵐光鎮重建完成後，高和隨即被推派為代理鎮長，負責處理各項繁重的鎮務；在接受艾瑞爾邀約後，更同時投入艾瑞爾軍的研究工作。多重職責讓他的作息長期失衡，經常忙到忘記進食與休息，但對他而言，這樣的生活反而充滿成就感。
@@ -1807,7 +1807,7 @@
                 name: "五十嵐", 
                 quote: "「或許，你們早就準備好要啟程離開這座燈塔，而真正沒準備好放手的……竟然是我。」",
                 tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐" ], faction: ["艾瑞爾軍", "十三元素"], type: ["嵐元素賦形者", "權能：氣候 / 折射"], element: ["風"] },
-                bgImage: "images/igarashi_bg.jpg", 
+                bgImage: "images/igarashi_bg.webp", 
                 desc: `五十嵐，嵐元素賦形者。在一次獨自旅行的途中，他意外捲入嵐光村遭受詛碼團襲擊的事件，挺身而出擊退幹部，並救下了尚未成熟的洛爾與高和。察覺兩人正值元素權能覺醒初期後，五十嵐選擇陪伴他們踏上復興城鎮、對抗詛碼團的漫長征途。
 
 他是夥伴們旅程之中的導師，將自身的知識、實戰經驗與元素奧秘傾囊相授。然而，在詛碼團襲擊艾瑞爾城的行動中，五十嵐為了守護眾人而犧牲，他所留下的信念與意志最終由洛爾、高和等人完整繼承。
@@ -1828,8 +1828,8 @@
                 form1Label: "🐱 獸人型態",   // 切換回預設型態時顯示的按鈕
                 form2Label: "👤 人類型態",   // 切換至第二型態時顯示的按鈕
                 tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["艾瑞爾軍", "十三元素"], type: ["斷元素賦形者", "權能：斷裂 / 襲轉"], element: ["光", "重力"] },
-                bgImage: "images/area_bg.jpg", 
-                beastBgImage: "images/area_human_bg.jpg",
+                bgImage: "images/area_bg.webp", 
+                beastBgImage: "images/area_human_bg.webp",
                 desc: `艾瑞爾，斷元素賦形者。他是艾瑞爾城的掌權總督，亦為遊走於城內各大實驗室的科學家。原本只是一隻小山貓族的他，藉由自己發明的「賦形晶」獲得了人類的「外設」形貌，得以從容遊走於政商往來之間，與官員與各方勢力周旋，將真實的自己隱沒在一層沉穩又冷靜的外殼之下。
 
 最初，他受制於阿爾提瑪的操控，整座城市的資源因此傾向於發展「人工創造元素使用者」以及「汲取元素的能源計畫」之中。然而，理智尚未被完全控制的他，總在關鍵節點暗中攪動局勢，悄然干擾計畫的推進。正是這些細微卻致命的偏移，讓掌控星球的野心藍圖無法迅速成形，也為五十嵐爭取到時間，四處尋訪當年四散各地、由賈瑞斯留下的年輕賦形者們，一同集結力量對抗迫近的威脅。
@@ -1848,7 +1848,7 @@
                 name: "瓦奇瑪", 
                 quote: "「你這個甜點叛徒，接受本大明神的制裁吧！」",
                 tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["艾瑞爾軍", "十三元素", "聯合陣線"], type: ["位元素賦形者", "權能：權位 / 適應"], element: ["光"] },
-                bgImage: "images/wakima_bg.jpg", 
+                bgImage: "images/wakima_bg.webp", 
                 desc: `瓦奇瑪，位元素賦形者，鯰魚精族。
 他是眾人與賈瑞斯意志溝通的渠道，負責將龍神的心念連結、轉化為現世行動的媒介。自「薄明之戰」落幕後，瓦奇瑪選擇了與眾不同的道路——他將自身對甜點的極致熱愛與推廣野心昇華為大眾信仰，建立起獨樹一格的「豐漁甘神教」並廣納信徒，以天真又驕傲的「本大明神」自居。
 
@@ -1860,7 +1860,7 @@
                 name: "弗爾特", 
                 quote: "「這裡是任我支配的世界，想耍的花招全都會化為徒勞無用！」",
                 tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["詛碼團", "十三元素"], type: ["滅元素賦形者", "權能：寂滅 / 洄流"], element: ["闇"] },
-                bgImage: "images/volt_bg.jpg", 
+                bgImage: "images/volt_bg.webp", 
                 desc: `弗爾特，滅元素賦形者。身為詛碼團的幹部，他向來習慣獨自行動，任憑本能中的破壞慾驅使，遊走於人類城鎮與獸人聚落之間肆意毀滅。那段無差別的侵襲，不僅留下遍地殘痕，也促成了洛爾與高和踏上復興之路的契機。
 
 在「薄明之戰」落幕、詛碼團瓦解之際，他順勢回歸艾瑞爾軍麾下。憑藉人造人的特性得以自由進出「裏網」，負責維護系統穩定與資訊流通的安全。
@@ -1873,8 +1873,8 @@
                 name: "普洛特", 
                 quote: "「沒有人可以阻擋我的去路！」",
                 tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["詛碼團", "十三元素"], type: ["毀元素賦形者", "權能：摧毀 / 霸軀"], element: ["火", "土"] },
-                bgImage: "images/proto_bg.jpg", 
-                beastBgImage: "images/proto_beast_bg.jpg", 
+                bgImage: "images/proto_bg.webp", 
+                beastBgImage: "images/proto_beast_bg.webp", 
                 desc: `普洛特，毀元素賦形者。他曾與洛爾、高和等人一同生活於嵐光村。然而，一場意外讓他窺見被扭曲的記憶——那份動搖信念的虛假真相迫使他選擇離開，轉而投身詛碼團。自此，他成為襲擊狼人村的主導者，不僅重創克爾亦擄走克明。之後的多次交鋒中，他總是站在昔日同伴的對立面，出手毫不留情，彷彿執意將過去的一切斬斷。
 
 「薄明之戰」結束後，他回到了嵐光鎮，與洛爾等人過著看似平靜的日子。隨著詛碼團銷聲匿跡，他選擇加入「野性之聲」，以過人的工藝天賦維生，並親手雕刻象徵三族友誼的聯誼雕像，試圖為嶄新的時代留下見證。
@@ -1889,7 +1889,7 @@
                 name: "詛碼", 
                 quote: "「這是我的獨到美學。」",
                 tags: { chapter: ["薄明之戰", "再契選篇", "荒野焰嵐"], faction: ["詛碼團", "十三元素"], type: ["究極元素賦形者", "權能：侵染"], element: ["闇", "重力"] },
-                bgImage: "images/zoma_bg.jpg", 
+                bgImage: "images/zoma_bg.webp", 
                 desc: `詛碼，究極元素的賦形者。更準確地說，他是自賈瑞斯身上剝離的碎片，與究極元素交錯投射而成的存在。其真正的元素名至今仍不詳。
 
 詛碼團的領導者，也是阿爾提瑪麾下的第一衛士，對這位究極元素的創造者有著絕對的忠誠。於「薄明之戰」中，他曾在洛爾一行人合力一擊之下解除賦形，短暫自戰場上消失。然而，在賈瑞斯與阿爾提瑪達成和解之後，他藉由嵐懶的權能再次復甦，得以重返世界。
@@ -1902,7 +1902,7 @@
                 name: "白珥", 
                 quote: "「哎呀，真是精采的表演啊。」",
                 tags: { chapter: ["薄明之戰", "再契選篇"], faction: ["詛碼團", "十三元素"], type: ["命元素賦形者", "權能：魂命 / 殞噬"], element: ["火", "重力"] },
-                bgImage: "images/veil_bg.jpg", 
+                bgImage: "images/veil_bg.webp", 
                 desc: `白珥，曾是詛碼於「薄明之戰」時所使用的人類型態外設。
 
 原本的他並非賦形者，只以命元素結晶的原始形態持續運作、存在。作為詛碼團的軍師，白珥沉穩老練、心思縝密，長於策劃與謀略。無論戰術佈局，或組織運作的方針制定，他皆居於最核心的位置。在詛碼靈活運用白珥的形象之下，本人也能藉此徹底隱身於暗影之中，成為無人能察覺的幕後策動者。
@@ -1915,7 +1915,7 @@
                 name: "阿爾提瑪", 
                 quote: "「這……這就是掌控世界的感覺嗎？」",
                 tags: { chapter: ["薄明之戰", "再契選篇"], faction: ["聯合陣線"], type: ["元素使用者"], element: ["無"] },
-                bgImage: "images/ultima_bg.jpg", 
+                bgImage: "images/ultima_bg.webp", 
                 desc: `阿爾提瑪，首位成功發現元素存在的救世學者，實際年齡超過數百歲。他曾是為了拯救世界而獻身的偉大先驅，成功將其從崩壞邊緣挽回，為世人開啟了嶄新的時代。他以無上的元素知識創造了一顆漆黑的「究極元素」，並藉此獲得較一般人類更長的壽命。然而，因求知心切與對力量的執著，他對龍神賈瑞斯伸出充滿野心的魔爪，擊碎了祂的腹部，使其分裂出十三元素，並在之後成功奪取數顆作為實現野心的第一步。
 
 他在「薄明之戰」中敗於賈瑞斯的天賦之形們，意識漂流於元素漩渦之中，而他曾經的偏執與野心也在沉澱中逐漸被沖淡，最終與賈瑞斯達成和解。此後，他被推舉為新任的星球意識，完成了自己對知識與真理的終極追求。
@@ -1928,7 +1928,7 @@
                 name: "賈瑞斯", 
                 quote: "「我只想讓你記得一件事，你值得我的重視，這是我沒有後悔過的選擇。」",
                 tags: { chapter: ["薄明之戰", "再契選篇", "荒野焰嵐", "無盡探途"], faction: ["聯合陣線", "無盡元素", "上古元素"], type: ["創元素賦形者", "權能：創生 / 賦形"], element: ["火"] },
-                bgImage: "images/jareth_bg.jpg", 
+                bgImage: "images/jareth_bg.webp", 
                 desc: `賈瑞斯，創元素賦形者
 
 為擁有金色鱗片、包容力廣大的龍人。他是這顆星球上所有元素結晶的創造者，也是親自賦形「十三元素」形象與本質的黃龍龍神。千年前，他是元素一族中第一位因「好奇心」而主動走出外界、嘗試與人類接觸的先驅，因而獲得族群授予的卓越稱號「賈瑞昂斯」。在無名與星球契選失敗後，他接任成為第二任星球意識，於漫長歲月裡忍受著極端的孤獨與阿爾提瑪的執著，以廣大的包容力引導整個世界的運行。
@@ -1950,7 +1950,7 @@
                     type: ["耀元素賦形者", "權能：成長"],
                     element: ["土", "光", "重力"]
                 },
-                bgImage: "images/zarion_bg.jpg", 
+                bgImage: "images/zarion_bg.webp", 
                 desc: `澤里恩，耀元素賦形者，灰熊族獸人。體型肉胖結實，性格害羞、怕生且缺乏自信。極度由情感主導、習慣壓抑情緒並慣性說自己「沒事」，但肢體反應與耳尖的微紅總會洩漏內心。
 
 在《無盡探途》中，千年前因無名將他視為「無限可能的綠蔭生機」而深受觸動，進而跨越了被族群視為無能的孤獨跟隨其踏上探索外界的漫長旅途。
@@ -1970,7 +1970,7 @@
                     type: ["崩元素賦形者", "權能：崩壞"],
                     element: ["無"]
                 },
-                bgImage: "images/kuzure_bg.jpg", 
+                bgImage: "images/kuzure_bg.webp", 
                 desc: `崩，牛頭族獸人。體格肉壯結實，個性剛毅木訥。行言自信且嚴肅正經，凡事堅守原則，甚至常因不會讀空氣而讓身邊的人覺得難以親近。
 
 在《無盡探途》中，身為上古菁英的他與無名共同經歷了多次死生交關的考驗，即便嘴上總愛抱怨同伴們跟不上節奏，卻早已將守護同伴視為自身的使命，以粗獷而直接的前線肉搏格鬥技，毫無保留地為彼此開闢生路。
@@ -1987,7 +1987,7 @@
                 name: "制", 
                 quote: "「看好了——這可是集結我鬣制工藝匠魂的結晶——《無垠號》！」",
                 tags: { chapter: ["再契選篇", "荒野焰嵐", "無盡探途"], faction: ["誓奪爪盟", "無盡元素", "上古元素"], type: ["制元素賦形者", "權能：壓制 / 汲縮"], element: ["無"] },
-                bgImage: "images/osae_bg.jpg", 
+                bgImage: "images/osae_bg.webp", 
                 desc: `制，鬣狗族獸人。身形精悍，常年帶著招牌的壞笑，語調輕快瀟灑。
 
 在《無盡探途》中，身為上古菁英的他對各式載具、機械工藝與器械研發有著近乎痴迷的改裝熱情。在千年前便與劫一同完成了高性能的「原界庫」設備，在團隊中展現出無可挑剔的工藝匠魂與執行力。
@@ -2004,7 +2004,7 @@
                 name: "影", 
                 quote: "「那只是因為我們有點相似罷了，都是享樂至上的玩家。」",
                 tags: { chapter: ["再契選篇", "荒野焰嵐", "無盡探途"], faction: ["誓奪爪盟", "無盡元素", "上古元素"], type: ["影元素賦形者", "權能：變質 / 消融"], element: ["無"] },
-                bgImage: "images/kage_bg.jpg", 
+                bgImage: "images/kage_bg.webp", 
                 desc: `影，黑豹族獸人。個性高挑優雅、放蕩不羈，總愛尋找刺激與混亂的樂子，平日裡以玩世不恭、玩世砥流的態度遊走於各方勢力之間。
 
 在《無盡探途》所追溯的千年前歷史中，他是上古探索隊「無盡元素」的菁英成員，與無名共同經歷無數次死生交關的考驗。雖然他在揮霍與探聽情報上總是我行我素，更熱衷於灰色地帶與霸潮盟的賭場，卻也在與同伴們的漫長旅途中漸漸加深羈絆。
@@ -2028,8 +2028,8 @@
                     type: ["劫元素賦形者", "權能：奪取"],
                     element: ["無"]
                 },
-                bgImage: "images/rub_bg.jpg", 
-                beastBgImage: "images/rub_young_bg.jpg",  // 第二背景（少年）
+                bgImage: "images/rub_bg.webp", 
+                beastBgImage: "images/rub_young_bg.webp",  // 第二背景（少年）
                 desc: `劫，狼犬族獸人。體幹高大、肩膀寬闊，身披深黑色長大衣，一舉一動皆散發著冷冽、高傲且不容置疑的絕對領袖威嚴。
 
 在《無盡探途》中，他曾是最為怯懦退縮、極度依賴戴爾莫格的少年。在無名引導下克服心魔，並正式開啟探索隊的探尋之途。
@@ -2046,7 +2046,7 @@
                 name: "伊蕾琪", 
                 quote: "「方便替我簽個名嗎？」",
                 tags: { chapter: ["再契選篇", "荒野焰嵐"], faction: ["誓奪爪盟"], type: ["元素使用者"], element: ["雷", "闇","重力"] },
-                bgImage: "images/electric_bg.jpg", 
+                bgImage: "images/electric_bg.webp", 
                 desc: `伊蕾琪，白狼族女性，元素使用者。
 
 出身背景成謎。她是首領劫為了補強誓奪爪盟戰力與宣傳聲量，特地重金聘請而來的王牌幫手。在各大影音平台與裏網直播頻道中，她是備受矚目、擁有龐大粉絲群「蕾寶」的高人氣主播，主持節目《蕾寶來電》。她擅長掌控話語權與節目節奏，言談間自帶鋒芒、美艷與極致的言語魅力，能在各種場合遊刃有餘，迅速吸引群眾目光並帶動輿論風向。
@@ -2065,7 +2065,7 @@
                 name: "提婭", 
                 quote: "「我很期待屬於你自己的音樂會是怎麼樣的，之後一定要讓我聽聽看喔！」",
                 tags: { chapter: ["薄明之戰", "荒野焰嵐"], faction: ["狼人村"], type: ["元素使用者"], element: ["冰"] },
-                bgImage: "images/tia_bg.jpg", 
+                bgImage: "images/tia_bg.webp", 
                 desc: `獵牙提婭，黑狼女性，元素使用者，也是克爾信賴的左膀右臂。當克爾不在村中時，由她全權統籌防衛與指揮事務，處事冷靜而果斷。
 
 儘管身處激進者眾多的狼人村狩獵派中，她卻是少數能保持絕對理性、對外族抱持中立甚至包容態度的存在。
@@ -2076,7 +2076,7 @@
                 name: "羅菲娜", 
                 quote: "「有客人啊？怎麼沒有事先遞交申請書，還偏偏選這麼冷僻的入口來拜訪呢？」",
                 tags: { chapter: ["聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["艾瑞爾軍", "貓族村"], type: ["元素使用者"], element: ["土", "風", "光"] },
-                bgImage: "images/rofena_bg.jpg", 
+                bgImage: "images/rofena_bg.webp", 
                 desc: `羅菲娜，獅族女性，畢業於聚學舍並以首席之姿脫穎而出，專精於政治與法學。原本她計畫先累積更多實務經驗，再逐步進入艾瑞爾城市政廳任職。然而一場機緣巧合的邀約，卻讓她得以提前入職，成為這個世界最大證物機關的一員，肩負起比同齡人更為沉重的責任。
 
 與聚學舍中多以理論與研究為主的元素使用者們不同，她並未將力量侷限於學術領域，而是將之融入近身格鬥。她擅長土元素的運用，能提取能量凝聚為飛石鏢，化為銳利的遠程制敵攻擊；此外，她亦能運用光元素破除潛行狀態，並具備揭露黑暗中目標的能力。這種兼具力量與洞察的能力，使她在戰場與情報行動中都極為靈活。
@@ -2087,7 +2087,7 @@
                 name: "嵐山", 
                 quote: "「歡迎回來。」",
                 tags: { chapter: ["薄明之戰", "聚學舍篇"], faction: ["貓族村"], type: [], element: [] },
-                bgImage: "images/arashiyama_bg.jpg", 
+                bgImage: "images/arashiyama_bg.webp", 
                 desc: `嵐山長老，貓族村的現任村長。他將非親生的五十嵐視如己出，對於村民當年以冷酷態度放逐這位兒子的決定始終耿耿於懷，心中藏著難以言說的痛與愧疚。
 
 在一次因戰事的回村相遇後，他傾盡一切手段試圖再度尋找五十嵐的下落卻始終無果。五十嵐本人總對過去閉口不談，加上艾瑞爾軍對情報的嚴密控管，使得嵐山即便身為一村之長，也無從探知他如今的行蹤。這份無力與思念，交織成他心中長年不癒的疤痕。
@@ -2098,7 +2098,7 @@
                 name: "霜糖紗母", 
                 quote: "「我並不是『決定』它們該成為什麼樣子，而是『聽』它們想變成什麼模樣。」",
                 tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: ["元素使用者"], element: ["水", "火"] },
-                bgImage: "images/sugar_bg.jpg", 
+                bgImage: "images/sugar_bg.webp", 
                 desc: `霜糖紗母，白綿羊族獸人，是在螢光幕上與聚學舍裡廣受敬愛的烘焙教授。她擅長細緻的元素操控，能靈巧地引導水與火的結合，製作出如晨霧般輕柔的香氣與氤氳，在烘焙過程中為食材增添獨有的層次與溫度。
 
 當她進入實作狀態，雙手觸及細緻的麥粉、柔韌的麵團與微溫燃燒的爐火時，來自土地與火焰的氣息便會悄然喚醒她體內的感知本能。那雙原本覆著白絨毛的獸掌，會隨著食材的溫度與質地變化而逐漸改變形態——毛髮緩緩收縮，指節變得細長靈巧，露出如櫻花瓣般的淡粉色手指。這雙手專屬於那些在爐火中緩緩膨脹的麵包香氣之中、專注付出的時刻。
@@ -2109,7 +2109,7 @@
                 name: "繪靈鹿茲", 
                 quote: "「有謎題的地方，就必定有偵探。只要有我的智慧與優雅，懸而未決的謎團便無所遁形，因為——我是繪靈鹿茲！」",
                 tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: ["元素使用者"], element: ["水"] },
-                bgImage: "images/deer_bg.jpg", 
+                bgImage: "images/deer_bg.webp", 
                 desc: `繪靈鹿茲：聚學舍的藝術教授。擁有傲人藝術天賦與多元創作才華的他，無論在學界或藝壇都享有極高聲譽，並同時兼任嵐光城鎮間的博物館要職。
 
 作為稀有的元素使用者，他擁有獨樹一幟的「顏料引靈」技藝。能隨意操控顏料的流動與質地，並於各種介質中作畫並瞬間成像。
@@ -2120,7 +2120,7 @@
                 name: "夜瞳梟賢", 
                 quote: "「我不一定能成為那個最萬能、實力最驚天動地的強者，但我希望能成為那種在世界陷入失序之際，仍能讓身旁的人找到方向、引導他們回歸正途的存在。」",
                 tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: ["元素使用者"], element: ["風"] },
-                bgImage: "images/owl_bg.jpg", 
+                bgImage: "images/owl_bg.webp", 
                 desc: `夜瞳梟賢：聚學舍首屈一指的醫學教授。長年授課於學舍的同時，也是於艾瑞爾城附設醫院的外科主治醫師。
 
 他擁有卓越的夜視與飛行能力，能於山林與野外緊急狀況中迅速搜索傷者，再結合風元素進行導流與探測，大幅縮短救援時間。
@@ -2133,7 +2133,7 @@
                 name: "翠芽泰納", 
                 quote: "「這麼多雙眼睛盯著我，我會不會一不小心先變成你們的午餐啦？」",
                 tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: ["元素使用者"], element: ["土"] },
-                bgImage: "images/teiner_bg.jpg", 
+                bgImage: "images/teiner_bg.webp", 
                 desc: `翠芽泰納：聚學舍的農藝與環境權威，被譽為「行走的種植全書」。精通各類作物的栽培與特性，無論是耐旱的荒地植物，還是需精細呵護的珍稀作物，都能在他手中茁壯生長。
 
 他走遍各大陸與部族之間，親自指導當地居民發展農業與環境保護，並擔任艾瑞爾大陸各地少數僅存的自然保留區管理者。泰納的夢想，是讓如今荒蕪的艾瑞爾大陸重新披上綠意，重現萬物蓬勃的景象。
@@ -2144,7 +2144,7 @@
                 name: "怒濤銳步", 
                 quote: "「然後……在最後的最後，由我一舉奪走勝利。那將會是落在我掌握之中的美味，一場從頭到尾都為我所設計的饗宴。」",
                 tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: ["元素使用者"], element: ["風"] },
-                bgImage: "images/doutou_bg.jpg", 
+                bgImage: "images/doutou_bg.webp", 
                 desc: `怒濤銳步：羚羊族的驕傲，現任聚學舍體適能與田徑教授。他的速度如風一般鋒利，手中握有現今最快的競賽紀錄，是學生們體能訓練與調整上的無可取代的顧問。
 
 但在那份光環之下，他卻隱藏著另一張難以窺見的面孔，肩負著不為人知的使命與秘密。
@@ -2157,7 +2157,7 @@
                 name: "凱登", 
                 quote: "「那種入學資格，咱到時候對著校長擠擠肌肉、展現一下，或許是他求著咱進去都來不及呢。」",
                 tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: ["元素使用者"], element: ["水", "土"] },
-                bgImage: "images/kaiden_bg.jpg", 
+                bgImage: "images/kaiden_bg.webp", 
                 desc: `凱登：鯊魚族獸人，聚學舍中與洛爾一行同屆的新生。他出身於尼爾桑大陸南端的海岸，性格豪放直率，兼具無比驚人的肌力。在舉重隊外，他也與克爾同時加入獸人族籃球隊「炙海獵者」，成為少數能讓克爾認可（或者說拿他沒轍）的死對頭。
 
 課餘時間，除了投入社團活動，他也熱衷於探索深海遺跡與幽暗的水底深谷。身為元素使用者，他能使用水元素操控、調節水流。據自述，他曾在熊族村落成功阻止一場因暴雨引發的坍方，因此功績順利進入聚學舍。` 
@@ -2166,7 +2166,7 @@
                 name: "豪助", 
                 quote: "「什麼時候……我也能夠像凱登哥那樣呢？」",
                 tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: [], element: [] },
-                bgImage: "images/gousuke_bg.jpg", 
+                bgImage: "images/gousuke_bg.webp", 
                 desc: `豪助，白熊族獸人，是和克爾同屆的聚學舍新生。他雖然擁有熊族天賜的壯碩肉體，性格卻文質彬彬、極具智性，是個心思細膩的溫和優等生。
 
 他是凱登的救命恩人與第一位摯友。當時那條高傲的藍鯊因追獵脈殤獸北上，在烈日灼燒的乾燥山道上脫水痙攣時，路過的豪助見狀立即替他敷藥救了他一把，隨後一同回到熊族村裡的老家，讓這條在漁村飽受叨念的藍鯊第一次於同輩中找到能平等相待的歸屬。
@@ -2179,7 +2179,7 @@
                 name: "瞬介", 
                 quote: "「我不想讓颯太的堅持到頭來只是一場空，我不想讓他的奉獻變成白費力氣！」",
                 tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: [], element: [] },
-                bgImage: "images/chitar_bg.jpg", 
+                bgImage: "images/chitar_bg.webp", 
                 desc: `瞬介，獵豹族獸人，是和克爾同屆的聚學舍新生。他是個自信、高傲、卻又無比隨性的運動好手，對自己經由千錘百鍊的肉體有著絕對的驕傲。他的生活與個性一樣十分隨心所欲，常常不按牌理出牌，在嚴肅的氣氛裡往往是那個能輕鬆打破緊繃的那位存在。
 
 在田徑社里的例行晨跑，瞬介與死黨颯太以及亞爾克都是時常出現於前段名次的常客。而在運動集社的因緣際會之下，他與颯太一同被凱登強勢拉入夥，一同加入克爾的籃球隊。` 
@@ -2188,7 +2188,7 @@
                 name: "颯太", 
                 quote: "「在這種情況下，如果能保住你的速度……讓你衝完這段，一定可以拿到非常可觀的積分。這樣一來，我們就能反超那些元素使用者了吧？難得的機會……我可不想放過。」",
                 tags: { chapter: ["聚學舍篇"], faction: ["聚學舍"], type: [], element: [] },
-                bgImage: "images/horse_bg.jpg", 
+                bgImage: "images/horse_bg.webp", 
                 desc: `颯太，棕馬族獸人，是和克爾同屆的聚學舍新生。他是個豪爽、踏實、且不服輸的體力怪傑。他的生活步調與為人正如馬族給人的信賴感一般，顯得大氣而沉穩。
 
 在田徑社里的例行晨跑中，颯太與死黨瞬介以及亞爾克都是時常出現於前段名次的常客。而他與豪助因家族的工作關係而結識，甚至對白熊卓越的下廚天分念念不忘。
@@ -2199,7 +2199,7 @@
                 name: "埒", 
                 quote: "「我會在無數的時空中庇佑你。戴上它，不管你在哪裡……我都能找到你。」",
                 tags: { chapter: ["再契選篇", "無盡探途"], faction: ["上古元素"], type: ["埒元素賦形者"], element: ["無"] },
-                bgImage: "images/raku_bg.jpg", 
+                bgImage: "images/raku_bg.webp", 
                 desc: `埒，綠狼族獸人，澤里恩私下稱他為「綠毛」。在外傳《無盡探途》中，他與崩相識後便長時間陪伴在側，行事一向沉穩內斂；崩脖子上所圍的圍巾，亦是出自他親手製作。對於無名率領族人前往外界的決定，他始終抱持保留與觀望的態度。
 於本傳中，嵐懶因一次意外誤入族人殘存的意識流，並再次見到了他，在其引導下得以離開。然而，對於早已遺忘過往的嵐懶而言，關於「綠毛」的一切仍籠罩在未解的迷霧之中……` 
             },
@@ -2207,7 +2207,7 @@
                 name: "犺", 
                 quote: "「你知道，我不會背叛你的……」",
                 tags: { chapter: ["再契選篇", "無盡探途"], faction: ["上古元素"], type: ["犺元素賦形者"], element: ["無"] },
-                bgImage: "images/garoz_bg.jpg", 
+                bgImage: "images/garoz_bg.webp", 
                 desc: `犺，灰狼族獸人，澤里恩私下稱他為「灰毛」。在外傳《無盡探途》中，他與年幼的劫一同生活，關係親近。其權能尚未完全明朗，目前僅知能製作書寫預言的「詠示日記」，裁所使用的《亞榭洛》正源於此。無名率領族人出發前夕，犺曾在劫棲身的大樹下與無名發生爭執，隨後分道揚鑣；出發當日，他亦獨自離開聚落，手中似乎攜帶著與《亞榭洛》極為相似的書籍。
 
 於本傳中，在上古元素們再度出現後，犺也感受到契機而開始蠢動。他潛伏在克明的潛意識深處，是克明施展沌元素權能時感受到侵蝕與壓迫的根源，並試圖奪取其身體重返現世。兩人同為灰狼族，雖外貌特徵相近，卻在本質上截然不同——克明沉穩內斂、偏重思考；犺行事果斷、傾向行動。前者身形較為纖瘦、衣著樸素，常披披風；後者熱衷鍛鍊與探索，體態健壯，偏好外套與短褲。
@@ -2218,7 +2218,7 @@
                 name: "泊信", 
                 quote: "「今天還沒和你好好喝過呢，這陣子我可想死你了。」",
                 tags: { chapter: ["再契選篇"], faction: ["詛碼團"], type: [], element: [] },
-                bgImage: "images/sinn_bg.jpg", 
+                bgImage: "images/sinn_bg.webp", 
                 desc: `泊信，新生詛碼團的第一分隊長。老練的他，過去不過只是普洛特麾下的一名小兵，卻也在「薄明之戰」中參與過對人類城鎮與獸人部落的多次襲擊，逐步累積實戰經驗與功績。
 
 詛碼團被擊潰後，他一度流連於各個見不得光的傭兵勢力之中，在混亂與利益之間輾轉求生。直到怒濤銳步四處奔走、發出召集令，他才再度回到那個最熟悉的名號之下。也正因過往的戰功與經歷，讓他被提拔為第一分隊長。
@@ -2229,7 +2229,7 @@
                 name: "烈塵巡衛", 
                 quote: "「少廢話。快從我眼前消失，我還有事要忙。」",
                 tags: { chapter: ["再契選篇"], faction: ["誓奪爪盟", "砧鍛坊"], type: ["元素使用者"], element: ["土"] },
-                bgImage: "images/gorilla_bg.jpg", 
+                bgImage: "images/gorilla_bg.webp", 
                 desc: `烈塵巡衛，黑猩猩族的元素使用者。曾自聚學舍畢業，並獲得僅授予少數人的榮譽校友稱號。
 
 然而，在過去與聚學舍相關的一場事件中，他選擇與現任的雇主一同脫離體制，自此隱沒於檯面之下，從事著外界難以窺探的事業。如今唯一較為明確的線索，是誓奪爪盟所取得的共鳴石礦，最終皆流入他們手中。而這股勢力，似乎同時掌握著石材加工與武器製造的關鍵環節。
@@ -2242,7 +2242,7 @@
                 name: "鍛魂獷牙", 
                 quote: "「因為科學、因為效率，就能把我的心血這樣端走？這種事太不講理了。」",
                 tags: { chapter: ["再契選篇"], faction: ["誓奪爪盟", "砧鍛坊"], type: ["元素使用者"], element: ["火", "土"] },
-                bgImage: "images/boar_bg.jpg", 
+                bgImage: "images/boar_bg.webp", 
                 desc: `鍛魂獷牙，野豬族獸人，元素使用者。他曾是聚學舍的校友與技術精湛的工匠，可是在某件事情後脫離聚學舍並隨後加入誓奪爪盟，自此在鍛鐵鎮私下開設了一間專屬於自己的工坊──「砧鍛坊」。
 
 在燼鐵鎮漫天的煤灰與滾燙的熱浪中，他是所有雜工眼裡霸道、冷硬且不可攀折的巨人。他單手便能提著那一柄厚重、鑲嵌著元素結晶並交織著火與土圖騰的巨大鐵鎚。在戰鬥中能將土元素的硬沉與火元素的爆裂完美熔鑄於鎚身，一擊「土岩」重如泰山，一招「火星」崩破千軍，展現出長年累積、無可撼動的底蘊與壓迫。` 
@@ -2251,7 +2251,7 @@
                 name: "旭言", 
                 quote: "「我們可以一起旅行。我們去聽嵐光的演唱會，去看尼爾桑的環輝樹脊，用兩雙不同的眼睛看同樣的事物！」",
                 tags: { chapter: ["再契選篇"], faction: ["晝光時報"], type: [], element: [] },
-                bgImage: "images/whissel_bg.jpg", 
+                bgImage: "images/whissel_bg.webp", 
                 desc: `旭言，黃鼠狼族，晝光時報的記者。這間發跡於艾瑞爾城的報社，一直以揭露真相為宗旨，在媒體與資訊流通劇烈變動的時代中完成轉型，得以延續至今。
 
 而旭言正是其中的王牌之一。他的記者生涯可追溯至「薄明之戰」時期，當時的他，已手持攝影機與平板，穿行於詛碼團肆虐過後的焦土之上，將斷裂的街道、流離失所的居民，以及那些在塵煙之中勉強重建生活的人，一筆一筆記錄成專題刊登上各大版面。
@@ -2266,7 +2266,7 @@
                 name: "嶙安", 
                 quote: "「如果有一天真的離開這裡，我……」",
                 tags: { chapter: ["再契選篇"], faction: ["砧鍛坊"], type: [], element: [] },
-                bgImage: "images/rin_bg.jpg", 
+                bgImage: "images/rin_bg.webp", 
                 desc: `嶙安，蜥蜴族獸人，是鍛魂獷牙開設的「砧鍛坊」裡不起眼的底層雜工。他長年在充斥著鐵鏽與煤灰的工坊過著忍耐又壓抑生活，連一次重要工作也沒被指名過，甚至在工坊裡遭到同事搶功、推搡與無情嘲弄。長期的壓榨與羞辱在他心底埋下了極深自卑，讓他無數次否定自己，卻又無比渴望能被看見與承認。
 
 在如此泥濘而窒息的生活中，摯友旭言是他生命中唯一且最溫暖的寄託。那名心思細膩、充滿正義感的記者，甚至期盼有朝一日能帶嶙安離開燼鐵鎮，一起坐上跑車到處去旅行……` 
@@ -2275,7 +2275,7 @@
                 name: "睿策樺霖", 
                 quote: "「希望我們能合作愉快，共創生靈與元素和諧共存的新未來。」",
                 tags: { chapter: ["聚學舍篇", "再契選篇"], faction: ["聚學舍"], type: ["元素使用者"], element: [] },
-                bgImage: "images/fox_bg.jpg", 
+                bgImage: "images/fox_bg.webp", 
                 desc: `睿策樺霖 ，狐狸族獸人，身著規整優雅的學者禮服，眼神深邃、神態溫文爾雅，舉手投足間散發著極具遠見的睿智與領導氣場。
 
 現任最高學府「聚學舍」的校長。憑藉著博識的學問、縝密的思維以及宏觀的政治智慧，他在眾人與評議會的一致推舉下坐上高位，成為掌管全星球最高知識殿堂的關鍵核心。
@@ -2290,7 +2290,7 @@
                 name: "影識秘爪", 
                 quote: "「紀錄只呈現可能性，評價與推論則由觀察者決定。」",
                 tags: { chapter: ["聚學舍篇", "再契選篇"], faction: ["聚學舍"], type: ["元素使用者"], element: [] },
-                bgImage: "images/racoon_bg.jpg", 
+                bgImage: "images/racoon_bg.webp", 
                 desc: `影識秘爪，浣熊族獸人，身著質地古樸的長袍，舉止沉穩老練、氣場超然。眼周標誌性的深色斑紋，在林間碎光下顯得無比深邃睿智，與遠離塵囂的自然秘境渾然一體。
 
 現任最高學府「聚學舍」的創校三巨頭之一。在「薄明之戰」後的動盪重組期，他與另外兩位志同道合的故友接手學府，為這座如今匯聚全星球知識與精英的搖籃立下了不可動搖的基石，因而被後世尊稱為給予聚學舍「第二任生命」的創校者。
@@ -2305,7 +2305,7 @@
                 name: "瑟莉雅", 
                 quote: "「大家都很恐懼、害怕，深怕自己所認知的一切都是虛構，是假的，是別人口中所訴說的故事而已！我不知道該相信什麼！」",
                 tags: { chapter: ["再契選篇"], faction: ["貓族村"], type: [], element: [] },
-                bgImage: "images/cat_bg.jpg", 
+                bgImage: "images/cat_bg.webp", 
                 desc: `瑟莉雅，灰虎斑貓族女性。眼神清澈卻帶著幾分敏感，平日裡在市集協助家人經營擺攤生意。她曾是五十嵐在貓族村開設學堂時的學生，對曾經親近的「老師」懷有複雜而深沉的情感。
 
 瑟莉雅代表著貓族村新一代年輕族人的縮影——在傳統信仰與排外風氣中長大，對村落長久以來仰賴的紅焰信仰抱持著虔誠與依戀。然而，當當年五十嵐解開記憶干涉、揭露自身為元素賦形者的真相後，這份驟然打破現實的衝擊，讓年幼的瑟莉雅陷入了巨大的恐懼與迷惘之中，深怕過往熟悉的生活與記憶全是一場虛構的謊言。
@@ -2318,7 +2318,7 @@
                 name: "雷瓦維那", 
                 quote: "「看起來只是石頭，但也許它們和你們元素一族原本的型態一樣，是以我們人類無法理解的方式活著的。」",
                 tags: { chapter: ["無盡探途"], faction: ["維那嶺"], type: ["地脈操流者"], element: ["火"] },
-                bgImage: "images/reva_bg.jpg", 
+                bgImage: "images/reva_bg.webp", 
                 desc: `雷瓦・維那——人類，維那嶺的前任領主，亦是奧法魯斯的平輩舊識。他氣度不凡、舉止從容，身著深藍金邊長袍，隨身攜帶一根質樸卻雕刻精細的魔法法杖。在《無盡探途》外傳中，他在城堡宴會廳熱情接待了遠道而來的「無盡元素」探索隊，不僅大方提供荒廢的地下避難所供鬣制改造成「科學工坊」，更毫無保留地分享自己對地脈魔法的研究，並以「等價交換」的信任態度，委託探索隊討伐威脅西方大陸的禍源「熔岩龍」。
 
 雷瓦一生熱衷於魔法研究，曾向北方遊牧民族「白原行族」請教地脈技術。即便自身魔法資質有限，他仍憑藉長年的熱情與細膩的觀察，成功研發出能人為培植、控制形狀的「綠石礦種」。在聽到耀熊提起權能困境時，他大方贈予綠石礦種並傳授栽培概念，展現出一名優秀領主的大氣、遠見與長者的親切。
@@ -2333,7 +2333,7 @@
                 name: "萊昂維那", 
                 quote: "「這真的很厲害……你們的技術水平遠超出我們的想像。」",
                 tags: { chapter: ["無盡探途"], faction: ["維那嶺"], type: [], element: [] },
-                bgImage: "images/leon_bg.jpg", 
+                bgImage: "images/leon_bg.webp", 
                 desc: `萊昂・維那——人類，維那嶺的現任領主，雷瓦・維那之子。他身形筆挺、一襲淺黑外衣以銀釦束住腰線，舉止俐落冷靜，端坐時挺直的背脊顯露出貴族教育的嚴謹與克制。在《無盡探途》外傳中，他與父親雷瓦一同在城堡接待遠道而來的「無盡元素」探索隊，展現出遠超同齡者的果斷決策力與治理領地的責任感。
 
 萊昂對新奇科技與建築構造有著極高的熱情與直覺。當鬣制展示懸浮飛艇「無垠號」時，他一眼便看出其驚人的技術價值與潛力；他也精準指出了人類當前科技卡在「能源不足」的瓶頸，並主動提議將城底下荒廢的地下避難所交給鬣制與獠劫改造成「科學工坊」，甚至提供人手、器材與物料協助，推動人類科技與元素超科學的結合。
@@ -2348,7 +2348,7 @@
                 name: "拓穆恩", 
                 quote: "「請帶著這份秘密繼續前進吧。我想有朝一日，會出現那個讓我們霸潮盟足以買下這份情報的契機。」",
                 tags: { chapter: ["無盡探途"], faction: ["霸潮盟"], type: [], element: [] },
-                bgImage: "images/tormunn_bg.jpg", 
+                bgImage: "images/tormunn_bg.webp", 
                 desc: `拓穆恩，野豬族，是掌控著北方聚落艾瑞拉經濟與秩序的核心領導者，同時也是「霸潮盟」艾瑞拉分會的分會長。他擁有極其高明且敏銳的商業頭腦，全身上下散發著精明的商賈氣場。在弱肉強食且資源匱乏的極北之地，拓穆恩憑藉著對規則的洞察與出色的管理手腕，將艾瑞拉打造成一座秩序井然、擁有先進保溫與防風設施的繁榮要塞，是個能憑一己之力維繫龐大都市運作的厲害人物。
 
 在性格上，拓穆恩是個極致的理性主義者與務實派商人。他奉行「利益、規則與對等交換」，看待事情不帶過多的情感偏見或傳統包袱，只要能為艾瑞拉帶來價值與長遠的穩定，他便樂意坐下來與任何人進行談判。雖然掌控著霸潮盟在北方的龐大資源，甚至被白原行族等傳統部族視為冷酷的邊境掌控者，但拓穆恩本質上並非盲目擴張的侵略者，而是一位講求規矩、重信守諾的「對等溝通者」。
@@ -2359,7 +2359,7 @@
                 name: "格洛薩", 
                 quote: "「居然敢在我面前耍這種連手法都看不出來的老千啊，膽子真不小。被你算計了一道，不過——我很欣賞你，這反而讓我越來越中意你們了。」",
                 tags: { chapter: ["無盡探途"], faction: ["霸潮盟"], type: [], element: [] },
-                bgImage: "images/grossa_bg.jpg", 
+                bgImage: "images/grossa_bg.webp", 
                 desc: `格洛薩，黑猩猩族，是北方大陸門戶港鎮的實權掌管者，也是掌控該區域地下秩序與商業運作的大勢力「霸潮盟」的老大。他體型龐大、全身覆著黑色毛髮，全身上下散發著一股歷經江湖與商業滄桑的沉穩威嚴。身為掌握海陸交通樞紐、貿易樞紐與暗處規則的核心人物，他行事冷酷、講求極致的務實與秩序，任何試圖在他地盤上賴帳或破壞規矩的人，都會被他毫不留情地教訓甚至「送去海底觀光」。
 
 在性格上，格洛薩絕非盲目濫殺的莽夫，而是一位深謀慮、講求「利益與誠信」的黑幫龍頭。他極度討厭繁瑣的手續與欠債不還，但同時也非常守信——只要談妥了條條件或繳清了債務，他便會分毫不差地將抵押物原封不動歸還，展現出極具原則與霸氣的「道義」。此外，他擁有極為敏銳的情報網絡，早在「無盡元素」探索隊踏上北方大陸碼頭的第一天起，便已經掌握了這群人背後的來歷，並以「賭場欠債」為名順水推舟，測試他們的實力與應變能力。
@@ -2370,7 +2370,7 @@
                 name: "伊格拉罕", 
                 quote: "「此地不容迷途者。爾等為何帶著罪人的氣息而來？」",
                 tags: { chapter: ["無盡探途"], faction: ["白原行族"], type: ["地脈操流者"], element: ["風"] },
-                bgImage: "images/igrahhan_bg.jpg", 
+                bgImage: "images/igrahhan_bg.webp", 
                 desc: `伊格拉罕，白狼族，是生活在北方極寒大陸「純白茫區」邊緣——白原行族的現任族長，同時也是塔芙琳的父親。他擁有歷經風霜的雪白毛皮與深邃敏銳的狼瞳，體型高大威嚴，全身上下散發著一股令人生畏的上位者氣場。作為這個歷史悠久的游牧部族最高掌權者與精神領袖，伊格拉罕恪守部族世代相傳的規矩，對地脈信仰抱持著絕對的敬畏，始終堅信唯有遵循自然的法則與先祖的智慧，族群才能在嚴酷的極北風雪中得以延續。
 
 在性格上，伊格拉罕剛毅木訥、治族嚴謹。為了全族子民的生存，他對外來者與南方文明的科技抱持著高度的警惕與防備，甚至曾對帶有異樣氣息的探索隊展露出強烈的排外立場。然而，在這層看似冷酷死板、堅不可摧的嚴厲外表下，伊格拉罕內心深處其實是個極度重視家人與族人安全的傳統慈父。面對性格天真理想、總是嚷著要向外探索的女兒塔芙琳，他雖然平時總是以嚴父的姿態大聲呵斥、極力反對她冒險，但每當女兒陷入危險時，他那份隱藏在威嚴背後的關切與焦慮便會流露無遺。
@@ -2381,7 +2381,7 @@
                 name: "塔芙琳", 
                 quote: "「沒有啦！我只是開個玩笑，想看看你們的反應而已啦！」",
                 tags: { chapter: ["無盡探途"], faction: ["白原行族"], type: ["地脈操流者"], element: ["土", "光"] },
-                bgImage: "images/touphrin_bg.jpg", 
+                bgImage: "images/touphrin_bg.webp", 
                 desc: `塔芙琳，白狼族女性，是白原行族族長伊格拉罕獨生的寶貝女兒，也是部族未來的繼承人。她擁有一身潔白無瑕的深白色毛皮與一雙冰藍色且充滿靈氣的澄澈雙眼，全身上下配戴著諸多骨製飾品與引流晶，走起路來總是伴隨着輕柔的微弱嗡鳴。不同於父親與長老們的保守固執，塔芙琳性格開朗外向、大大咧咧且富有些許狂氣，時常展露出活潑俏皮的一面，但也因為這份直來直往與理想派的性格，讓她有時顯得有些傲嬌與不服輸。
 
 身為部族的地脈紀錄者，塔芙琳對外面的世界充滿了好奇與探索欲，不願被死板的傳統束縛在冰谷之中。她敏銳地察覺到北原資源日益枯竭的危機，堅信部族不能一昧逃避，唯有主動與外界互通有無才能尋得未來。雖然她平時總是習慣用昂揚、樂觀的態度來武裝自己，藉此向嚴厲的父親證明自己的能力，但這份堅強背後，其實承載著身為族長之女的龐大壓力與對部族未來的深深焦慮。每當獨處或面對信任的夥伴時，她也會流露出細膩、脆弱且極具責任感的一面。
@@ -2455,7 +2455,7 @@
             const char = characterData[charKey];
             const titleName = char ? char.name : charKey;
             const charDesc = (char && char.desc && char.desc.trim() !== "") ? char.desc : "角色詳細簡介與設定準備中……";
-            const bgImg = (char && char.bgImage) ? char.bgImage : `images/${charKey}_bg.jpg`;
+            const bgImg = (char && char.bgImage) ? char.bgImage : `images/${charKey}_bg.webp`;
 
             // 設定角色名稱與內文
             document.getElementById('char-title').innerText = titleName;
@@ -2554,7 +2554,7 @@
                 title: "✦ 無盡軌跡",
                 badge: "回聲殘響",
                 isHighlight: true,
-                bgImage: "images/HISTORY.jpg",
+                bgImage: "images/HISTORY.webp",
                 content:  `
 【外傳：無盡探途】
 
@@ -2599,13 +2599,13 @@
             {
                 title: "聚學舍",
                 badge: "回聲殘響",
-                bgImage: "images/GS.jpg",
+                bgImage: "images/GS.webp",
                 content: "■歷史淵源\n\n聚學舍最初是由救世學者阿爾提瑪年輕時所親手創立的學校組織。那是個全星球身處能源枯竭危機的沉重世代，阿爾提瑪在艾瑞拉的大學院裡以第一名的優秀成績畢業後，由於才華過人且深深為稀有又神秘的元素結晶所展現的潛能所著迷，他接受了學院的邀請回到學校裡，與志同道合的教授、學者們從事新能源的研究。\n\n隨著他的研究進展步上正軌，學院高層看中他的貢獻以及世間的迫切需求，於校務會議將校長之位以及管理權力全數讓渡給他。阿爾提瑪便藉此機會重整並重新命名為「聚學舍」。當時的勢力分布，主要由西方大陸的嵐光城以及北方大陸的艾瑞拉平衡管理，原本艾瑞拉在科技上與嵐光城不相上下，但在阿爾提瑪眾多嶄新且跨世代的想法引導下，聚學舍便推動這座城市走向進步的頂峰。\n\n■危機面前的禁忌手段\n\n然而，由於自然環境與地脈循環在當時不斷惡化，導致星球平衡開始崩壞。這使得聚學舍的能源研究其急迫度日漸緊縮。\n\n阿爾提瑪為了讓實驗能有效進展，開始採取不顧手段的方針驅使艾瑞拉的官員暗中「弄來」各種實驗體與素材。畢竟在拯救世界的宏大危機面前，這些小小的犧牲都顯得微不足道。為了秘密處理這些踩在倫理紅線上的研究，阿爾提瑪讓底下的研究員往北方大陸各處散開、闢設隱密的地下實驗室，以便就近處理與研究那些運送而來的物資。\n\n這些激進的行為在存亡危急時刻終於獲得回報。阿爾提瑪成功提煉出由他整合過的元素結晶，以人類生靈的意志與智慧破除星球對元素一族的制衡枷鎖，並成功讓龍神賈瑞斯調和元素與星球之間的能量循環，重置了即將毀滅的星球。但阿爾提瑪自己卻也因此捲入能量洪流中，自世人眼前消失。\n\n■神諭傳承與元素使用者的誕生\n\n聚學舍在失去這位傳奇學者後並沒有停下腳步，由艾瑞拉的官僚指派了自己的人選接替校長職位。\n\n而在阿爾提瑪在元素之源參悟與進修的漫長日子中，並未完全斷絕與世界的聯繫。他會不時利用「降下神諭」方式，將賈瑞斯所具備的元素科技與知識傳達給聚學舍的生徒與研究夥伴。原本世人對這些虛無飄渺的神諭只以為是瘋子的胡言亂語，但在西方大陸某個古老望族世代傳承下來的典籍對照下，學者們震驚地發現這些知識並非一派胡言，反無比精準地教導世人該如何引出、使用元素結晶的力量。\n\n不久，聚學舍就在一屆的選拔中成功找到第一批能夠操使元素能量的「元素使用者」們，由他們引出元素結晶中的高能並儲存在各式儲能設備中供社會運轉。這科技的普及大幅取代並避免原本只能依靠開發、開採星球天然資源而導致滅亡的後果，徹底改寫世界的文明軌跡。\n\n■二次轉型\n\n隨著時光流逝，賈瑞斯的口述知識漸漸無法滿足阿爾提瑪對「究極」的追求，使牠最終對賈瑞斯出手，擊碎其腹部、將力量強行分離出「十三元素」。儘管賈瑞斯在關鍵時刻將部分十三元素引渡出去，卻也將自己與龐大的知識結晶化死死定在元素之源中。\n\n阿爾提瑪在取得賦形術知識後，便替自己重新製造了一副身軀回到艾瑞拉，也成為近代「薄明之戰」的開端與組織「詛碼團」的成立。而在分離的十三元素中，艾瑞爾在受賦形時正巧處於賈瑞斯與阿爾提瑪的力量拉扯，導致他靈魂受到深深制約，被迫不時聽命於阿爾提瑪。\n\n但艾瑞爾本質總還是遵從賈瑞斯的意志。對於強行操控他的阿爾提瑪，他心中只有純粹的厭惡、毫無半點崇敬更覺得對方是個難搞且瘋狂的老頭。在半傀儡的掌控過程中，艾瑞爾一邊配合阿爾提瑪將北方大陸的科技推向頂峰，一邊暗中磨礪反叛的獠牙，不斷試圖尋找抵抗的機會。\n\n而阿爾提瑪也利用這段掌控艾瑞爾軍的時期，在城內與聚學舍開啟更為偏執的研究計劃，將學校再度拖入激進實驗的陰影。\n\n聚學舍的第二次關鍵轉型，正是爆發在詛碼團襲擊艾瑞爾城的戰役中。為了徹底脫離阿爾提瑪的掌控並清理體制，艾瑞爾與聚學舍的校友們逮到這唯一的權力交替空檔，裁撤並廢除了當時舊體制底下的所有高官暗部以及實驗部門。\n\n其中，一位從當年殘酷實驗中倖存下來的經歷者，為了不讓這種激進的實驗悲劇在後代身上重演，主動與另外兩位聚學舍校友配合艾瑞爾，對學校進行前所未有的整頓。為了防止權力再度集中引發腐敗，他們將聚學舍的監督權分散至三位新任的「創校者三巨頭」手中：\n\n睿策樺霖：擔任現任校長，留在校內親自管理、庇護聚學舍的內部師生與日常運作。\n\n？？？？：負責現地管理聚學舍所記錄下來的所有「真實歷史」，將其集中藏匿於與世隔絕的『學識之庫』中，防止真相被有心人利用。\n\n？？？？：憑藉著超凡的實力，在世界各處與北陸荒野巡邏、追查並處理舊體制殘留的殘黨，保護聚學舍不受那些勢力再度滲透與破壞。\n\n■未來的信念\n\n經歷數任歷史變遷與權力轉移，如今的聚學舍已徹底洗淨當年的暗幕與激進。學校在三巨頭的管理下，延續了「追求知識」與「培養元素使用者」的最高宗旨。\n\n現在的聚學舍是全世界公認的最高學府。他們在陽光下廣招世界各地有志一同精進天賦的人才，並致力研究新式建材與未來科技。他們將秉持著這份對知識的敬畏，與所有師生、夥伴們攜手邁向共存的未來。"
             },
             {
                 title: "賦形日",
                 badge: "回聲殘響",
-                bgImage: "images/BIRTH.jpg",
+                bgImage: "images/BIRTH.webp",
                 content: `「嗯？已經這麼晚了啊…
 真虧你能找到這裡。沒錯，今天是我的賦形日。
 既然你都來了，我也沒打算輕易讓你走。
@@ -2616,7 +2616,7 @@
             {
                 title: "誓奪爪盟",
                 badge: "回聲殘響",
-                bgImage: "images/OC.jpg",
+                bgImage: "images/OC.webp",
                 content: `■歷史淵源
 
 誓奪爪盟是由元素一族的強大賦形者「劫」所一手創立的組織。據熱愛考究與探詢歷史的愛好者所言，這個組織與千年前在艾瑞拉大陸崛起的「霸潮盟」有不少相似之處，行事作風多能看見霸潮盟當年的影子。
@@ -2675,7 +2675,7 @@
             {
                 title: "詛碼團",
                 badge: "回聲殘響",
-                bgImage: "images/ZOMATAN.jpg",
+                bgImage: "images/ZOMATAN.webp",
                 content: `■歷史的表象：席捲世界的黑暗狂潮
 
 隨著文明推進與人口聚集，各類結社與管理組織在明面上相繼成立。無論是因興趣交遊，或是因信仰集結，皆在規範下蓬勃發展。然而，有光必有影。在無法觸及的暗處，那些心懷野心、或被社會體制排擠的邊緣之人，因走投無路而逐步墮入黑暗，最終匯聚成了最初的「詛碼團」。
@@ -2740,7 +2740,7 @@
             {
                 title: "艾瑞爾軍",
                 badge: "回聲殘響",
-                bgImage: "images/AREAAR.jpg",
+                bgImage: "images/AREAAR.webp",
                 content: `■ 起源：從遊牧到高科技重鎮
 
 艾瑞爾城是這顆星球上的科技心臟。這裡最早是由各處遷徙而來的民族，為了互相扶持而形成的聚落。起初，大家還維持著傳統的遊牧生活，但隨著星球資源越來越稀缺，這種逐水草而居的日子終究過不下去。於是，在當時盟會的統籌下展開轉型，並與西方大陸的「嵐光城」建立起往來。
@@ -2774,7 +2774,7 @@
             {
                 title: "野性之聲",
                 badge: "回聲殘響",
-                bgImage: "images/VOICE.jpg",
+                bgImage: "images/VOICE.webp",
                 content: `■ 起源：餘燼中的復興
 
 「野性之聲」由人族的洛爾所創立。一切始於一場悲劇——洛爾與兒時玩伴高和親眼目睹家鄉在詛碼團的蹂躪下化為灰燼。在恩師五十嵐的指引與協助下，兩人踏上了漫長的復興之路。他們帶領倖存的村民北上跋涉，與來自各地的難民在北方大城的郊外匯合，齊心協力一磚一瓦地築起了新的故鄉「嵐光鎮」。
@@ -2806,7 +2806,7 @@
             {
                 title: "對手",
                 badge: "回聲殘響",
-                bgImage: "images/RIVAL.jpg",
+                bgImage: "images/RIVAL.webp",
                 content: `無論在「薄明之戰」的混亂中，或在追逐卓越領域的修練之路上，每個人心中或許都印著幾個名字——或許是渴望超越的競爭對象，也或許是命運而糾纏的宿敵。有時，一段僅因一時興起而綻放的因緣，便足以拉開長達數載的博弈序幕。
 
 野性之聲：犬猿之仲的堅定默契
@@ -2834,7 +2834,7 @@
             {
                 title: "崩川牛子",
                 badge: "戰況速報",
-                bgImage: "images/BON.jpg",
+                bgImage: "images/BON.webp",
                 content: `荒野焰嵐於樂團較勁中全面潰敗，已宣告解散。
 
 ……
@@ -2859,7 +2859,7 @@
             {
                 title: "美食",
                 badge: "回聲殘響",
-                bgImage: "images/FOOD.jpg",
+                bgImage: "images/FOOD.webp",
                 content: `民以食為天。
 原本不需進食的元素一族，在獲得「賦形之身」後，也不得不開始面對飲食這件事。於是在奧法魯斯的指導下，他們從採集植物、到獵捕聚落附近誤入的迷途野獸，從零開始一點一滴摸索，逐漸發展出屬於元素一族風格的飲食方式。
 
@@ -2892,7 +2892,7 @@
             {
                 title: "信仰",
                 badge: "回聲殘響",
-                bgImage: "images/OATH.jpg",
+                bgImage: "images/OATH.webp",
                 content: `在「一切」這顆星球上，各個種族皆有發展出專屬於自身的信仰形式，並與生活方式、歷史記憶與族群本性等緊密交織。
 
 以狼人一族為例，他們對信奉的狼神祈求狩獵時的平安與庇佑。族人於隱密的叢林深處設有專門用於祭祀的聖地，其中立著自古流傳的石碑，刻錄著歷代族人留下的知識與經驗。由於狩獵本就是狼人天性與日常的一部分，他們並未在村落中設立固定的祭拜場所，僅在狩獵祭典時，才由族長與狩獵頭領共同進入聖地，向狼神祈願，尋求指引與祝福。
@@ -2916,7 +2916,7 @@
             {
                 title: "節日",
                 badge: "回聲殘響",
-                bgImage: "images/DAYS.jpg",
+                bgImage: "images/DAYS.webp",
                 content: `在無盡元素的世界裡，節慶的存在因族群而異。各族對時間的感知、對自然的回應不同，慶祝的日程與形式也隨之分歧。
 
 然而，仍有幾個時節，是所有族群共同迎來的節日——冬日的新年慶、春日的賞花祭、夏日的避暑慶典，以及秋日的收穫節。
@@ -2938,7 +2938,7 @@
             {
                 title: "夥伴",
                 badge: "回聲殘響",
-                bgImage: "images/PART.jpg",
+                bgImage: "images/PART.webp",
                 content: `在亞爾克（阿風）仍是野獸之身，奔馳於艾瑞爾大陸自然保留區時，他曾與一群同族夥伴們並肩生活。
 
 ——那是一段自由而純粹的時光，他們彼此依賴，在荒野與森林交織的天地間生存、奔跑著。
@@ -2974,7 +2974,7 @@
             {
                 title: "面貌",
                 badge: "回聲殘響",
-                bgImage: "images/FACE.jpg",
+                bgImage: "images/FACE.webp",
                 content: `在最初的構想中，艾瑞爾原本是「詛碼團」的一員。
 
 身為一位追求知識的學者，他本想趁著戰亂四起、秩序崩解之時，趁此蒐集世界各地關於「元素」的各種情報，
@@ -3024,7 +3024,7 @@
             {
                 title: "假如",
                 badge: "回聲殘響",
-                bgImage: "images/IF.jpg",
+                bgImage: "images/IF.webp",
                 content: `假如洛爾是獸人族的話，他會是什麼樣的面貌？故事又會如何隨之發展？
 
 在最初構思《無限元素》時，整個世界的骨架、文化與社會秩序，皆以「人類」為核心而延伸。
@@ -3378,7 +3378,7 @@
                     
                     storyIntroElem.innerHTML = `
                         <div style="display: flex; align-items: flex-start; gap: 12px;">
-                            <img src="images/${item.charKey}.jpg" alt="${item.charKey}" style="width: 48px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
+                            <img src="images/${item.charKey}.webp" alt="${item.charKey}" style="width: 48px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
                             <div style="flex-grow: 1;">
                                 <p style="font-weight: 600; color: #f8fafc; margin-bottom: 4px; font-size: 0.88rem; line-height: 1.5;">${item.text}</p>
                                 <p style="font-size: 0.72rem; color: #38bdf8; opacity: 0.85; margin-bottom: 0; text-align: right;">( ✦ 點擊切換下一句對話 ✦ )</p>
@@ -3858,7 +3858,7 @@
             currentFortuneCharName = item.name;
 
             // 1. 帶入大頭像與名字
-            document.getElementById('fortune-avatar').src = `images/${item.charKey}.jpg`;
+            document.getElementById('fortune-avatar').src = `images/${item.charKey}.webp`;
             document.getElementById('fortune-char-name').innerText = item.name;
 
             // 2. 共鳴文字判斷
@@ -3885,7 +3885,7 @@
             }
 
             // 5. 更換背景大圖並紀錄網址
-            const bgImg = (characterData[item.charKey] && characterData[item.charKey].bgImage) ? characterData[item.charKey].bgImage : `images/${item.charKey}_bg.jpg`;
+            const bgImg = (characterData[item.charKey] && characterData[item.charKey].bgImage) ? characterData[item.charKey].bgImage : `images/${item.charKey}_bg.webp`;
             currentFortuneBgUrl = bgImg;
             document.body.style.setProperty('--bg-image', `url('${bgImg}')`);
 
@@ -3922,7 +3922,7 @@
                 return;
             }
 
-            const bgUrl = currentFortuneBgUrl || "images/background.jpg";
+            const bgUrl = currentFortuneBgUrl || "images/background.webp";
 
             html2canvas(captureArea, {
                 scale: 2,
