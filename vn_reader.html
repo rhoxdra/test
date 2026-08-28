@@ -1105,6 +1105,11 @@
       }
 
       document.getElementById('log-modal').style.display = 'flex';
+
+      // 🌟 關鍵：等待彈窗顯示與 DOM 渲染完成後，自動將捲軸捲到最下方（最新的對話）
+      requestAnimationFrame(() => {
+        logBody.scrollTop = logBody.scrollHeight;
+      });
     }
 
     function closeLogModal() {
