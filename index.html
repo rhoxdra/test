@@ -1152,54 +1152,59 @@ body.modal-open {
             </div>
         </header>
 
-        <!-- 焦點互動與實體周邊 -->
-        <div class="section-title">作品專頁 / 互動體驗</div>
-        <div class="link-list">
-            
-            <!-- 🌟 獨立出版與未來排程預告卡片 🌟 -->
-            <div class="link-card" onclick="openScheduleModal()" style="cursor: pointer;">
-                <img src="images/lanlan.webp" alt="嵐懶" class="avatar">
-                <div class="link-info">
-                    <div class="link-title">出版與活動月曆 ✦ 排程預告</div>
-                    <div class="link-desc">查看 8 - 10 月本傳發售、連載、學園祭主題與周邊資訊</div>
-                </div>
-                <div class="arrow">➔</div>
-            </div>
 
-            <a href="https://www.bookwalker.com.tw/search?v=1147&series_display=1" target="_blank" class="link-card highlight" onclick="gtag('event', 'Book_Walker');">
-                <img src="images/kulu.webp" alt="克爾" class="avatar">
+        <!-- 🌟 1. 核心變現專區置頂（官方商城與最新出版） 🌟 -->
+        <div class="section-title" style="color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+             官方商城與最新出版
+        </div>
+        <div class="link-list">
+            <!-- BookWalker：強化第 11 集與試閱動機 -->
+            <a href="https://www.bookwalker.com.tw/search?v=1147&series_display=1" target="_blank" class="link-card highlight" onclick="gtag('event', 'Book_Walker');" style="border: 1px solid rgba(56, 189, 248, 0.7); background: linear-gradient(135deg, rgba(2, 132, 199, 0.4) 0%, rgba(30, 41, 59, 0.9) 100%);">
+                <img src="images/kulu.webp" alt="克爾" class="avatar" style="border-color: #38bdf8;">
                 <div class="link-info">
-                    <div class="link-title">BookWalker 作品專頁</div>
-                    <div class="link-desc">內容豐富的本傳、免費連載的外傳一次滿足你的閱讀興致</div>
+                    <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <div class="link-title">BookWalker作品專頁</div>
+                        <span class="event-badge" style="background: #059669; margin-bottom: 0; font-size: 0.68rem;">外傳免費連載</span>
+                        <span class="event-badge" style="background: #e11d48; margin-bottom: 0; font-size: 0.68rem;">本傳第 11 集上市</span>
+                    </div>
+                    <div class="link-desc" style="color: #cbd5e1; margin-top: 2px;">最新外傳全面免費暢讀，亦可試閱並收藏本傳單行本！</div>
                 </div>
                 <div class="arrow">➔</div>
             </a>
-            <!-- 🌟 2. 每日元素共鳴籤（已移至心理測驗上方，且移除 highlight 高光） 🌟 -->
-            <div class="link-card" onclick="drawDailyFortune()" style="cursor: pointer;">
-                <img src="images/arc.webp" alt="亞爾克" class="avatar">
+
+            <!-- 7-11 賣貨便：強化實體透卡、貼紙現貨感 -->
+            <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" class="link-card highlight" onclick="gtag('event', 'shop711');" style="border: 1px solid rgba(245, 158, 11, 0.6); background: linear-gradient(135deg, rgba(180, 83, 9, 0.35) 0%, rgba(30, 41, 59, 0.9) 100%);">
+                <img src="images/proto_beast.webp" alt="普洛特" class="avatar" style="border-color: #fbbf24;">
                 <div class="link-info">
-                    <div class="link-title">每日元素共鳴籤</div>
-                    <div class="link-desc">點擊抽取今日幸運夥伴與元素開運指引！</div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <div class="link-title">官方周邊實體賣場</div>
+                        <span class="event-badge" style="background: #f59e0b; color: #000; margin-bottom: 0; font-size: 0.68rem;">現貨販售中</span>
+                    </div>
+                    <div class="link-desc" style="color: #cbd5e1; margin-top: 2px;">壓克力飯友、精美透卡與限量特典現貨發售中！</div>
                 </div>
-                <div class="arrow">➔</div>
-            </div>
-            <a href="https://rhoxdra.github.io/endless-element-quiz/" target="_blank" class="link-card">
-                <img src="images/jareth.webp" alt="賈瑞斯" class="avatar">
-                <div class="link-info">
-                    <div class="link-title">與你契合的夥伴心理測驗</div>
-                    <div class="link-desc">測測看你在這個世界裡最適合與誰同行？</div>
-                </div>
-                <div class="arrow">➔</div>
+                <div class="arrow" style="color: #fbbf24;">➔</div>
             </a>
         </div>
 
-        <div class="section-title">篇章專區</div>
+        <!-- 🌟 2. 最新篇章與連載排程（主題進展 + 月曆排程） 🌟 -->
+        <div class="section-title">沉浸篇章 ✦ 連載排程</div>
         <div class="link-list">
+            <!-- 主題進展 -->
             <div class="link-card highlight" onclick="openVNModal()" style="cursor: pointer;">
                 <img src="images/kokumei.webp" alt="克明" class="avatar">
                 <div class="link-info">
                     <div class="link-title">主題進展 ✦ 回聲殘響</div>
                     <div class="link-desc">進入視覺小說型閱讀體驗，查看當前篇章活動與過往內容</div>
+                </div>
+                <div class="arrow">➔</div>
+            </div>
+
+            <!-- 出版排程預告 -->
+            <div class="link-card" onclick="openScheduleModal()" style="cursor: pointer;">
+                <img src="images/lanlan.webp" alt="嵐懶" class="avatar">
+                <div class="link-info">
+                    <div class="link-title">出版月曆 ✦ 未來排程預告</div>
+                    <div class="link-desc">查看 8 - 10 月本傳發售、外傳連載、學園祭主題與周邊資訊</div>
                 </div>
                 <div class="arrow">➔</div>
             </div>
@@ -1316,22 +1321,38 @@ body.modal-open {
             </details>
         </div>
 
-        <!-- 社群專題與賣場連結 -->
-        <div class="section-title">社群專題</div>
+       <!-- 🌟 3. 夥伴共鳴 ✦ 互動體驗（抽籤 + 心理測驗 往下拉到此處） 🌟 -->
+        <div class="section-title">夥伴共鳴 ✦ 互動體驗</div>
+        <div class="link-list">
+            <!-- 每日元素共鳴籤 -->
+            <div class="link-card" onclick="drawDailyFortune()" style="cursor: pointer;">
+                <img src="images/arc.webp" alt="亞爾克" class="avatar">
+                <div class="link-info">
+                    <div class="link-title">每日元素共鳴籤</div>
+                    <div class="link-desc">點擊抽取今日幸運夥伴與元素開運指引！</div>
+                </div>
+                <div class="arrow">➔</div>
+            </div>
+
+            <!-- 與你契合的夥伴心理測驗 -->
+            <a href="https://rhoxdra.github.io/endless-element-quiz/" target="_blank" class="link-card">
+                <img src="images/jareth.webp" alt="賈瑞斯" class="avatar">
+                <div class="link-info">
+                    <div class="link-title">與你契合的夥伴心理測驗</div>
+                    <div class="link-desc">測測看你在這個世界裡最適合與誰同行？</div>
+                </div>
+                <div class="arrow">➔</div>
+            </a>
+        </div>
+
+        <!-- 社群專題（緊接在互動體驗後，引導進一步追蹤） -->
+        <div class="section-title">社群專題 ✦ 獨家收錄</div>
         <div class="link-list">
             <a href="https://www.facebook.com/profile.php?id=61572883663242" target="_blank" class="link-card">
                 <img src="images/zarion.webp" alt="澤里恩" class="avatar">
                 <div class="link-info">
                     <div class="link-title">Facebook 官方粉絲專頁</div>
-                    <div class="link-desc">第一時間獲取最新消息</div>
-                </div>
-                <div class="arrow">➔</div>
-            </a>
-            <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" class="link-card highlight" onclick="gtag('event', 'shop711');">
-                <img src="images/proto_beast.webp" alt="普洛特" class="avatar">
-                <div class="link-info">
-                    <div class="link-title">7-11 賣貨便周邊賣場</div>
-                    <div class="link-desc">精美透卡與限量特典貼紙現貨發售中！</div>
+                    <div class="link-desc">第一時間獲取最新連載與公告</div>
                 </div>
                 <div class="arrow">➔</div>
             </a>
@@ -1345,37 +1366,49 @@ body.modal-open {
             </a>
         </div>
 
-        <!-- 小說閱讀平台 -->
+        <!-- 🌟 其他各大線上閱讀平台（精簡無備註版） 🌟 -->
         <div class="section-title">其他各大線上閱讀平台</div>
         <div class="link-list">
-            <a href="https://www.penana.com/user/380530/%E5%B5%90%E6%87%B6/portfolio" target="_blank" class="link-card">
-                <img src="images/kage.webp" alt="影" class="avatar">
-                <div class="link-info"><div class="link-title">Penana</div><div class="link-desc"></div></div><div class="arrow">➔</div>
-            </a>
-            <a href="https://readmoo.com/publisher/8667" target="_blank" class="link-card">
-                <img src="images/area.webp" alt="艾瑞爾" class="avatar">
-                <div class="link-info"><div class="link-title">Readmoo</div><div class="link-desc"></div></div><div class="arrow">➔</div>
-            </a>
-            <a href="https://www.books.com.tw/web/sys_puballb/books/?pubid=bookwalker137" target="_blank" class="link-card">
-                <img src="images/igarashi.webp" alt="五十嵐" class="avatar">
-                <div class="link-info"><div class="link-title">博客來</div><div class="link-desc"></div></div><div class="arrow">➔</div>
-            </a>            
-            <a href="https://ebook.hyread.com.tw/searchList.jsp?search_field=FullText&search_input=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&search_field=PU&search_input=%E5%B5%90%E6%87%B6%E6%9B%B8" target="_blank" class="link-card">
-                <img src="images/kuzure.webp" alt="崩" class="avatar">
-                <div class="link-info"><div class="link-title">Hyread</div><div class="link-desc"></div></div><div class="arrow">➔</div>
-            </a>            
-            <a href="https://play.google.com/store/search?q=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&c=books&hl=zh-TW" target="_blank" class="link-card">
-                <img src="images/osae.webp" alt="制" class="avatar">
-                <div class="link-info"><div class="link-title">Google Play</div><div class="link-desc"></div></div><div class="arrow">➔</div>
-            </a>            
-            <a href="https://tw.myrenta.com/search2?keyword=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&field=name" target="_blank" class="link-card">
-                <img src="images/chitar.webp" alt="瞬介" class="avatar">
-                <div class="link-info"><div class="link-title">MyRenta</div><div class="link-desc"></div></div><div class="arrow">➔</div>
-            </a>            
-            <a href="https://www.kobo.com/tw/zh/series/1GoXVrlB21SC9am6qDfZ9Q" target="_blank" class="link-card">
-                <img src="images/gousuke.webp" alt="豪助" class="avatar">
-                <div class="link-info"><div class="link-title">Kobo</div><div class="link-desc"></div></div><div class="arrow">➔</div>
-            </a>
+            <details class="link-card-dropdown">
+                <summary class="link-card-summary">
+                    <img src="images/area.webp" alt="其他閱讀平台" class="avatar">
+                    <div class="link-info">
+                        <div class="link-title">更多電子書與線上閱讀平台</div>
+                        <div class="link-desc">展開查看 Penana、Readmoo、博客來、Kobo 等通路</div>
+                    </div>
+                    <div class="arrow-icon">▼</div>
+                </summary>
+                <div style="padding: 12px; display: flex; flex-direction: column; gap: 8px; background: rgba(15, 23, 42, 0.6); border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                    <a href="https://www.penana.com/user/380530/%E5%B5%90%E6%87%B6/portfolio" target="_blank" class="link-card">
+                        <img src="images/kage.webp" alt="影" class="avatar" style="width: 50px; height: 50px;">
+                        <div class="link-info"><div class="link-title">Penana</div></div><div class="arrow">➔</div>
+                    </a>
+                    <a href="https://readmoo.com/publisher/8667" target="_blank" class="link-card">
+                        <img src="images/area.webp" alt="艾瑞爾" class="avatar" style="width: 50px; height: 50px;">
+                        <div class="link-info"><div class="link-title">Readmoo 讀墨</div></div><div class="arrow">➔</div>
+                    </a>
+                    <a href="https://www.books.com.tw/web/sys_puballb/books/?pubid=bookwalker137" target="_blank" class="link-card">
+                        <img src="images/igarashi.webp" alt="五十嵐" class="avatar" style="width: 50px; height: 50px;">
+                        <div class="link-info"><div class="link-title">博客來</div></div><div class="arrow">➔</div>
+                    </a>            
+                    <a href="https://ebook.hyread.com.tw/searchList.jsp?search_field=FullText&search_input=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&search_field=PU&search_input=%E5%B5%90%E6%87%B6%E6%9B%B8" target="_blank" class="link-card">
+                        <img src="images/kuzure.webp" alt="崩" class="avatar" style="width: 50px; height: 50px;">
+                        <div class="link-info"><div class="link-title">HyRead 電子書</div></div><div class="arrow">➔</div>
+                    </a>            
+                    <a href="https://play.google.com/store/search?q=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&c=books&hl=zh-TW" target="_blank" class="link-card">
+                        <img src="images/osae.webp" alt="制" class="avatar" style="width: 50px; height: 50px;">
+                        <div class="link-info"><div class="link-title">Google Play 圖書</div></div><div class="arrow">➔</div>
+                    </a>            
+                    <a href="https://tw.myrenta.com/search2?keyword=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&field=name" target="_blank" class="link-card">
+                        <img src="images/chitar.webp" alt="瞬介" class="avatar" style="width: 50px; height: 50px;">
+                        <div class="link-info"><div class="link-title">Renta! 亂搭</div></div><div class="arrow">➔</div>
+                    </a>            
+                    <a href="https://www.kobo.com/tw/zh/series/1GoXVrlB21SC9am6qDfZ9Q" target="_blank" class="link-card">
+                        <img src="images/gousuke.webp" alt="豪助" class="avatar" style="width: 50px; height: 50px;">
+                        <div class="link-info"><div class="link-title">Rakuten Kobo</div></div><div class="arrow">➔</div>
+                    </a>
+                </div>
+            </details>
         </div>
          <!-- 原創作者專區 -->
         <div class="section-title">作者專區</div>
@@ -1439,7 +1472,7 @@ body.modal-open {
 （※ 詳細故事與其他未介紹的篇章，屆時一樣會完整收錄在未來發售的本傳單行本中。）
 
 ■ <strong>全新周邊與熱銷補貨預告</strong>
-新一批的周邊產品小物上架囉！同時既有熱銷產品也已再度補貨，立即前往周邊賣場將他們帶回家！
+新一批的主角群壓克力飯友與精美透卡上架囉！同時既有熱銷產品也已再度補貨，立即前往 7-11 賣場將他們帶回家！
             </div>
         </div>
     </div>
@@ -1475,6 +1508,15 @@ body.modal-open {
             
             <div id="char-text" class="char-text">
                 <!-- 角色簡介內文將由 JS 自動帶入 -->
+            </div>
+            <!-- 🌟 調整 2：角色彈窗底部專屬導購按鈕欄 🌟 -->
+            <div style="display: flex; gap: 8px; margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; flex-shrink: 0;">
+                <a href="https://www.bookwalker.com.tw/search?v=1147&series_display=1" target="_blank" class="form-switch-btn" onclick="gtag('event', 'Book_Walker_CharModal');" style="flex: 1; text-align: center; text-decoration: none; font-size: 0.78rem; padding: 6px 10px; margin-bottom: 0;">
+                    前往 BookWalker 閱讀故事
+                </a>
+                <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" class="form-switch-btn" onclick="gtag('event', 'shop711_CharModal');" style="flex: 1; text-align: center; text-decoration: none; font-size: 0.78rem; padding: 6px 10px; margin-bottom: 0; background: linear-gradient(135deg, #d97706 0%, #b45309 100%); border-color: #f59e0b;">
+                    尋找各式角色實體周邊
+                </a>
             </div>
         </div>
     </div>
@@ -1518,6 +1560,12 @@ body.modal-open {
             <div style="display: flex; gap: 10px; width: 100%; margin-top: 14px;">
                 <button id="draw-again-btn" class="form-switch-btn" onclick="drawDailyFortune()" style="margin-bottom: 0; flex: 1;">🎲 再抽一次 (剩 2 次)</button>
                 <button class="form-switch-btn" onclick="downloadFortuneImage()" style="margin-bottom: 0; flex: 1; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-color: rgba(56, 189, 248, 0.5);">📸 儲存籤詩圖卡</button>
+            </div>
+            <!-- 🌟 調整 3：共鳴籤底部賣場引流小連結 🌟 -->
+            <div style="margin-top: 10px; text-align: center;">
+                <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" onclick="gtag('event', 'shop711_FortuneModal');" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; transition: color 0.2s;">
+                    ✦ 想讓夥伴陪你度過每一天？前往賣場收藏精選角色實體周邊 ✦
+                </a>
             </div>
         </div>
     </div>
