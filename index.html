@@ -320,7 +320,7 @@
         .header {
             text-align: center;
             margin-top: 20px;
-            margin-bottom: 45vh; /* 已為新增文字調整留白高度 */
+            margin-bottom: 15vh; /* 已為新增文字調整留白高度 */
         }
 
         .main-title {
@@ -1106,7 +1106,56 @@ body.modal-open {
         display: none !important;
       }
     }
-    
+    /* 🌟 Current Event 自動輪播專用樣式 🌟 */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+}
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+.carousel-slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.carousel-img {
+    width: 100%;
+    max-height: 220px; /* 控制 3:2 橫式插圖在框內的高度，不滿版 */
+    object-fit: contain; /* 確保圖片完整包在框內不變形 */
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: rgba(15, 23, 42, 0.4);
+}
+.carousel-btn {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: #38bdf8;
+    font-size: 1rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    transition: background 0.2s;
+}
+.carousel-btn:hover {
+    background: rgba(56, 189, 248, 0.3);
+}
+.carousel-prev { left: 8px; }
+.carousel-next { right: 8px; }
+
     </style>
 </head>
 <body>
@@ -1135,27 +1184,58 @@ body.modal-open {
             <h1 class="main-title">《無限元素》</h1>
             <div class="tagline">與賦形者相遇，和獸人夥伴展開日常冒險</div>
 
-            <!-- 🌟 作品世界觀內容解說 🌟 -->
-            <div class="story-intro">
-                <p>從最初的元素冒險，到如今在聚學舍修練、參與再契選的漫長旅程，賦形者們將在這片世界中探索力量、羈絆，以及隱藏於歷史深處的真相。</p>
-            </div>
+            <!-- 🌟 統合區塊：上方世界觀（含點擊對話），下方接 Current Event 輪播 🌟 -->
+          <div class="event-card">
+              <!-- 上方：世界觀短文與點擊對話互動 -->
+              <div class="story-intro" style="background: transparent; border-left: none; padding: 0; margin: 0 0 10px 0; backdrop-filter: none;">
+                  <p style="font-size: 0.9rem; line-height: 1.65; color: #e2e8f0; margin-bottom: 6px;">從最初的元素冒險，到如今在聚學舍修練、參與再契選的漫長旅程，賦形者們將在這片世界中探索力量、羈絆，以及隱藏於歷史深處的真相。</p>
+                  <p style="font-size: 0.75rem; color: #38bdf8; opacity: 0.85; margin-bottom: 0; text-align: right;">( ✦ 點擊開啟夥伴對話 ✦ )</p>
+              </div>
 
-            <!-- 當前主題/篇章動態簡介 -->
-            <div class="event-card">
-                <span class="event-badge">CURRENT EVENT</span>
-                <p class="event-text">
-                    <strong>2026/8/28 學園祭篇章「啟幕」正式開跑！</strong><br><br>
-                    聚學舍的盛大慶典開幕囉！<br>
-                    無限量級的極速競跑、卡牌大賽的狂熱對決，還有各方勢力的交鋒等你來探索。<br>
-                    趕快前往主題進展專區，解鎖這場盛典的開幕與精彩過程吧！<br>
-                </p>
-            </div>
+              <!-- 分隔微光線 -->
+              <div style="width: 100%; height: 1px; background: rgba(56, 189, 248, 0.2); margin: 10px 0;"></div>
+
+              <!-- 下方：Current Event 自動輪播區塊 -->
+              <span class="event-badge">CURRENT EVENT</span>
+              <div class="carousel-container" id="event-carousel">
+                  <div class="carousel-track" id="carousel-track">
+                      <!-- 公告 1 -->
+                      <div class="carousel-slide">
+                          <img src="images/background01.webp" alt="公告插圖1" class="carousel-img">
+                          <p class="event-text" style="text-align: center;">
+                              <strong>2026/8/28 學園祭篇章「啟幕」正式開跑！</strong><br>
+                              聚學舍的盛大校慶開幕囉！極速競跑與卡牌大賽等你來探索。<br>
+                              趕快前往主題進展專區，參與盛典的開幕與精彩過程吧！<br>
+                          </p>
+                      </div>
+                      <!-- 公告 2 -->
+                      <div class="carousel-slide">
+                          <img src="images/card.webp" alt="公告插圖2" class="carousel-img">
+                          <p class="event-text" style="text-align: center;">
+                              <strong>全新周邊與熱銷補貨預告！</strong><br>
+                              新一批周邊與熱銷品已補貨，立即前往賣場將他們帶回家！
+                          </p>
+                      </div>
+                      <!-- 公告 3 -->
+                      <div class="carousel-slide">
+                          <img src="images/periodic.webp" alt="公告插圖3" class="carousel-img">
+                          <p class="event-text" style="text-align: center;">
+                              <strong>元素週期表正式開放！</strong><br>
+                              揭露全體角色關係圖譜，綜覽三大陸自然地理全貌。
+                          </p>
+                      </div>
+                  </div>
+                  <!-- 左右手動切換按鈕 -->
+                  <button class="carousel-btn carousel-prev" onclick="moveSlide(-1)">❮</button>
+                  <button class="carousel-btn carousel-next" onclick="moveSlide(1)">❯</button>
+              </div>
+          </div>
         </header>
 
 
         <!-- 🌟 1. 核心變現專區置頂（官方商城與最新出版） 🌟 -->
         <div class="section-title" style="color: #38bdf8; display: flex; align-items: center; gap: 6px;">
-             官方商城與最新出版
+             最新出版 ✦ 官方商城
         </div>
         <div class="link-list">
             <!-- BookWalker：強化第 11 集與試閱動機 -->
@@ -1211,7 +1291,7 @@ body.modal-open {
         </div>
 
 <!-- 社群內容與圖鑑 -->
-        <div class="section-title">角色圖鑑</div>
+        <div class="section-title">角色圖鑑 ✦ 關係圖譜</div>
         <div class="link-list">
             <a href="periodic.html" target="_blank" rel="noopener noreferrer" class="link-card highlight">
     <img src="images/rub.webp" alt="元素週期表" class="avatar">
@@ -1384,7 +1464,7 @@ body.modal-open {
                         <div class="link-info"><div class="link-title">Penana</div></div><div class="arrow">➔</div>
                     </a>
                     <a href="https://readmoo.com/publisher/8667" target="_blank" class="link-card">
-                        <img src="images/area.webp" alt="艾瑞爾" class="avatar" style="width: 50px; height: 50px;">
+                        <img src="images/deer.webp" alt="鹿茲" class="avatar" style="width: 50px; height: 50px;">
                         <div class="link-info"><div class="link-title">Readmoo 讀墨</div></div><div class="arrow">➔</div>
                     </a>
                     <a href="https://www.books.com.tw/web/sys_puballb/books/?pubid=bookwalker137" target="_blank" class="link-card">
@@ -3423,31 +3503,25 @@ body.modal-open {
 
         // 確保函數在 HTML 載入完成後開啟對白與動態頭像
         function initStoryIntro() {
-            const storyIntroElem = document.querySelector('.story-intro');
-            if (storyIntroElem) {
-                // 預設保持原本的簡介文字
-                storyIntroElem.innerHTML = `
-                    <p style="font-size: 0.9rem; line-height: 1.65; color: #e2e8f0; margin-bottom: 6px;">${originalStoryText}</p>
-                    <p style="font-size: 0.75rem; color: #38bdf8; opacity: 0.85; margin-bottom: 0; text-align: right;">( ✦ 點擊開啟夥伴對話 ✦ )</p>
-                `;
+    const storyIntroElem = document.querySelector('.story-intro');
+    if (storyIntroElem) {
+        storyIntroElem.style.cursor = 'pointer';
+        storyIntroElem.onclick = function() {
+            const randomIndex = Math.floor(Math.random() * randomDialogues.length);
+            const item = randomDialogues[randomIndex];
 
-                storyIntroElem.style.cursor = 'pointer';
-                storyIntroElem.onclick = function() {
-                    const randomIndex = Math.floor(Math.random() * randomDialogues.length);
-                    const item = randomDialogues[randomIndex];
-                    
-                    storyIntroElem.innerHTML = `
-                        <div style="display: flex; align-items: flex-start; gap: 12px;">
-                            <img src="images/${item.charKey}.webp" alt="${item.charKey}" style="width: 48px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
-                            <div style="flex-grow: 1;">
-                                <p style="font-weight: 600; color: #f8fafc; margin-bottom: 4px; font-size: 0.88rem; line-height: 1.5;">${item.text}</p>
-                                <p style="font-size: 0.72rem; color: #38bdf8; opacity: 0.85; margin-bottom: 0; text-align: right;">( ✦ 點擊切換下一句對話 ✦ )</p>
-                            </div>
-                        </div>
-                    `;
-                };
-            }
-        }
+            storyIntroElem.innerHTML = `
+                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                    <img src="images/${item.charKey}.webp" alt="${item.charKey}" style="width: 48px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
+                    <div style="flex-grow: 1;">
+                        <p style="font-weight: 600; color: #f8fafc; margin-bottom: 4px; font-size: 0.88rem; line-height: 1.5;">${item.text}</p>
+                        <p style="font-size: 0.72rem; color: #38bdf8; opacity: 0.85; margin-bottom: 0; text-align: right;">( ✦ 點擊切換下一句對話 ✦ )</p>
+                    </div>
+                </div>
+            `;
+        };
+    }
+}
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initStoryIntro);
@@ -4224,6 +4298,43 @@ function closeVNModal() {
             }
         }
     });
+    // 🌟 Current Event 輪播控制邏輯 🌟
+let currentSlideIndex = 0;
+const track = document.getElementById('carousel-track');
+const slides = document.querySelectorAll('.carousel-slide');
+const totalSlides = slides.length;
+let slideInterval;
+
+function updateSlidePosition() {
+    if (track) {
+        track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+    }
+}
+
+function moveSlide(direction) {
+    currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
+    updateSlidePosition();
+    resetInterval();
+}
+
+function startInterval() {
+    slideInterval = setInterval(() => {
+        currentSlideIndex = (currentSlideIndex + 1) % totalSlides;
+        updateSlidePosition();
+    }, 5000); // 5秒自動輪播
+}
+
+function resetInterval() {
+    clearInterval(slideInterval);
+    startInterval();
+}
+
+// 頁面載入後啟動自動輪播
+window.addEventListener('DOMContentLoaded', () => {
+    if (track) {
+        startInterval();
+    }
+});
     </script>
     
     <div id="poster-title-box" class="poster-title-box">
