@@ -1526,8 +1526,8 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
             }
         });
 
-        canvas.addEventListener('click', (e) => {
-            if (totalMoved > 5) return;
+        canvas.addEventListener('pointerup', (e) => {
+            if (totalMoved > 15) return;
 
             const rect = canvas.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
