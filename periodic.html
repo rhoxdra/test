@@ -256,9 +256,14 @@
         <div id="drawer-content" class="drawer-content">詳細內容解說...</div>
         
         <div id="drawer-btn-group" class="drawer-btn-group">
-            <a href="https://www.bookwalker.com.tw/search?v=1147&series_display=1" target="_blank" class="buy-book-btn">📚 前往 BookWalker 閱讀本傳與外傳</a>
-            <a href="https://rhoxdra.github.io/intro/" class="home-btn">🌐 返回《無限元素》首頁</a>
-        </div>
+    <!-- 兩大導購按鈕並排 -->
+    <div style="display: flex; gap: 8px; width: 100%;">
+        <a href="https://www.bookwalker.com.tw/search?v=1147&series_display=1" target="_blank" class="buy-book-btn" onclick="gtag('event', 'Book_Walker_Click', {'source': 'periodic_drawer'});" style="flex: 1; font-size: 0.8rem; padding: 10px 6px; text-align: center;">📚 BookWalker</a>
+        <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" class="buy-book-btn" onclick="gtag('event', 'Shop711_Click', {'source': 'periodic_drawer'});" style="flex: 1; font-size: 0.8rem; padding: 10px 6px; text-align: center; background: linear-gradient(135deg, #d97706 0%, #b45309 100%); border-color: #f59e0b;">🛍️ 7-11 周邊</a>
+    </div>
+    <!-- 返回首頁按鈕 -->
+    <a href="https://rhoxdra.github.io/intro/" class="home-btn">🌐 返回《無限元素》首頁</a>
+</div>
     </div>
 
     <div id="hint-box" class="hint-text">拖曳平移 ｜ 滾輪縮放 ｜ 點擊節點檢視詳細</div>
@@ -1623,6 +1628,8 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
         // ==========================================
         function openNodeDrawer(node) {
             const avatar = document.getElementById('drawer-avatar');
+            // 發送 GA4 追蹤，記錄週期表被點擊的角色
+            gtag('event', 'Character_Encyclopedia_Click', { 'character_id': node.id, 'character_name': node.name });
             avatar.style.display = 'block';
             avatar.src = `images/${node.id}.webp`;
             document.getElementById('drawer-badge').innerText = `元素記錄 ✦ ${node.faction}`;

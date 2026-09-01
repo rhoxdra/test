@@ -1250,7 +1250,7 @@ body.modal-open {
         </div>
         <div class="link-list">
             <!-- BookWalker：強化第 11 集與試閱動機 -->
-            <a href="https://www.bookwalker.com.tw/search?v=1147&series_display=1" target="_blank" class="link-card highlight" onclick="gtag('event', 'Book_Walker');" style="border: 1px solid rgba(56, 189, 248, 0.7); background: linear-gradient(135deg, rgba(2, 132, 199, 0.4) 0%, rgba(30, 41, 59, 0.9) 100%);">
+            <a href="https://www.bookwalker.com.tw/search?v=1147&series_display=1" target="_blank" class="link-card highlight" onclick="gtag('event', 'Book_Walker_Click', {'source': 'homepage'});" style="border: 1px solid rgba(56, 189, 248, 0.7); background: linear-gradient(135deg, rgba(2, 132, 199, 0.4) 0%, rgba(30, 41, 59, 0.9) 100%);">
                 <img src="images/kulu.webp" alt="克爾" class="avatar" style="border-color: #38bdf8;">
                 <div class="link-info">
                     <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
@@ -1264,7 +1264,7 @@ body.modal-open {
             </a>
 
             <!-- 7-11 賣貨便：強化實體透卡、貼紙現貨感 -->
-            <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" class="link-card highlight" onclick="gtag('event', 'shop711');" style="border: 1px solid rgba(245, 158, 11, 0.6); background: linear-gradient(135deg, rgba(180, 83, 9, 0.35) 0%, rgba(30, 41, 59, 0.9) 100%);">
+            <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" class="link-card highlight" onclick="gtag('event', 'Shop711_Click', {'source': 'homepage'});" style="border: 1px solid rgba(245, 158, 11, 0.6); background: linear-gradient(135deg, rgba(180, 83, 9, 0.35) 0%, rgba(30, 41, 59, 0.9) 100%);">
                 <img src="images/proto_beast.webp" alt="普洛特" class="avatar" style="border-color: #fbbf24;">
                 <div class="link-info">
                     <div style="display: flex; align-items: center; gap: 6px;">
@@ -1614,10 +1614,10 @@ body.modal-open {
             </div>
             <!-- 🌟 調整 2：角色彈窗底部專屬導購按鈕欄 🌟 -->
             <div style="display: flex; gap: 8px; margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; flex-shrink: 0;">
-                <a href="https://www.bookwalker.com.tw/search?v=1147&series_display=1" target="_blank" class="form-switch-btn" onclick="gtag('event', 'Book_Walker_CharModal');" style="flex: 1; text-align: center; text-decoration: none; font-size: 0.78rem; padding: 6px 10px; margin-bottom: 0;">
+                <a href="https://www.bookwalker.com.tw/search?v=1147&series_display=1" target="_blank" class="form-switch-btn" onclick="gtag('event', 'Book_Walker_Click', {'source': 'character_modal'});" style="flex: 1; text-align: center; text-decoration: none; font-size: 0.78rem; padding: 6px 10px; margin-bottom: 0;">
                     前往 BookWalker 閱讀故事
                 </a>
-                <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" class="form-switch-btn" onclick="gtag('event', 'shop711_CharModal');" style="flex: 1; text-align: center; text-decoration: none; font-size: 0.78rem; padding: 6px 10px; margin-bottom: 0; background: linear-gradient(135deg, #d97706 0%, #b45309 100%); border-color: #f59e0b;">
+                <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" class="form-switch-btn" onclick="gtag('event', 'Shop711_Click', {'source': 'character_modal'});" style="flex: 1; text-align: center; text-decoration: none; font-size: 0.78rem; padding: 6px 10px; margin-bottom: 0; background: linear-gradient(135deg, #d97706 0%, #b45309 100%); border-color: #f59e0b;">
                     尋找各式角色實體周邊
                 </a>
             </div>
@@ -1666,7 +1666,7 @@ body.modal-open {
             </div>
             <!-- 🌟 調整 3：共鳴籤底部賣場引流小連結 🌟 -->
             <div style="margin-top: 10px; text-align: center;">
-                <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" onclick="gtag('event', 'shop711_FortuneModal');" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; transition: color 0.2s;">
+                <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" onclick="gtag('event', 'Shop711_Click', {'source': 'fortune_modal'});" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; transition: color 0.2s;">
                     ✦ 想讓夥伴陪你度過每一天？前往賣場收藏精選角色實體周邊 ✦
                 </a>
             </div>
@@ -2616,6 +2616,8 @@ body.modal-open {
             isBeastFormActive = false;
             
             const char = characterData[charKey];
+            const charName = char ? char.name : charKey;
+            gtag('event', 'Character_Encyclopedia_Click', { 'character_id': charKey, 'character_name': charName });
             const titleName = char ? char.name : charKey;
             const charDesc = (char && char.desc && char.desc.trim() !== "") ? char.desc : "角色詳細簡介與設定準備中……";
             const bgImg = (char && char.bgImage) ? char.bgImage : `images/${charKey}_bg.webp`;
