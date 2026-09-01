@@ -1605,7 +1605,7 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
                 let clickedLoc = null;
                 geoLocations.forEach(loc => {
                     const dist = Math.hypot(worldX - loc.x, worldY - loc.y);
-                    if (dist < 24 / scale) clickedLoc = loc;
+                    if (dist < 42 / scale) clickedLoc = loc;
                 });
 
                 if (clickedLoc) {
