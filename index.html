@@ -1777,10 +1777,11 @@ body.modal-open {
                 return;
             }
 
-            // 初次點擊若尚未載入 src，先載入第一首
-            if (!audio.src || audio.src.endsWith('.html') || audio.src === window.location.href) {
-                loadTrack(currentTrackIndex);
-        }
+            // 初次點擊若尚未載入 src，隨機挑選一首開始播放
+if (!audio.src || audio.src.endsWith('.html') || audio.src === window.location.href) {
+    currentTrackIndex = Math.floor(Math.random() * playlist.length); // 隨機亂數索引
+    loadTrack(currentTrackIndex);
+}
 
             if (isMusicPlaying) {
                 audio.pause();
