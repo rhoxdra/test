@@ -18,7 +18,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            background-color: #080b12; color: #ffffff; overflow: hidden; width: 100vw; height: 100vh;
+            background-color: #151314; color: #ede5d8; overflow: hidden; width: 100vw; height: 100vh;
             position: relative;
         }
 
@@ -47,116 +47,117 @@
 
         /* 頂部標題與模式切換按鈕 */
         .header-title-box { position: absolute; top: 20px; left: 24px; z-index: 10; pointer-events: none; }
-        .main-title { font-size: 1.8rem; font-weight: 800; color: #ffffff; letter-spacing: 2px; text-shadow: 0 0 14px rgba(56, 189, 248, 0.6); }
-        .sub-title { font-size: 0.85rem; color: #38bdf8; margin-top: 4px; letter-spacing: 1px; }
+        .main-title { font-size: 1.8rem; font-weight: 800; color: #e07b46; letter-spacing: 2px; text-shadow: 0 0 20px rgba(224, 123, 70, 0.6), 0 2px 4px rgba(0,0,0,0.8); }
+        .sub-title { font-size: 0.85rem; color: #d6cbbe; margin-top: 4px; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
 
         .view-switch-box {
             margin-top: 10px; pointer-events: auto; display: flex; gap: 8px;
         }
         .view-btn {
-            background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.4);
-            border-radius: 6px; padding: 6px 14px; font-size: 0.82rem; font-weight: 700; color: #cbd5e1;
+            background: rgba(30, 24, 23, 0.85); border: 1px solid rgba(224, 123, 70, 0.4);
+            border-radius: 6px; padding: 6px 14px; font-size: 0.82rem; font-weight: 700; color: #d6cbbe;
             cursor: pointer; backdrop-filter: blur(8px); transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
-        .view-btn:hover { color: #ffffff; border-color: #38bdf8; }
+        .view-btn:hover { color: #ede5d8; border-color: #e07b46; }
         .view-btn.active {
-            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-            color: #ffffff; border-color: #38bdf8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+            background: linear-gradient(135deg, #e07b46 0%, #c96532 100%);
+            color: #151314; border-color: #f5a623; box-shadow: 0 0 15px rgba(245, 166, 35, 0.5);
         }
 
         /* 座標顯示面板 */
         .coords-box {
             position: absolute; top: 20px; right: 24px; z-index: 10;
-            background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.3);
+            background: rgba(21, 19, 20, 0.88); border: 1px solid rgba(224, 123, 70, 0.35);
             border-radius: 8px; padding: 8px 12px; backdrop-filter: blur(8px);
-            font-size: 0.8rem; font-family: monospace; color: #38bdf8; pointer-events: none;
+            font-size: 0.8rem; font-family: monospace; color: #f5a623; pointer-events: none;
             display: flex; flex-direction: column; gap: 4px; text-align: right;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
         .coords-item { display: flex; justify-content: space-between; gap: 12px; }
-        .coords-label { color: #94a3b8; }
+        .coords-label { color: #d6cbbe; }
 
         /* 地理圖層控制面板 (僅在地理模式顯示) */
         .layer-panel {
             position: absolute; top: 85px; right: 24px; z-index: 10;
-            background: rgba(15, 23, 42, 0.88); border: 1px solid rgba(56, 189, 248, 0.3);
+            background: rgba(21, 19, 20, 0.92); border: 1px solid rgba(224, 123, 70, 0.35);
             backdrop-filter: blur(10px); border-radius: 8px; padding: 14px 18px;
-            font-size: 0.8rem; color: #94a3b8; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            font-size: 0.8rem; color: #d6cbbe; box-shadow: 0 10px 25px rgba(0,0,0,0.6);
             max-width: 220px; transition: opacity 0.3s ease;
         }
         .layer-panel.hidden { display: none; }
-        .layer-panel div.panel-title { font-weight: 700; color: #38bdf8; margin-bottom: 8px; letter-spacing: 1px; border-bottom: 1px solid rgba(56, 189, 248, 0.2); padding-bottom: 4px; }
-        .layer-panel label { display: flex; align-items: center; margin-bottom: 6px; cursor: pointer; color: #cbd5e1; }
-        .layer-panel label:hover { color: #ffffff; }
-        .layer-panel input { margin-right: 8px; accent-color: #38bdf8; cursor: pointer; }
+        .layer-panel div.panel-title { font-weight: 700; color: #e07b46; margin-bottom: 8px; letter-spacing: 1px; border-bottom: 1px solid rgba(224, 123, 70, 0.3); padding-bottom: 4px; }
+        .layer-panel label { display: flex; align-items: center; margin-bottom: 6px; cursor: pointer; color: #ede5d8; }
+        .layer-panel label:hover { color: #f5a623; }
+        .layer-panel input { margin-right: 8px; accent-color: #e07b46; cursor: pointer; }
 
         .btn-group { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
         .action-btn {
-            width: 100%; padding: 6px 0; background: rgba(56, 189, 248, 0.15);
-            border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 4px; color: #38bdf8;
+            width: 100%; padding: 6px 0; background: rgba(224, 123, 70, 0.2);
+            border: 1px solid rgba(224, 123, 70, 0.4); border-radius: 4px; color: #e07b46;
             font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
         }
-        .action-btn:hover { background: rgba(56, 189, 248, 0.25); color: #ffffff; }
-        .action-btn.active { background: #38bdf8; color: #0f172a; box-shadow: 0 0 10px #38bdf8; }
+        .action-btn:hover { background: rgba(224, 123, 70, 0.35); color: #ede5d8; }
+        .action-btn.active { background: linear-gradient(135deg, #e07b46, #c96532); color: #151314; box-shadow: 0 0 10px rgba(224, 123, 70, 0.6); }
 
         /* 週期表圖例 (僅在週期表模式顯示) */
         .legend-box {
             position: absolute; bottom: 40px; left: 24px; z-index: 10;
-            background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.3);
+            background: rgba(21, 19, 20, 0.88); border: 1px solid rgba(224, 123, 70, 0.35);
             border-radius: 12px; padding: 12px 16px; backdrop-filter: blur(8px);
             font-size: 0.78rem; display: flex; gap: 16px; align-items: center;
             max-width: 90vw; overflow-x: auto; transition: opacity 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
         }
         .legend-box.hidden { display: none; }
-        .legend-item { display: flex; align-items: center; gap: 6px; color: #cbd5e1; white-space: nowrap; }
+        .legend-item { display: flex; align-items: center; gap: 6px; color: #ede5d8; white-space: nowrap; }
         .legend-line { width: 20px; height: 3px; border-radius: 2px; }
 
-        /* 側邊欄抽屜 */
+        /* 側邊抽屜 */
         .info-drawer {
             position: absolute; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100%;
-            background: rgba(15, 23, 42, 0.95); border-left: 1px solid rgba(56, 189, 248, 0.4);
+            background: rgba(25, 21, 21, 0.96); border-left: 1px solid rgba(224, 123, 70, 0.4);
             backdrop-filter: blur(12px); z-index: 20; padding: 30px 24px;
             display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5); overflow-y: auto;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8); overflow-y: auto; color: #ede5d8;
         }
         .info-drawer.open { right: 0; }
-        .close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; padding: 10px; z-index: 30; }
-        .close-btn:hover { color: #ffffff; }
+        .close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; color: #d6cbbe; font-size: 1.5rem; cursor: pointer; padding: 10px; z-index: 30; }
+        .close-btn:hover { color: #e07b46; }
 
         .drawer-avatar {
             width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
-            border: 2px solid #38bdf8; box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+            border: 2px solid #e07b46; box-shadow: 0 4px 16px rgba(0,0,0,0.6);
             margin-bottom: 12px;
         }
 
         .drawer-badge {
-            display: inline-block; background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4);
-            color: #38bdf8; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-bottom: 8px; align-self: flex-start;
+            display: inline-block; background: rgba(224, 123, 70, 0.2); border: 1px solid rgba(224, 123, 70, 0.4);
+            color: #e07b46; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-bottom: 8px; align-self: flex-start;
         }
-        .drawer-title { font-size: 1.5rem; font-weight: 800; color: #ffffff; margin-bottom: 6px; }
+        .drawer-title { font-size: 1.5rem; font-weight: 800; color: #ede5d8; margin-bottom: 6px; }
         .drawer-quote {
-            font-size: 0.88rem; font-style: italic; color: #7dd3fc; margin: 10px 0 16px; padding: 8px 12px;
-            background: rgba(15, 23, 42, 0.5); border-left: 3px solid #38bdf8; border-radius: 0 6px 6px 0; line-height: 1.5;
+            font-size: 0.88rem; font-style: italic; color: #f5a623; margin: 10px 0 16px; padding: 8px 12px;
+            background: rgba(21, 19, 20, 0.6); border-left: 3px solid #e07b46; border-radius: 0 6px 6px 0; line-height: 1.5;
         }
-        .drawer-content { font-size: 0.92rem; line-height: 1.7; color: #e2e8f0; white-space: pre-line; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 16px; margin-bottom: 24px; }
+        .drawer-content { font-size: 0.92rem; line-height: 1.7; color: #d6cbbe; white-space: pre-line; border-top: 1px solid rgba(224, 123, 70, 0.2); padding-top: 16px; margin-bottom: 24px; }
         
         .drawer-btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
         .buy-book-btn {
-            display: block; width: 100%; padding: 12px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-            border: 1px solid rgba(56, 189, 248, 0.5); border-radius: 10px; color: #ffffff; font-size: 0.95rem; font-weight: 700;
-            text-align: center; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;
+            display: block; width: 100%; padding: 12px; background: linear-gradient(135deg, #e07b46 0%, #c96532 100%);
+            border: none; border-radius: 10px; color: #151314; font-size: 0.95rem; font-weight: 800;
+            text-align: center; text-decoration: none; box-shadow: 0 4px 12px rgba(224, 123, 70, 0.35); transition: all 0.25s ease;
         }
-        .buy-book-btn:hover { background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); transform: translateY(-2px); }
+        .buy-book-btn:hover { background: linear-gradient(135deg, #f5a623 0%, #e07b46 100%); transform: translateY(-2px); color: #ede5d8; }
 
         .home-btn {
-            display: block; width: 100%; padding: 12px; background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(148, 163, 184, 0.4); border-radius: 10px; color: #e2e8f0; font-size: 0.95rem; font-weight: 700;
-            text-align: center; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.25s ease;
+            display: block; width: 100%; padding: 12px; background: rgba(21, 19, 20, 0.8);
+            border: 1px solid rgba(224, 123, 70, 0.4); border-radius: 10px; color: #d6cbbe; font-size: 0.95rem; font-weight: 700;
+            text-align: center; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); transition: all 0.25s ease;
         }
-        .home-btn:hover { background: rgba(51, 65, 85, 0.9); color: #ffffff; transform: translateY(-2px); }
+        .home-btn:hover { background: rgba(224, 123, 70, 0.2); color: #ede5d8; border-color: #e07b46; }
 
-        .hint-text { position: absolute; bottom: 18px; left: 24px; z-index: 10; font-size: 0.75rem; color: #64748b; pointer-events: none; }
+        .hint-text { position: absolute; bottom: 18px; left: 24px; z-index: 10; font-size: 0.75rem; color: #a89f91; pointer-events: none; }
 
         @media (max-width: 768px) {
     /* 1. 隱藏座標顯示面板、Map Layer 圖層面板、週期表左下角圖例、右下角比例尺文字 */
@@ -222,13 +223,13 @@
 
     <!-- 週期表圖例 -->
     <div id="periodic-legend" class="legend-box">
-        <div class="legend-item"><div class="legend-line" style="background: #38bdf8;"></div>野性之聲</div>
-        <div class="legend-item"><div class="legend-line" style="background: #ffffff;"></div>艾瑞爾軍</div>
-        <div class="legend-item"><div class="legend-line" style="background: #f43f5e;"></div>詛碼團</div>
-        <div class="legend-item"><div class="legend-line" style="background: #c084fc;"></div>誓奪爪盟</div>
-        <div class="legend-item"><div class="legend-line" style="background: #fbbf24;"></div>上古元素</div>
-        <div class="legend-item"><div class="legend-line" style="background: #34d399;"></div>聚學舍</div>
-        <div class="legend-item"><div class="legend-line" style="background: #94a3b8;"></div>外傳與其他陣營</div>
+        <div class="legend-item"><div class="legend-line" style="background: #e07b46;"></div>野性之聲</div>
+        <div class="legend-item"><div class="legend-line" style="background: #ede5d8;"></div>艾瑞爾軍</div>
+        <div class="legend-item"><div class="legend-line" style="background: #e53935;"></div>詛碼團</div>
+        <div class="legend-item"><div class="legend-line" style="background: #ab47bc;"></div>誓奪爪盟</div>
+        <div class="legend-item"><div class="legend-line" style="background: #f5a623;"></div>上古元素</div>
+        <div class="legend-item"><div class="legend-line" style="background: #26c6da;"></div>聚學舍</div>
+        <div class="legend-item"><div class="legend-line" style="background: #8c827a;"></div>外傳與其他陣營</div>
     </div>
 
     <!-- 地理圖圖層面板 -->
@@ -340,14 +341,14 @@
         // ==========================================
         // 🌟 2. 元素週期表數據與邏輯 🌟
         // ==========================================
-        const cWild = "#38bdf8";  // 野性之聲
-        const cBeast = "#10b981"; // 獸人族群
-        const cArea = "#ffffff";  // 艾瑞爾軍 
-        const cZoma = "#f43f5e";  // 詛碼團
-        const cAnci = "#fbbf24";  // 上古/無盡/核心
-        const cClaw = "#c084fc";  // 誓奪爪盟
-        const cAcad = "#34d399";  // 聚學舍
-        const cOuts = "#94a3b8";  // 外界/其他
+        const cWild = "#e07b46";  // 野性之聲
+        const cBeast = "#81c784"; // 獸人族群
+        const cArea = "#ede5d8";  // 艾瑞爾軍 
+        const cZoma = "#e53935";  // 詛碼團
+        const cAnci = "#f5a623";  // 上古/無盡/核心
+        const cClaw = "#ab47bc";  // 誓奪爪盟
+        const cAcad = "#26c6da";  // 聚學舍
+        const cOuts = "#8c827a";  // 外界/其他
 
         const rawNodes = [
             { id: "roar", name: "零(洛爾)", faction: "野性之聲", x: -158, y: -65, color: cWild, quote: "「我一定要結束這一切的爭端，創造一個我們能夠安心居住的地方。」", desc: "零元素賦形者，夥伴們多半習慣稱他為阿洛。\n\n童年時，他與幾位摯友一同生活在嵐光村，平凡而安穩的日子卻在詛碼團的一次襲擊中徹底消失。村落被焚毀、生命瀕臨終結之際，他因五十嵐的出手相救而倖存，也在那一刻覺醒了自身的元素之力。自此，他成立了組織「野性之聲」，踏上復興故鄉、對抗詛碼團的艱險征途。" },
@@ -1449,7 +1450,10 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
             if (isDragging) {
                 targetCameraX = (clientX - startX) / scale;
                 targetCameraY = (clientY - startY) / scale;
+                
+                // 確實累積移動距離
                 totalMoved += Math.hypot(clientX - downClientX, clientY - downClientY);
+                
                 downClientX = clientX;
                 downClientY = clientY;
             }
@@ -1527,7 +1531,7 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
         });
 
         canvas.addEventListener('pointerup', (e) => {
-            if (totalMoved > 15) return;
+            if (totalMoved > 25) return;
 
             const rect = canvas.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
