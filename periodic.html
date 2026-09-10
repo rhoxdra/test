@@ -1418,7 +1418,8 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
         // 🌟 5. 互動與事件監聽 (滑鼠、觸控、鍵盤) 🌟
         // ==========================================
         let downClientX = 0, downClientY = 0;
-        let initialPinchDist = null;
+let initialPinchDist = null;
+let multiTouchGesture = false;
 
         function updateCoords(clientX, clientY) {
             currentMouseX = clientX;
@@ -1483,17 +1484,20 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
         window.addEventListener('mouseup', handleEnd);
 
         canvas.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 1) {
-                initialPinchDist = null;
-                handleStart(e.touches[0].clientX, e.touches[0].clientY);
-            } else if (e.touches.length === 2) {
-                isDragging = false;
-                initialPinchDist = Math.hypot(
-                    e.touches[0].clientX - e.touches[1].clientX,
-                    e.touches[0].clientY - e.touches[1].clientY
-                );
-            }
-        }, { passive: true });
+    if (e.touches.length === 1 && !multiTouchGesture) {
+        initialPinchDist = null;
+        handleStart(e.touches[0].clientX, e.touches[0].clientY);
+    } else if (e.touches.length >= 2) {
+        // 雙指操作期間，一律禁止後續 pointerup 被判定為點擊
+        multiTouchGesture = true;
+        isDragging = false;
+
+        initialPinchDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+        );
+    }
+}, { passive: true });
 
         window.addEventListener('touchmove', (e) => {
             if (e.touches.length === 1 && isDragging) {
@@ -1512,7 +1516,16 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
 }
         }, { passive: true });
 
-        window.addEventListener('touchend', handleEnd);
+        window.addEventListener('touchend', (e) => {
+    handleEnd();
+
+    if (e.touches.length === 0) {
+        // 延後解除，避免 touchend → pointerup 的事件順序造成誤觸
+        setTimeout(() => {
+            multiTouchGesture = false;
+        }, 50);
+    }
+});
 
         canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
@@ -1531,7 +1544,9 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
         });
 
         canvas.addEventListener('pointerup', (e) => {
-            if (totalMoved > 25) return;
+    // 雙指操作期間或剛結束時，禁止觸發節點／線的點擊
+    if (multiTouchGesture) return;
+    if (totalMoved > 25) return;
 
             const rect = canvas.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
