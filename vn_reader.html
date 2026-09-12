@@ -16,27 +16,20 @@
   <title>《無限元素》主題進展與回聲殘響 - 視覺小說閱讀器</title>
 
    <script>
-    const preloadImages = [
-      "images/arc_sp.webp",
-      "images/area_sp.webp",
-      "images/chitar_sp.webp",
-      "images/doutou_sp.webp",
-      "images/electric_sp.webp",
-      "images/horse_sp.webp",
-      "images/kage_sp.webp",
-      "images/kulu_sp.webp",
-      "images/kuzure_sp.webp",
-      "images/lanlan_sp.webp",
-      "images/osae_sp.webp",
-      "images/roar_sp.webp",
-      "images/rofena_sp.webp",
-      "images/rub_sp.webp",
-      "images/zarion_sp.webp"
+    // 🌟 未來只要在這裡新增角色的 ID 即可，程式會自動組合成完整路徑並預先讀取
+    const characterIds = [
+      "arc", "area", "chitar", "doutou", "electric", 
+      "horse", "igarashi", "kage", "kokumei", "kulu", 
+      "kuzure", "lanlan", "osae", "owl", "roar", 
+      "rofena", "rub", "sugar", "takawa", "teiner", 
+      "wakima", "zarion"
+      // 新增角色範例：只需寫入 id，例如 "new_character"
     ];
 
-    preloadImages.forEach(src => {
+    // 自動對每個 ID 加上資料夾前綴與副檔名，並進行預先讀取
+    characterIds.forEach(id => {
       const img = new Image();
-      img.src = src;
+      img.src = `images/${id}_sp.webp`;
     });
   </script>
   <style>
