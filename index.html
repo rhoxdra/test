@@ -1764,6 +1764,16 @@
         }
 
         // 同步更新播放控制按鈕狀態圖示
+        function updatePlayControlUI() {
+            const playPauseBtn = document.getElementById('music-play-pause-btn');
+            const menuBtn = document.getElementById('music-menu-btn');
+            if (playPauseBtn) {
+                playPauseBtn.innerText = isMusicPlaying ? "||" : "▶";
+            }
+            if (menuBtn) {
+                menuBtn.style.borderColor = isMusicPlaying ? "#e07b46" : "rgba(224, 123, 70, 0.5)";
+            }
+        }
 
         // 開啟音樂選單彈窗（注意：不觸發 body.modal-open，確保播放器本身不被隱藏）
         function openMusicSelectModal() {
@@ -1788,7 +1798,7 @@
                 item.className = `music-track-item ${isCurrent ? 'playing' : ''}`;
                 item.innerHTML = `
                     <span>${idx + 1}. ${track.title}</span>
-                    <span style="font-size: 11px; opacity: 0.85;">${isCurrent && isMusicPlaying ? '▶ 播放中' : (isCurrent ? '⏸ 就緒' : '點擊播放')}</span>
+                    <span style="font-size: 11px; opacity: 0.85;">${isCurrent && isMusicPlaying ? '▶ 播放中' : (isCurrent ? '[就緒]' : '點擊播放')}</span>
                 `;
                 item.onclick = () => {
                     selectAndPlayTrack(idx);
@@ -1834,7 +1844,7 @@
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
                         isMusicPlaying = true;
-                        updatePlayControlUI();
+                        updatePlayControlUI(); // 🌟 補上這一行，讓點擊播放時立即更新按鈕圖示
                         renderMusicTrackList();
                     }).catch(error => {
                         console.error("音樂播放失敗：", error);
