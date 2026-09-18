@@ -83,11 +83,16 @@
             background: none;
             border: none;
             color: #e07b46;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            font-family: "Segoe UI Symbol", "Apple Symbols", -apple-system, sans-serif !important; /* 強制純文字字型，杜絕 Emoji */
             cursor: pointer;
-            padding: 2px;
+            padding: 2px 4px;
             opacity: 0.85;
-            transition: opacity 0.2s;
+            transition: opacity 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
 
         .music-sub-btn:hover {
@@ -265,7 +270,8 @@
             background: rgba(30, 24, 23, 0.85);
             border: 1px solid rgba(224, 123, 70, 0.5);
             color: #e07b46;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            font-family: "Segoe UI Symbol", "Apple Symbols", -apple-system, sans-serif !important;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -852,7 +858,8 @@
             background: rgba(30, 24, 23, 0.85);
             border: 1px solid rgba(224, 123, 70, 0.5);
             color: #e07b46;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
+            font-family: "Segoe UI Symbol", "Apple Symbols", -apple-system, sans-serif !important;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -1127,18 +1134,20 @@
 <body>
 
     <!-- 🌟 右上角懸浮「隱藏 UI 眼睛按鈕（純淨觀圖模式）」 🌟 -->
-<button id="ui-toggle-btn" class="ui-toggle-btn" onclick="toggleUI()" title="觀看全幅背景圖">📷</button>
+<button id="ui-toggle-btn" class="ui-toggle-btn" onclick="toggleUI()" title="觀看全幅背景圖">⛶</button>
+<!-- 🌟 右下角「回到頂部」浮動按鈕（移至此處） 🌟 -->
+<button id="back-to-top-btn" class="back-to-top-btn" onclick="scrollToTop()" title="回到頁面頂部">▲</button>
 <!-- 🌟 浮動音樂播放器 🌟 -->
 <div class="music-player-container">
-    <!-- 圓鈕作為選單開啟鈕，符號維持 🎵 -->
-    <button id="music-menu-btn" class="music-btn" onclick="openMusicSelectModal()" title="開啟曲目選單">🎵</button>
+    <!-- 純文字古典音符 ♫ ，不再是彩色手機 Emoji -->
+    <button id="music-menu-btn" class="music-btn" onclick="openMusicSelectModal()" title="開啟曲目選單">♫</button>
     
     <div id="music-info-panel" class="music-info-panel" onclick="openMusicSelectModal()" title="點擊開啟選單">
         <span id="music-title" class="music-title-text">點擊選擇 BGM</span>
         <div class="music-controls" onclick="event.stopPropagation()">
-            <button class="music-sub-btn" onclick="playPrevTrack()" title="上一首">⏮</button>
+            <button class="music-sub-btn" onclick="playPrevTrack()" title="上一首">|◀</button>
             <button class="music-sub-btn" onclick="togglePlayMusic()" id="music-play-pause-btn" title="播放/暫停">▶</button>
-            <button class="music-sub-btn" onclick="playNextTrack()" title="下一首">⏭</button>
+            <button class="music-sub-btn" onclick="playNextTrack()" title="下一首">▶|</button>
         </div>
     </div>
 </div>
@@ -1686,8 +1695,7 @@
             <!-- 按鈕群組（去掉複製文字，儲存圖片遞補，雙按鈕橫向並排） -->
             <div style="display: flex; gap: 10px; width: 100%; margin-top: 14px;">
     <button id="draw-again-btn" class="form-switch-btn" onclick="drawDailyFortune()" style="margin-bottom: 0; flex: 1;"> 再抽一次 (剩 2 次)</button>
-<button class="form-switch-btn" onclick="downloadFortuneImage()" style="margin-bottom: 0; flex: 1; background: linear-gradient(135deg, #f5a623 0%, #d97706 100%); border-color: rgba(245, 166, 35, 0.6);">📸 儲存籤詩圖卡</button>            </div>
-
+<button class="form-switch-btn" onclick="downloadFortuneImage()" style="margin-bottom: 0; flex: 1; background: linear-gradient(135deg, #f5a623 0%, #d97706 100%); border-color: rgba(245, 166, 35, 0.6);">[↓] 儲存籤詩圖卡</button>
         </div>
     </div>
     <!-- 🌟 JS 控制腳本 🌟 -->
@@ -1702,11 +1710,12 @@
             });
         }
 
-        // 監聽頁面滾動事件，捲動超過 300px 才淡入顯示按鈕
+        // 監聽頁面滾動事件，捲動超過 200px 才淡入顯示按鈕
         window.addEventListener('scroll', () => {
             const backToTopBtn = document.getElementById('back-to-top-btn');
+            const scrollDistance = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
             if (backToTopBtn) {
-                if (window.scrollY > 300) {
+                if (scrollDistance > 200) {
                     backToTopBtn.classList.add('show');
                 } else {
                     backToTopBtn.classList.remove('show');
@@ -1721,7 +1730,7 @@
         const playlist = [
                 { title: "灼嵐火", src: "music/bgm1.mp3" },
                 { title: "滄月心", src: "music/bgm2.mp3" },
-                { title: "嚎影", src: "music/bgm12.mp3" },
+                { title: "嚎影", src: "music/bgm3.mp3" },
                 { title: "The Iron Ascent", src: "music/bgm4.mp3" },
                 { title: "嵐光城的早晨慢跑", src: "music/bgm5.mp3" },
                 { title: "尼爾桑夏日時光", src: "music/bgm6.mp3" },
@@ -1754,16 +1763,6 @@
         }
 
         // 同步更新播放控制按鈕狀態圖示
-        function updatePlayControlUI() {
-            const playPauseBtn = document.getElementById('music-play-pause-btn');
-            const menuBtn = document.getElementById('music-menu-btn');
-            if (playPauseBtn) {
-                playPauseBtn.innerText = isMusicPlaying ? "⏸" : "▶";
-            }
-            if (menuBtn) {
-                menuBtn.style.borderColor = isMusicPlaying ? "#e07b46" : "rgba(224, 123, 70, 0.5)";
-            }
-        }
 
         // 開啟音樂選單彈窗（注意：不觸發 body.modal-open，確保播放器本身不被隱藏）
         function openMusicSelectModal() {
@@ -2037,8 +2036,8 @@
             "area": { 
                 name: "艾瑞爾", 
                 quote: "「我是暗夜中展翅翱翔的恐怖，自奈落之淵而來的『黑夜魔君』。所有徬徨、心懷歹念的惡徒啊，接受我的睥睨吧！」",
-                form1Label: "🐱 獸人型態",   // 切換回預設型態時顯示的按鈕
-                form2Label: "👤 人類型態",   // 切換至第二型態時顯示的按鈕
+                form1Label: "〔 獸人型態 〕",   // 切換回預設型態時顯示的按鈕
+                form2Label: "〔 人類型態 〕",   // 切換至第二型態時顯示的按鈕
                 tags: { chapter: ["薄明之戰", "聚學舍篇", "再契選篇", "荒野焰嵐"], faction: ["艾瑞爾軍", "十三元素"], type: ["斷元素賦形者", "權能：斷裂 / 襲轉"], element: ["光", "重力"] },
                 bgImage: "images/area_bg.webp", 
                 beastBgImage: "images/area_human_bg.webp",
@@ -2232,8 +2231,8 @@
             "rub": { 
                 name: "劫", 
                 quote: "「真是悲慘的下場呢，這就是和你扯上關係的後果，你的存在，根本不會帶給任何人幸福！」",
-                form1Label: "🐺 成年型態",   // 切換回預設型態時顯示的按鈕
-                form2Label: "⏳ 少年型態",   // 切換至第二型態時顯示的按鈕
+                form1Label: "〔 成年型態 〕",   // 切換回預設型態時顯示的按鈕
+                form2Label: "〔 少年型態 〕",   // 切換至第二型態時顯示的按鈕
                 tags: {
                     chapter: ["再契選篇", "荒野焰嵐", "無盡探途"],
                     faction: ["誓奪爪盟", "無盡元素", "上古元素"],
@@ -2618,7 +2617,7 @@
                 document.body.classList.add('modal-open');
                 
                 // 2. 按鈕圖示變更，並套用極淺半透明樣式
-                toggleBtn.innerHTML = '↩';
+                toggleBtn.innerHTML = '✕';
                 toggleBtn.title = '點擊恢復選單卡片';
                 toggleBtn.style.opacity = '0.2';
                 toggleBtn.style.background = 'rgba(15, 23, 42, 0.25)';
@@ -2633,7 +2632,7 @@
                 }
                 
                 // 2. 按鈕恢復原本亮藍色與立體光暈
-                toggleBtn.innerHTML = '📷';
+                toggleBtn.innerHTML = '⛶';
                 toggleBtn.title = '觀看全幅背景圖';
                 toggleBtn.style.opacity = '';
                 toggleBtn.style.background = '';
@@ -2709,7 +2708,7 @@
             // 判斷型態切換按鈕
             const switchContainer = document.getElementById('char-switch-container');
             if (char && char.beastBgImage) {
-                const labelText = char.form2Label || "🐾 切換為獸化型態";
+                const labelText = char.form2Label || "〔 切換為獸化型態 〕";
                 switchContainer.innerHTML = `
                     <button id="form-toggle-btn" class="form-switch-btn" onclick="toggleCharForm()">
                         ${labelText}
@@ -2741,8 +2740,8 @@
             const toggleBtn = document.getElementById('form-toggle-btn');
             
             // 讀取專屬按鈕文字（若無則套用預設值）
-            const f1Label = char.form1Label || "👤 切換為人類型態";
-            const f2Label = char.form2Label || "🐾 切換為獸化型態";
+            const f1Label = char.form1Label || "〔切換為人類型態〕";
+            const f2Label = char.form2Label || "〔切換為獸化型態〕";
 
             if (!isBeastFormActive) {
                 // 切換至第二型態背景
@@ -3620,7 +3619,7 @@
                 typeCategory: "賦形者",
                 elementName: "無名",
                 quote: "「奇蹟並非出自一人之力，而是每位夥伴以情感與理解共同成就的成果。今天也慢慢來吧～」",
-                lucky: "🍀 幸運地點：遊競前線 ｜ 幸運物品：日式炒麵"
+                lucky: "✦ 幸運地點：遊競前線 ｜ 幸運物品：日式炒麵"
             },
             {
                 charKey: "lanlan",
@@ -3628,7 +3627,7 @@
                 typeCategory: "賦形者",
                 elementName: "無名",
                 quote: "「還是等我不懶的時候再開始動工吧……偶爾給自己放個假也是很重要的喔。」",
-                lucky: "🍀 幸運地點：聚學舍助教休息室 ｜ 幸運物品：慵懶抱枕"
+                lucky: "✦ 幸運地點：聚學舍助教休息室 ｜ 幸運物品：慵懶抱枕"
             },
             // --- 克爾 (多套備選) ---
             {
@@ -3637,7 +3636,7 @@
                 typeCategory: "賦形者",
                 elementName: "融",
                 quote: "「如果有什麼被壓抑的情緒與痛楚，別憋在心裡，試著全吼出來吧！」",
-                lucky: "🍀 幸運地點：樂團團練室 ｜ 幸運物品：特製熱咖啡"
+                lucky: "✦ 幸運地點：樂團團練室 ｜ 幸運物品：特製熱咖啡"
             },
             {
                 charKey: "kulu",
@@ -3645,7 +3644,7 @@
                 typeCategory: "賦形者",
                 elementName: "融",
                 quote: "「理解一個人需要時間，不用急著給自己下定論，慢慢走總會找到方向的。」",
-                lucky: "🍀 幸運地點：狼人村狩獵邊界 ｜ 幸運物品：特製藥草菸"
+                lucky: "✦ 幸運地點：狼人村狩獵邊界 ｜ 幸運物品：特製藥草菸"
             },
             // --- 亞爾克 / 阿風 (多套備選) ---
             {
@@ -3654,7 +3653,7 @@
                 typeCategory: "賦形者",
                 elementName: "震",
                 quote: "「今天如果感到些許不安，試著跟隨自己的節奏去跑道上限速奔馳一段吧。」",
-                lucky: "🍀 幸運地點：山間跑道 ｜ 幸運物品：運動頭巾"
+                lucky: "✦ 幸運地點：山間跑道 ｜ 幸運物品：運動頭巾"
             },
             {
                 charKey: "arc",
@@ -3662,7 +3661,7 @@
                 typeCategory: "賦形者",
                 elementName: "震",
                 quote: "「若是為了守護如今陪在身旁的夥伴，我會毫不猶豫地踏入險境。今天我也在身後支持你。」",
-                lucky: "🍀 幸運地點：極速賽道 ｜ 幸運物品：貝斯琴撥片"
+                lucky: "✦ 幸運地點：極速賽道 ｜ 幸運物品：貝斯琴撥片"
             },
             // --- 洛爾 (多套備選) ---
             {
@@ -3671,7 +3670,7 @@
                 typeCategory: "賦形者",
                 elementName: "零",
                 quote: "「只要大家聚在一起，就沒有跨不過去的難關！今天也一起充滿活力地出發吧！」",
-                lucky: "🍀 幸運地點：嵐光鎮小餐館 ｜ 幸運物品：特製鼓棒"
+                lucky: "✦ 幸運地點：嵐光鎮小餐館 ｜ 幸運物品：特製鼓棒"
             },
             {
                 charKey: "roar",
@@ -3679,7 +3678,7 @@
                 typeCategory: "賦形者",
                 elementName: "零",
                 quote: "「累了的話就回餐館坐坐吧！我會準備好熱氣騰騰的餐點等著你。」",
-                lucky: "🍀 幸運地點：聚學舍醫學系教室 ｜ 幸運物品：急救藥箱"
+                lucky: "✦ 幸運地點：聚學舍醫學系教室 ｜ 幸運物品：急救藥箱"
             },
             // --- 核心角色群 ---
             {
@@ -3688,7 +3687,7 @@
                 typeCategory: "賦形者",
                 elementName: "沌",
                 quote: "「即使力量帶有反噬，只要心懷理性與溫柔，就能開創跨越隔閡的新時代。」",
-                lucky: "🍀 幸運地點：狼人村狩牙沃野 ｜ 幸運物品：美工繪圖板"
+                lucky: "✦ 幸運地點：狼人村狩牙沃野 ｜ 幸運物品：美工繪圖板"
             },
             {
                 charKey: "koushou",
@@ -3696,7 +3695,7 @@
                 typeCategory: "賦形者",
                 elementName: "極",
                 quote: "「去野外走走吧！別讓書本和煩惱框住了你，在野外揮灑汗水才是最棒的解藥！」",
-                lucky: "🍀 幸運地點：尼爾桑廣袤荒野 ｜ 幸運物品：吉他彈片"
+                lucky: "✦ 幸運地點：尼爾桑廣袤荒野 ｜ 幸運物品：吉他彈片"
             },
             {
                 charKey: "takawa",
@@ -3704,7 +3703,7 @@
                 typeCategory: "賦形者",
                 elementName: "恆",
                 quote: "「創造希望的人怎麼可以放棄希望？保持踏實的步調，今天的事務也能井井有條。」",
-                lucky: "🍀 幸運地點：艾瑞爾城市政廳實驗室 ｜ 幸運物品：研究筆記本"
+                lucky: "✦ 幸運地點：艾瑞爾城市政廳實驗室 ｜ 幸運物品：研究筆記本"
             },
             {
                 charKey: "igarashi",
@@ -3712,7 +3711,7 @@
                 typeCategory: "賦形者",
                 elementName: "嵐",
                 quote: "「我是你們的燈塔，無論前路風浪多大，我都堅信你們能走出屬於自己的昂揚道路。」",
-                lucky: "🍀 幸運地點：嵐光鎮學堂 ｜ 幸運物品：講義教案"
+                lucky: "✦ 幸運地點：嵐光鎮學堂 ｜ 幸運物品：講義教案"
             },
             {
                 charKey: "area",
@@ -3720,7 +3719,7 @@
                 typeCategory: "賦形者",
                 elementName: "斷",
                 quote: "「運籌帷幄乃本總督之日常。偶爾展露一下睥睨之氣，也能讓複雜的局勢迎刃而解喔。」",
-                lucky: "🍀 幸運地點：艾瑞爾城市政廳 ｜ 幸運物品：賦形晶樣品"
+                lucky: "✦ 幸運地點：艾瑞爾城市政廳 ｜ 幸運物品：賦形晶樣品"
             },
             {
                 charKey: "wakima",
@@ -3728,7 +3727,7 @@
                 typeCategory: "賦形者",
                 elementName: "位",
                 quote: "「今天的心情需要甜點來拯救！快嚐嚐本大明神親自推薦的賽錢箱焦糖派吧！」",
-                lucky: "🍀 幸運地點：豐漁甘神教神社 ｜ 幸運物品：手工烤布丁"
+                lucky: "✦ 幸運地點：豐漁甘神教神社 ｜ 幸運物品：手工烤布丁"
             },
             {
                 charKey: "volt",
@@ -3736,7 +3735,7 @@
                 typeCategory: "賦形者",
                 elementName: "滅",
                 quote: "「這是我支配的場域。只要冷靜觀察資訊流向，沒有任何干擾能動搖你。」",
-                lucky: "🍀 幸運地點：裏網核心節點 ｜ 幸運物品：數據傳輸硬碟"
+                lucky: "✦ 幸運地點：裏網核心節點 ｜ 幸運物品：數據傳輸硬碟"
             },
             {
                 charKey: "proto",
@@ -3744,7 +3743,7 @@
                 typeCategory: "賦形者",
                 elementName: "毀",
                 quote: "「用實力證明一切。當你專注於雕琢自身技藝時，過去的陰影便無法將你困住。」",
-                lucky: "🍀 幸運地點：野性之聲團練室 ｜ 幸運物品：木雕工具套組"
+                lucky: "✦ 幸運地點：野性之聲團練室 ｜ 幸運物品：木雕工具套組"
             },
             {
                 charKey: "zoma",
@@ -3752,7 +3751,7 @@
                 typeCategory: "賦形者",
                 elementName: "究極",
                 quote: "「遵循自身的獨到美學，哪怕走在暗處，也能展現凌駕一切的威嚴。」",
-                lucky: "🍀 幸運地點：新生詛碼團指揮部 ｜ 幸運物品：究極元素碎片"
+                lucky: "✦ 幸運地點：新生詛碼團指揮部 ｜ 幸運物品：究極元素碎片"
             },
             {
                 charKey: "veil",
@@ -3760,7 +3759,7 @@
                 typeCategory: "賦形者",
                 elementName: "命",
                 quote: "「哎呀，真是精采的表演呢。保持沉穩與謀略，局勢自然會朝你傾斜。」",
-                lucky: "🍀 幸運地點：地下演講集會廳 ｜ 幸運物品：微型探照燈"
+                lucky: "✦ 幸運地點：地下演講集會廳 ｜ 幸運物品：微型探照燈"
             },
             {
                 charKey: "ultima",
@@ -3768,7 +3767,7 @@
                 typeCategory: "使用者",
                 elementName: "究極",
                 quote: "「知識是理解世界的鑰匙。掌握量識與半衰期的法則，今天也能理性地面對考驗。」",
-                lucky: "🍀 幸運地點：聚學舍元素通識講堂 ｜ 幸運物品：粉筆與定理講義"
+                lucky: "✦ 幸運地點：聚學舍元素通識講堂 ｜ 幸運物品：粉筆與定理講義"
             },
             {
                 charKey: "jareth",
@@ -3776,7 +3775,7 @@
                 typeCategory: "賦形者",
                 elementName: "創",
                 quote: "「這顆星球該屬於其上的萬物。記得——你值得被重視，去享受平凡而美好的一天吧！」",
-                lucky: "🍀 幸運地點：熱鬧夜市攤位 ｜ 幸運物品：章魚燒與八寶糕"
+                lucky: "✦ 幸運地點：熱鬧夜市攤位 ｜ 幸運物品：章魚燒與八寶糕"
             },
             {
                 charKey: "zarion",
@@ -3784,7 +3783,7 @@
                 typeCategory: "賦形者",
                 elementName: "耀",
                 quote: "「請相信你自己！每天累積的微小努力，一定會像種子一樣綻放出無比耀眼的光芒！」",
-                lucky: "🍀 幸運地點：聚學舍溫室｜ 幸運物品：蘊華微縮罐"
+                lucky: "✦ 幸運地點：聚學舍溫室｜ 幸運物品：蘊華微縮罐"
             },
             {
                 charKey: "kuzure",
@@ -3792,7 +3791,7 @@
                 typeCategory: "賦形者",
                 elementName: "崩",
                 quote: "「堅守原則，用剛毅的信念擊碎阻礙！……就算被捉弄，責任感也絕不妥協！」",
-                lucky: "🍀 幸運地點：深山眺望台 ｜ 幸運物品：紅色針織圍巾"
+                lucky: "✦ 幸運地點：深山眺望台 ｜ 幸運物品：紅色針織圍巾"
             },
             {
                 charKey: "osae",
@@ -3800,7 +3799,7 @@
                 typeCategory: "賦形者",
                 elementName: "制",
                 quote: "「發揮工藝匠魂吧！只要滿懷熱情，再困難的改裝與挑戰都能順利搞定！」",
-                lucky: "🍀 幸運地點：天才工坊 ｜ 幸運物品：組裝扳手與機油"
+                lucky: "✦ 幸運地點：天才工坊 ｜ 幸運物品：組裝扳手與機油"
             },
             {
                 charKey: "kage",
@@ -3808,7 +3807,7 @@
                 typeCategory: "賦形者",
                 elementName: "影",
                 quote: "「人生就是一場遊戲～用優雅又玩世不恭的態度享受音樂與派對吧！」",
-                lucky: "🍀 幸運地點：地下夜店 DJ 台 ｜ 幸運物品：黑膠唱片"
+                lucky: "✦ 幸運地點：地下夜店 DJ 台 ｜ 幸運物品：黑膠唱片"
             },
             {
                 charKey: "rub",
@@ -3816,7 +3815,7 @@
                 typeCategory: "賦形者",
                 elementName: "劫",
                 quote: "「將掌控權握在自己手中。對於想要守護的事物與榮耀，就靠實力親手奪回來！」",
-                lucky: "🍀 幸運地點：誓奪爪盟基地 ｜ 幸運物品：黑色長大衣"
+                lucky: "✦ 幸運地點：誓奪爪盟基地 ｜ 幸運物品：黑色長大衣"
             },
             {
                 charKey: "electric",
@@ -3824,7 +3823,7 @@
                 typeCategory: "使用者",
                 elementName: "雷、闇、重力",
                 quote: "「掌握話語權與自信，今天在任何場合你都能展現極致的魅力與光彩～」",
-                lucky: "🍀 幸運地點：蕾寶來電直播間 ｜ 幸運物品：高音質麥克風"
+                lucky: "✦ 幸運地點：蕾寶來電直播間 ｜ 幸運物品：高音質麥克風"
             },
             {
                 charKey: "tia",
@@ -3832,7 +3831,7 @@
                 typeCategory: "使用者",
                 elementName: "冰",
                 quote: "「保持理性與冷靜。戰鬥之外，別忘了給自己一段彈吉他沉思的音樂時光。」",
-                lucky: "🍀 幸運地點：狼人村狩獵派據點 ｜ 幸運物品：木吉他"
+                lucky: "✦ 幸運地點：狼人村狩獵派據點 ｜ 幸運物品：木吉他"
             },
             {
                 charKey: "rofena",
@@ -3840,7 +3839,7 @@
                 typeCategory: "使用者",
                 elementName: "土、風、光",
                 quote: "「用清晰的條理與氣場掌控全場！今天也是展現專業與渲染力的大好時機！」",
-                lucky: "🍀 幸運地點：賽事主播播報台 ｜ 幸運物品：法政法規彙編"
+                lucky: "✦ 幸運地點：賽事主播播報台 ｜ 幸運物品：法政法規彙編"
             },
             {
                 charKey: "arashiyama",
@@ -3848,7 +3847,7 @@
                 typeCategory: "無能力",
                 elementName: "無",
                 quote: "「歡迎回家。無論外面的風浪多大，長者深沉的包容與堅毅永遠是你最堅實的後盾。」",
-                lucky: "🍀 幸運地點：貓族村村長宅邸 ｜ 幸運物品：溫熱茶湯"
+                lucky: "✦ 幸運地點：貓族村村長宅邸 ｜ 幸運物品：溫熱茶湯"
             },
             {
                 charKey: "sugar",
@@ -3856,7 +3855,7 @@
                 typeCategory: "使用者",
                 elementName: "水、火",
                 quote: "「傾聽食材與生活微溫的氣息，用心付出烘焙出來的成果，最能療癒人心。」",
-                lucky: "🍀 幸運地點：聚學舍烘焙教室 ｜ 幸運物品：熱氣騰騰的麵包籃"
+                lucky: "✦ 幸運地點：聚學舍烘焙教室 ｜ 幸運物品：熱氣騰騰的麵包籃"
             },
             {
                 charKey: "deer",
@@ -3864,7 +3863,7 @@
                 typeCategory: "使用者",
                 elementName: "水",
                 quote: "「有謎題的地方就必定有解答！用優雅而靈動的藝術視角，解開眼前的懸案吧！」",
-                lucky: "🍀 幸運地點：嵐光城博物館 ｜ 幸運物品：調色盤與水彩筆"
+                lucky: "✦ 幸運地點：嵐光城博物館 ｜ 幸運物品：調色盤與水彩筆"
             },
             {
                 charKey: "owl",
@@ -3872,7 +3871,7 @@
                 typeCategory: "使用者",
                 elementName: "風、水",
                 quote: "「沉著果斷地做出判斷。就算世界陷入失序，你的專長也能成為別人的方向指引。」",
-                lucky: "🍀 幸運地點：附設醫院手術室 ｜ 幸運物品：聽診器"
+                lucky: "✦ 幸運地點：附設醫院手術室 ｜ 幸運物品：聽診器"
             },
             {
                 charKey: "teiner",
@@ -3880,7 +3879,7 @@
                 typeCategory: "使用者",
                 elementName: "土",
                 quote: "「細心呵護當下的泥土與養分，夢想的綠意終會在荒蕪中茁壯生長。」",
-                lucky: "🍀 幸運地點：聚學舍苗圃 ｜ 幸運物品：園藝小鐵鏟"
+                lucky: "✦ 幸運地點：聚學舍苗圃 ｜ 幸運物品：園藝小鐵鏟"
             },
             {
                 charKey: "doutou",
@@ -3888,7 +3887,7 @@
                 typeCategory: "使用者",
                 elementName: "風",
                 quote: "「調整好自身的『氣』與呼吸。如風般敏銳精準地捕捉每個細節，勝利就在掌握中！」",
-                lucky: "🍀 幸運地點：聚學舍田徑跑道 ｜ 幸運物品：專業碼錶"
+                lucky: "✦ 幸運地點：聚學舍田徑跑道 ｜ 幸運物品：專業碼錶"
             },
             {
                 charKey: "kaiden",
@@ -3896,7 +3895,7 @@
                 typeCategory: "使用者",
                 elementName: "水、土",
                 quote: "「豪爽直率地面對挑戰！拿出肌力與氣勢，沒什麼坍方是我們推不開的！」",
-                lucky: "🍀 幸運地點：大海灣 ｜ 幸運物品：舉重腰帶"
+                lucky: "✦ 幸運地點：大海灣 ｜ 幸運物品：舉重腰帶"
             },
             {
                 charKey: "gousuke",
@@ -3904,7 +3903,7 @@
                 typeCategory: "無能力",
                 elementName: "無",
                 quote: "「憑藉嚴謹的智慧與溫和的陪伴，就能成為隊友最踏實的基座。」",
-                lucky: "🍀 幸運地點：聚學舍圖書館 ｜ 幸運物品：手作便當盒"
+                lucky: "✦ 幸運地點：聚學舍圖書館 ｜ 幸運物品：手作便當盒"
             },
             {
                 charKey: "chitar",
@@ -3912,7 +3911,7 @@
                 typeCategory: "無能力",
                 elementName: "無",
                 quote: "「相信千錘百鍊的自己！自信隨性地揮灑熱情，打破壓迫與緊繃的氣氛吧！」",
-                lucky: "🍀 幸運地點：晨跑林蔭大道 ｜ 幸運物品：跑鞋"
+                lucky: "✦ 幸運地點：晨跑林蔭大道 ｜ 幸運物品：跑鞋"
             },
             {
                 charKey: "horse",
@@ -3920,7 +3919,7 @@
                 typeCategory: "無能力",
                 elementName: "無",
                 quote: "「豪爽踏實地走每一步！認準了目標就不服輸，珍惜難得的翻盤機會！」",
-                lucky: "🍀 幸運地點：運動集社活動場 ｜ 幸運物品：運動水壺"
+                lucky: "✦ 幸運地點：運動集社活動場 ｜ 幸運物品：運動水壺"
             },
             {
                 charKey: "raku",
@@ -3928,7 +3927,7 @@
                 typeCategory: "賦形者",
                 elementName: "埒",
                 quote: "「沉穩內斂地守候。不管身在何處，真心為對方製作的羈絆永遠不會消逝。」",
-                lucky: "🍀 幸運地點：星空下的草地 ｜ 幸運物品：手作圍巾"
+                lucky: "✦ 幸運地點：星空下的草地 ｜ 幸運物品：手作圍巾"
             },
             {
                 charKey: "garoz",
@@ -3936,7 +3935,7 @@
                 typeCategory: "賦形者",
                 elementName: "犺",
                 quote: "「果斷行動，朝著目標邁進。有些看似脫離大眾的選擇，只有自己知道其意義。」",
-                lucky: "🍀 幸運地點：遺跡碑文前 ｜ 幸運物品：亞榭洛"
+                lucky: "✦ 幸運地點：遺跡碑文前 ｜ 幸運物品：亞榭洛"
             },
             {
                 charKey: "sinn",
@@ -3944,7 +3943,7 @@
                 typeCategory: "無能力",
                 elementName: "無",
                 quote: "「老練地在混亂中求生。珍惜並肩作戰累積起來的信任與兄弟情誼吧！」",
-                lucky: "🍀 幸運地點：傭兵休息營地 ｜ 幸運物品：軍用麥重酒杯"
+                lucky: "✦ 幸運地點：傭兵休息營地 ｜ 幸運物品：軍用麥重酒杯"
             },
             {
                 charKey: "gorilla",
@@ -3952,7 +3951,7 @@
                 typeCategory: "使用者",
                 elementName: "土",
                 quote: "「長途奔走、踏實扎根。避開浮躁的喧囂，用最原始可靠的方式完成託付。」",
-                lucky: "🍀 幸運地點：山岩礦石加工廠 ｜ 幸運物品：信差皮包"
+                lucky: "✦ 幸運地點：山岩礦石加工廠 ｜ 幸運物品：信差皮包"
             },
             {
                 charKey: "boar",
@@ -3960,7 +3959,7 @@
                 typeCategory: "使用者",
                 elementName: "火、土",
                 quote: "「把熱血與硬沉熔鑄一體！用長年累積的無撼底蘊，一鎚敲響屬於你的霸氣！」",
-                lucky: "🍀 幸運地點：燼鐵鎮砧鍛坊 ｜ 幸運物品：鍛造鐵鎚"
+                lucky: "✦ 幸運地點：燼鐵鎮砧鍛坊 ｜ 幸運物品：鍛造鐵鎚"
             },
             {
                 charKey: "whissel",
@@ -3968,7 +3967,7 @@
                 typeCategory: "無能力",
                 elementName: "",
                 quote: "「追求真相與知識的平等！勇敢地跨出腳步，用雙眼去記錄真實的世界吧！」",
-                lucky: "🍀 幸運地點：晝光時報採訪現場 ｜ 幸運物品：新聞攝影機"
+                lucky: "✦ 幸運地點：晝光時報採訪現場 ｜ 幸運物品：新聞攝影機"
             },
             {
                 charKey: "rin",
@@ -3976,7 +3975,7 @@
                 typeCategory: "無能力",
                 elementName: "無",
                 quote: "「就算現在身處泥濘與壓抑中，也別否定自己，溫暖的陪伴會帶你看到遠方的光。」",
-                lucky: "🍀 幸運地點：燼鐵鎮小巷 ｜ 幸運物品：跑車模型"
+                lucky: "✦ 幸運地點：燼鐵鎮小巷 ｜ 幸運物品：跑車模型"
             },
             {
                 charKey: "fox",
@@ -3984,7 +3983,7 @@
                 typeCategory: "使用者",
                 elementName: "光",
                 quote: "「處變不驚、睿智遠見。在波濤湧動的局勢中保持中立與理智，指引方向。」",
-                lucky: "🍀 幸運地點：聚學舍校長室 ｜ 幸運物品：學者禮服羽毛筆"
+                lucky: "✦ 幸運地點：聚學舍校長室 ｜ 幸運物品：學者禮服羽毛筆"
             },
             {
                 charKey: "racoon",
@@ -3992,7 +3991,7 @@
                 typeCategory: "使用者",
                 elementName: "土、光",
                 quote: "「紀錄只呈現可能性。遠離塵囂喧鬧，在密林與碑文間守護最純粹的真實。」",
-                lucky: "🍀 幸運地點：尼爾桑學識之庫 ｜ 幸運物品：古老古籍羊皮紙"
+                lucky: "✦ 幸運地點：尼爾桑學識之庫 ｜ 幸運物品：古老古籍羊皮紙"
             },
             {
                 charKey: "cat",
@@ -4000,7 +3999,7 @@
                 typeCategory: "無能力",
                 elementName: "無",
                 quote: "「縱使面對認知的拆解與不安，用真摯的目光去尋找屬於自己的真實答案吧。」",
-                lucky: "🍀 幸運地點：貓族村集市擺攤區 ｜ 幸運物品：手工手飾"
+                lucky: "✦ 幸運地點：貓族村集市擺攤區 ｜ 幸運物品：手工手飾"
             },
             {
                 charKey: "reva",
@@ -4008,7 +4007,7 @@
                 typeCategory: "地脈操流者",
                 elementName: "火",
                 quote: "「以等價交換與大氣包容待人，只要願意溝通，總能找到和平共處的契機。」",
-                lucky: "🍀 幸運地點：維那嶺城堡圖書館 ｜ 幸運物品：雕花魔法法杖"
+                lucky: "✦ 幸運地點：維那嶺城堡圖書館 ｜ 幸運物品：雕花魔法法杖"
             },
             {
                 charKey: "leon",
@@ -4016,7 +4015,7 @@
                 typeCategory: "無能力",
                 elementName: "無",
                 quote: "「果斷決策、責任克制。用開明與尊重異族的姿態，守護身邊重視的人。」",
-                lucky: "🍀 幸運地點：維那嶺避難所工坊 ｜ 幸運物品：領主銀釦外衣"
+                lucky: "✦ 幸運地點：維那嶺避難所工坊 ｜ 幸運物品：領主銀釦外衣"
             },
             {
                 charKey: "tormunn",
@@ -4024,7 +4023,7 @@
                 typeCategory: "無能力",
                 elementName: "無",
                 quote: "「講求規則與對等交換。冷靜評估價值，成為連結不同文明之間不可或缺的橋樑。」",
-                lucky: "🍀 幸運地點：艾瑞拉商會總部 ｜ 幸運物品：防風保溫斗篷"
+                lucky: "✦ 幸運地點：艾瑞拉商會總部 ｜ 幸運物品：防風保溫斗篷"
             },
             {
                 charKey: "grossa",
@@ -4032,7 +4031,7 @@
                 typeCategory: "無能力",
                 elementName: "無",
                 quote: "「務實且極守信用！拿出梟雄大人物的肚量與道義，欣賞有膽識的合作者。」",
-                lucky: "🍀 幸運地點：港鎮霸潮盟賭場 ｜ 幸運物品：五芒重鑄撲克牌"
+                lucky: "✦ 幸運地點：港鎮霸潮盟賭場 ｜ 幸運物品：五芒重鑄撲克牌"
             },
             {
                 charKey: "igrahhan",
@@ -4040,7 +4039,7 @@
                 typeCategory: "地脈操流者",
                 elementName: "風",
                 quote: "「恪守規矩與自然法則。看似嚴厲的外表下，隱藏著守護家人最沉重的愛。」",
-                lucky: "🍀 幸運地點：純白茫區祭典冰谷 ｜ 幸運物品：骨製古老骨笛"
+                lucky: "✦ 幸運地點：純白茫區祭典冰谷 ｜ 幸運物品：骨製古老骨笛"
             },
             {
                 charKey: "touphrin",
@@ -4048,7 +4047,7 @@
                 typeCategory: "地脈操流者",
                 elementName: "土、光",
                 quote: "「昂揚樂觀地面對生活！憑藉勇氣與溫柔的堅毅，為主動開創嶄新道路而努力吧！」",
-                lucky: "🍀 幸運地點：極北地脈導流點 ｜ 幸運物品：地脈引流晶手杖"
+                lucky: "✦ 幸運地點：極北地脈導流點 ｜ 幸運物品：地脈引流晶手杖"
             }
         ];
 
@@ -4108,11 +4107,11 @@
             const remaining = 3 - drawCount;
             if (redrawBtn) {
                 if (remaining > 0) {
-                    redrawBtn.innerText = `🎲 再抽一次 (剩 ${remaining} 次)`;
+                    redrawBtn.innerText = `[↻] 再抽一次 (剩 ${remaining} 次)`;
                     redrawBtn.style.opacity = "1";
                     redrawBtn.style.cursor = "pointer";
                 } else {
-                    redrawBtn.innerText = "🔒 次數已達上限";
+                    redrawBtn.innerText = "[×] 次數已達上限";
                     redrawBtn.style.opacity = "0.5";
                     redrawBtn.style.cursor = "not-allowed";
                 }
@@ -4474,9 +4473,6 @@ window.addEventListener('DOMContentLoaded', () => {
     <div id="poster-title-box" class="poster-title-box">
         <div class="poster-main-title">《無限元素》</div>
         <div class="poster-tagline">與賦形者相遇，和獸人夥伴展開日常冒險</div>
-    </div>
-    <!-- 🌟 右下角「回到頂部」浮動按鈕 🌟 -->
-    <button id="back-to-top-btn" class="back-to-top-btn" onclick="scrollToTop()" title="回到頁面頂部">⬆</button>
-    
+    </div> 
 </body>
 </html>
