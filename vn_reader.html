@@ -635,15 +635,14 @@
     </div>
 
     <!-- 荒野焰嵐影音播放卡片（取代對話框） -->
-    <div id="music-stage-panel" onclick="event.stopPropagation()">
-      <div class="music-stage-header">
-        <div>
-          <span id="music-stage-title" style="font-size: 1.15rem; font-weight: bold; color: #e07b46;">樂曲標題</span>
-          <span id="music-stage-desc" style="font-size: 0.75rem; color: #aaa; margin-left: 8px;">樂曲說明</span>
-        </div>
-        <button class="modal-close" onclick="closeMusicStagePanel()" title="返回文字對話模式">✕</button>
+  <div id="music-stage-panel" onclick="event.stopPropagation()">
+    <div class="music-stage-header">
+      <div>
+        <span id="music-stage-title" style="font-size: 1.15rem; font-weight: bold; color: #e07b46;">樂曲標題</span>
+        <span id="music-stage-desc" style="font-size: 0.75rem; color: #aaa; margin-left: 8px;">樂曲說明</span>
       </div>
-      <div class="music-stage-content">
+    </div>
+    <div class="music-stage-content">
         <div class="music-stage-video">
           <iframe id="music-stage-iframe" src="about:blank" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
@@ -1655,6 +1654,10 @@ Yeah 偽りの舞台 幕が上がるぜ
     }
 
     function handleStageClick() {
+      // 🌟 若目前處於荒野焰嵐音樂面板模式，點擊背景不推進文字對話
+      const musicPanel = document.getElementById('music-stage-panel');
+      if (musicPanel && musicPanel.style.display === 'flex') return;
+
       if (document.body.classList.contains('vn-ui-hidden')) {
         document.body.classList.remove('vn-ui-hidden');
         return;
@@ -1672,6 +1675,10 @@ Yeah 偽りの舞台 幕が上がるぜ
     }
 
     function handleAdvance() {
+      // 🌟 音樂模式下禁止前進對話
+      const musicPanel = document.getElementById('music-stage-panel');
+      if (musicPanel && musicPanel.style.display === 'flex') return;
+
       const story = getCurrentStory();
       if (currentStepIndex < story.length - 1) {
         currentStepIndex++;
@@ -1682,6 +1689,10 @@ Yeah 偽りの舞台 幕が上がるぜ
     }
 
     function handleBack() {
+      // 🌟 音樂模式下禁止倒退對話
+      const musicPanel = document.getElementById('music-stage-panel');
+      if (musicPanel && musicPanel.style.display === 'flex') return;
+
       if (currentStepIndex > 0) {
         currentStepIndex--;
         renderStep();
@@ -1939,8 +1950,10 @@ Yeah 偽りの舞台 幕が上がるぜ
     window.addEventListener('keydown', function(e) {
       const chapterModal = document.getElementById('chapter-modal');
       const logModal = document.getElementById('log-modal');
+      const musicPanel = document.getElementById('music-stage-panel');
       const isModalOpen = (chapterModal && chapterModal.style.display === 'flex') ||
-                          (logModal && logModal.style.display === 'flex');
+                          (logModal && logModal.style.display === 'flex') ||
+                          (musicPanel && musicPanel.style.display === 'flex'); // 🌟 加入音樂面板
 
       if (isModalOpen) {
         if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
