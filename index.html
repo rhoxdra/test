@@ -101,6 +101,58 @@
             }
         }
 
+        /* ===== 音樂自選彈窗樣式 ===== */
+        .music-info-panel {
+            cursor: pointer;
+        }
+        .music-info-panel:hover {
+            border-color: #e07b46;
+        }
+
+        #modal-music-select {
+            z-index: 250; /* 高於播放器 (200)，確保可操作 */
+        }
+        .music-list-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin: 12px 0;
+            max-height: 320px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 4px;
+            text-align: left;
+        }
+        .music-track-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(21, 19, 20, 0.85);
+            border: 1px solid rgba(237, 229, 216, 0.15);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+            font-size: 12px;
+            color: #ede5d8;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .music-track-item:hover {
+            background: rgba(224, 123, 70, 0.25);
+            border-color: rgba(224, 123, 70, 0.7);
+            box-shadow: 0 0 8px rgba(224, 123, 70, 0.3);
+        }
+        .music-track-item.playing {
+            border-color: #e07b46;
+            background: rgba(65, 34, 25, 0.95);
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(224, 123, 70, 0.4);
+            color: #fff;
+        }
+
+        /* 🌟 角色圖鑑篩選按鈕樣式 🌟 */
+
         /* 🌟 角色圖鑑篩選按鈕樣式 🌟 */
         .char-filter-container {
             padding: 12px 16px;
@@ -343,13 +395,13 @@
         }
 
         .event-card {
-            background: rgba(30, 24, 23, 0.85);
+            background: rgba(30, 24, 23, 0.55);
             border: 1px solid rgba(224, 123, 70, 0.35);
             border-radius: 12px;
             padding: 14px 16px;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(4px);
             text-align: left;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.65);
         }
 
         .event-badge {
@@ -1078,12 +1130,14 @@
 <button id="ui-toggle-btn" class="ui-toggle-btn" onclick="toggleUI()" title="觀看全幅背景圖">📷</button>
 <!-- 🌟 浮動音樂播放器 🌟 -->
 <div class="music-player-container">
-    <button id="music-toggle-btn" class="music-btn" onclick="togglePlayMusic()" title="播放/暫停背景音樂">🎵</button>
+    <!-- 圓鈕作為選單開啟鈕，符號維持 🎵 -->
+    <button id="music-menu-btn" class="music-btn" onclick="openMusicSelectModal()" title="開啟曲目選單">🎵</button>
     
-    <div id="music-info-panel" class="music-info-panel">
-        <span id="music-title" class="music-title-text">點擊播放 BGM</span>
-        <div class="music-controls">
+    <div id="music-info-panel" class="music-info-panel" onclick="openMusicSelectModal()" title="點擊開啟選單">
+        <span id="music-title" class="music-title-text">點擊選擇 BGM</span>
+        <div class="music-controls" onclick="event.stopPropagation()">
             <button class="music-sub-btn" onclick="playPrevTrack()" title="上一首">⏮</button>
+            <button class="music-sub-btn" onclick="togglePlayMusic()" id="music-play-pause-btn" title="播放/暫停">▶</button>
             <button class="music-sub-btn" onclick="playNextTrack()" title="下一首">⏭</button>
         </div>
     </div>
@@ -1091,6 +1145,19 @@
 
 <!-- HTML5 音訊標籤 -->
 <audio id="bgm-audio" onended="playNextTrack()"></audio>
+
+<!-- 背景音樂自選彈窗 -->
+<div id="modal-music-select" class="schedule-modal-overlay" style="display: none;">
+    <div class="schedule-modal-content" style="max-width: 380px;">
+        <button class="close-btn" onclick="closeMusicSelectModal()">✕</button>
+        <h3 style="color: #e07b46; margin-bottom: 4px; font-size: 1.15rem;">曲目選擇</h3>
+        <p style="font-size: 11px; color: #d6cbbe; margin-bottom: 10px;">點擊直接切換並播放指定音樂</p>
+        <div class="music-list-grid" id="music-track-list"></div>
+        <div style="margin-top: 14px;">
+            <button class="form-switch-btn" style="width: 100%; margin: 0;" onclick="closeMusicSelectModal()">關閉</button>
+        </div>
+    </div>
+</div>
 
     <div id="main-container" class="container">
         <!-- 頂部標題與精神短語 -->
@@ -1103,8 +1170,7 @@
               <!-- 上方：世界觀短文與點擊對話互動 -->
               <div class="story-intro" style="background: transparent; border-left: none; padding: 0; margin: 0 0 10px 0; backdrop-filter: none;">
                   <p style="font-size: 0.9rem; line-height: 1.65; color: #e2e8f0; margin-bottom: 6px;">從最初的元素冒險，到如今在聚學舍修練、參與再契選的漫長旅程，賦形者們將在這片世界中探索力量、羈絆，以及隱藏於歷史深處的真相。</p>
-                  <p style="font-size: 0.75rem; color: #38bdf8; opacity: 0.85; margin-bottom: 0; text-align: right;">( ✦ 點擊開啟夥伴對話 ✦ )</p>
-              </div>
+                  <p style="font-size: 0.75rem; color: #d6cbbe; opacity: 0.85; margin-bottom: 0; text-align: right;">( ✦ 點擊開啟夥伴對話 ✦ )</p>              </div>
 
               <!-- 分隔微光線 -->
               <div style="width: 100%; height: 1px; background: rgba(56, 189, 248, 0.2); margin: 10px 0;"></div>
@@ -1159,8 +1225,8 @@
 
 
         <!-- 🌟 1. 核心變現專區置頂（官方商城與最新出版） 🌟 -->
-        <div class="section-title" style="color: #38bdf8; display: flex; align-items: center; gap: 6px;">
-             最新出版 ✦ 官方商城
+        <div class="section-title" style="display: flex; align-items: center; gap: 6px;">
+      最新出版 ✦ 官方商城
         </div>
         <div class="link-list">
             <!-- BookWalker：強化第 11 集與試閱動機 -->
@@ -1326,49 +1392,94 @@
             </details>
         </div>
 
-       <!-- 🌟 3. 夥伴共鳴 ✦ 互動體驗（抽籤 + 心理測驗 往下拉到此處） 🌟 -->
+       <!-- 🌟 3. 夥伴共鳴 ✦ 互動體驗（下拉式選單形式） 🌟 -->
         <div class="section-title">夥伴共鳴 ✦ 互動體驗</div>
         <div class="link-list">
-            <!-- 每日元素共鳴籤 -->
-            <div class="link-card" onclick="drawDailyFortune()" style="cursor: pointer;">
-                <img src="images/arc.webp" alt="亞爾克" class="avatar">
-                <div class="link-info">
-                    <div class="link-title">每日元素共鳴籤</div>
-                    <div class="link-desc">點擊抽取今日幸運夥伴與元素開運指引！</div>
-                </div>
-                <div class="arrow">➔</div>
-            </div>
+            <details class="link-card-dropdown">
+                <summary class="link-card-summary">
+                    <img src="images/kuzure.webp" alt="互動體驗" class="avatar">
+                    <div class="link-info">
+                        <div class="link-title">小遊戲互動專區</div>
+                        <div class="link-desc">Chain Burst 小遊戲、抽取每日共鳴籤與心理測驗</div>
+                    </div>
+                    <div class="arrow-icon">▼</div>
+                </summary>
+                <div style="padding: 12px; display: flex; flex-direction: column; gap: 8px; background: rgba(15, 23, 42, 0.6); border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                    <!-- 1. 置頂：無限元素 Chain Burst 小遊戲 -->
+                    <a href="https://rhoxdra.github.io/Eletsum/" class="link-card highlight" style="border-left: 2px solid #e07b46;">
+                        <img src="images/arc.webp" alt="亞爾克" class="avatar" style="width: 50px; height: 50px; border-color: #e07b46;">
+                        <div class="link-info">
+                            <div class="link-title" style="color: #e07b46; font-weight: 800;">無限元素 Chain Burst </div>
+                            <div class="link-desc">幫助亞爾克與夥伴展開連鎖消除挑戰！</div>
+                        </div>
+                        <div class="arrow" style="color: #e07b46;">➔</div>
+                    </a>
 
-            <!-- 與你契合的夥伴心理測驗 -->
-            <a href="https://rhoxdra.github.io/endless-element-quiz/" target="_blank" class="link-card">
-                <img src="images/jareth.webp" alt="賈瑞斯" class="avatar">
-                <div class="link-info">
-                    <div class="link-title">與你契合的夥伴心理測驗</div>
-                    <div class="link-desc">測測看你在這個世界裡最適合與誰同行？</div>
+                    <!-- 2. 每日元素共鳴籤 -->
+                    <div class="link-card" onclick="drawDailyFortune()" style="cursor: pointer;">
+                        <img src="images/kaiden.webp" alt="凱登" class="avatar" style="width: 50px; height: 50px;">
+                        <div class="link-info">
+                            <div class="link-title">每日元素共鳴籤</div>
+                            <div class="link-desc">抽取今日幸運夥伴與元素開運指引！</div>
+                        </div>
+                        <div class="arrow">➔</div>
+                    </div>
+
+                    <!-- 3. 與你契合的夥伴心理測驗 -->
+                    <a href="https://rhoxdra.github.io/endless-element-quiz/" target="_blank" class="link-card">
+                        <img src="images/jareth.webp" alt="賈瑞斯" class="avatar" style="width: 50px; height: 50px;">
+                        <div class="link-info">
+                            <div class="link-title">與你契合的夥伴心理測驗</div>
+                            <div class="link-desc">測測看你在這個世界裡最適合與誰同行？</div>
+                        </div>
+                        <div class="arrow">➔</div>
+                    </a>
                 </div>
-                <div class="arrow">➔</div>
-            </a>
+            </details>
         </div>
 
-        <!-- 社群專題（緊接在互動體驗後，引導進一步追蹤） -->
+        <!-- 社群專題 ✦ 獨家收錄（下拉式選單形式） -->
         <div class="section-title">社群專題 ✦ 獨家收錄</div>
         <div class="link-list">
-            <a href="https://www.facebook.com/profile.php?id=61572883663242" target="_blank" class="link-card">
-                <img src="images/zarion.webp" alt="澤里恩" class="avatar">
-                <div class="link-info">
-                    <div class="link-title">Facebook 官方粉絲專頁</div>
-                    <div class="link-desc">第一時間獲取最新連載與公告</div>
+            <details class="link-card-dropdown">
+                <summary class="link-card-summary">
+                    <img src="images/zarion.webp" alt="社群專區" class="avatar">
+                    <div class="link-info">
+                        <div class="link-title">官方社群平台</div>
+                        <div class="link-desc">Facebook 專頁、Patreon 插圖集與 YouTube 頻道</div>
+                    </div>
+                    <div class="arrow-icon">▼</div>
+                </summary>
+                <div style="padding: 12px; display: flex; flex-direction: column; gap: 8px; background: rgba(15, 23, 42, 0.6); border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                    <!-- Facebook 官方粉專 -->
+                    <a href="https://www.facebook.com/profile.php?id=61572883663242" target="_blank" class="link-card">
+                        <img src="images/garoz.webp" alt="犺" class="avatar" style="width: 50px; height: 50px;">
+                        <div class="link-info">
+                            <div class="link-title">Facebook 官方粉絲專頁</div>
+                            <div class="link-desc">第一時間獲取最新連載與公告</div>
+                        </div>
+                        <div class="arrow">➔</div>
+                    </a>
+                    <!-- Patreon 專區 -->
+                    <a href="http://patreon.com/rhoxine" target="_blank" class="link-card">
+                        <img src="images/ura.webp" alt="克爾" class="avatar" style="width: 50px; height: 50px;">
+                        <div class="link-info">
+                            <div class="link-title">Patreon 專區</div>
+                            <div class="link-desc">收錄相關插圖作品集，以及角色們不曾公開的一面</div>
+                        </div>
+                        <div class="arrow">➔</div>
+                    </a>
+                    <!-- 新增 YouTube 官方頻道 -->
+                    <a href="https://www.youtube.com/@rhoxdra" target="_blank" class="link-card">
+                        <img src="images/rin.webp" alt="嶙安" class="avatar" style="width: 50px; height: 50px;">
+                        <div class="link-info">
+                            <div class="link-title">YouTube 官方頻道</div>
+                            <div class="link-desc">收錄原創音樂曲目、宣傳短影音與創作記錄</div>
+                        </div>
+                        <div class="arrow">➔</div>
+                    </a>
                 </div>
-                <div class="arrow">➔</div>
-            </a>
-            <a href="http://patreon.com/rhoxine" target="_blank" class="link-card">
-                <img src="images/ura.webp" alt="克爾" class="avatar">
-                <div class="link-info">
-                    <div class="link-title">Patreon 專區</div>
-                    <div class="link-desc">收錄《無限元素》的相關插圖作品集，以及角色們不曾公開的一面</div>
-                </div>
-                <div class="arrow">➔</div>
-            </a>
+            </details>
         </div>
 
         <!-- 🌟 其他各大線上閱讀平台（精簡無備註版） 🌟 -->
@@ -1379,7 +1490,7 @@
                     <img src="images/area.webp" alt="其他閱讀平台" class="avatar">
                     <div class="link-info">
                         <div class="link-title">更多電子書與線上閱讀平台</div>
-                        <div class="link-desc">展開查看 Penana、Readmoo、博客來、Kobo 等通路</div>
+                        <div class="link-desc">查看 Penana、Readmoo、博客來、Kobo 等通路</div>
                     </div>
                     <div class="arrow-icon">▼</div>
                 </summary>
@@ -1394,7 +1505,7 @@
                     </a>
                     <a href="https://cxc.today/zh/@endlesselement/" target="_blank" class="link-card">
                         <img src="images/fox.webp" alt="睿策樺霖" class="avatar" style="width: 50px; height: 50px;">
-                        <div class="link-info"><div class="link-title">CxC 利創市集</div></div><div class="arrow">➔</div>
+                        <div class="link-info"><div class="link-title">CxC 創利市集</div></div><div class="arrow">➔</div>
                     </a>
                     <a href="https://home.gamer.com.tw/profile/index_creation.php?owner=squallroger" target="_blank" class="link-card">
                         <img src="images/gorilla.webp" alt="格洛薩" class="avatar" style="width: 50px; height: 50px;">
@@ -1409,7 +1520,7 @@
                         <div class="link-info"><div class="link-title">博客來</div></div><div class="arrow">➔</div>
                     </a>            
                     <a href="https://ebook.hyread.com.tw/searchList.jsp?search_field=FullText&search_input=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&search_field=PU&search_input=%E5%B5%90%E6%87%B6%E6%9B%B8" target="_blank" class="link-card">
-                        <img src="images/kuzure.webp" alt="崩" class="avatar" style="width: 50px; height: 50px;">
+                        <img src="images/wakima.webp" alt="瓦奇瑪" class="avatar" style="width: 50px; height: 50px;">
                         <div class="link-info"><div class="link-title">HyRead 電子書</div></div><div class="arrow">➔</div>
                     </a>            
                     <a href="https://play.google.com/store/search?q=%E7%84%A1%E9%99%90%E5%85%83%E7%B4%A0&c=books&hl=zh-TW" target="_blank" class="link-card">
@@ -1545,8 +1656,7 @@
 
             <!-- 📸 圖卡擷取區域（網頁顯示與截圖標的） -->
             <div id="fortune-capture-area" class="fortune-card-capture">
-                <span class="event-badge" style="background: #a855f7;">DAILY FORTUNE</span>
-                <h2 id="fortune-title" class="modal-title" style="margin-bottom: 12px; margin-top: 4px;">今日共鳴指引</h2>
+<span class="event-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #151314;">DAILY FORTUNE</span>                <h2 id="fortune-title" class="modal-title" style="margin-bottom: 12px; margin-top: 4px;">今日共鳴指引</h2>
                 
                 <!-- 網頁頭像（截圖時會自動隱藏） -->
                 <img id="fortune-avatar" src="" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #38bdf8; margin: 4px 0; object-fit: cover; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
@@ -1575,15 +1685,9 @@
             
             <!-- 按鈕群組（去掉複製文字，儲存圖片遞補，雙按鈕橫向並排） -->
             <div style="display: flex; gap: 10px; width: 100%; margin-top: 14px;">
-                <button id="draw-again-btn" class="form-switch-btn" onclick="drawDailyFortune()" style="margin-bottom: 0; flex: 1;">🎲 再抽一次 (剩 2 次)</button>
-                <button class="form-switch-btn" onclick="downloadFortuneImage()" style="margin-bottom: 0; flex: 1; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-color: rgba(56, 189, 248, 0.5);">📸 儲存籤詩圖卡</button>
-            </div>
-            <!-- 🌟 調整 3：共鳴籤底部賣場引流小連結 🌟 -->
-            <div style="margin-top: 10px; text-align: center;">
-                <a href="https://myship.7-11.com.tw/general/detail/GM2608074156966" target="_blank" onclick="gtag('event', 'Shop711_Click', {'source': 'fortune_modal'});" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; transition: color 0.2s;">
-                    ✦ 想讓夥伴陪你度過每一天？前往賣場收藏精選角色實體周邊 ✦
-                </a>
-            </div>
+    <button id="draw-again-btn" class="form-switch-btn" onclick="drawDailyFortune()" style="margin-bottom: 0; flex: 1;"> 再抽一次 (剩 2 次)</button>
+<button class="form-switch-btn" onclick="downloadFortuneImage()" style="margin-bottom: 0; flex: 1; background: linear-gradient(135deg, #f5a623 0%, #d97706 100%); border-color: rgba(245, 166, 35, 0.6);">📸 儲存籤詩圖卡</button>            </div>
+
         </div>
     </div>
     <!-- 🌟 JS 控制腳本 🌟 -->
@@ -1612,57 +1716,23 @@
 
 
 // ==========================================
-        // 🎵 背景音樂播放器 logic
+        // 🎵 背景音樂播放器 logic（自選選單 + 循序循環）
         // ==========================================
         const playlist = [
-            {
-                title: "嵐光城的早晨慢跑",
-                src: "music/bgm1.mp3"
-            },
-            {
-                title: "尼爾桑夏日時光",
-                src: "music/bgm2.mp3"
-            },
-            {
-                title: "聚學舍午後一隅",
-                src: "music/bgm3.mp3"
-            },
-            {
-                title: "艾瑞爾城市政廳",
-                src: "music/bgm4.mp3"
-            },
-            {
-                title: "蕾寶來電",
-                src: "music/bgm5.mp3"
-            },
-            {
-                title: "詛碼團基地",
-                src: "music/bgm6.mp3"
-            },
-            {
-                title: "夜晨奇境遊樂園",
-                src: "music/bgm7.mp3"
-            },
-            {
-                title: "荒野焰嵐團練室",
-                src: "music/bgm8.mp3"
-            },
-            {
-                title: "裏網世界",
-                src: "music/bgm9.mp3"
-            },
-            {
-                title: "瞭望燼鐵鎮",
-                src: "music/bgm10.mp3"
-            },
-            {
-                title: "元素之源",
-                src: "music/bgm11.mp3"
-            },
-            {
-                title: "豹飲豹食DJ台",
-                src: "music/bgm12.mp3"
-            }
+                { title: "灼嵐火", src: "music/bgm1.mp3" },
+                { title: "滄月心", src: "music/bgm2.mp3" },
+                { title: "嚎影", src: "music/bgm12.mp3" },
+                { title: "The Iron Ascent", src: "music/bgm4.mp3" },
+                { title: "嵐光城的早晨慢跑", src: "music/bgm5.mp3" },
+                { title: "尼爾桑夏日時光", src: "music/bgm6.mp3" },
+                { title: "聚學舍午後一隅", src: "music/bgm7.mp3" },
+                { title: "艾瑞爾城市政廳", src: "music/bgm8.mp3" },
+                { title: "蕾寶來電", src: "music/bgm9.mp3" },
+                { title: "詛碼團基地", src: "music/bgm10.mp3" },
+                { title: "夜晨奇境遊樂園", src: "music/bgm11.mp3" },
+                { title: "裏網世界", src: "music/bgm12.mp3" },
+                { title: "瞭望燼鐵鎮", src: "music/bgm13.mp3" },
+                { title: "元素之源", src: "music/bgm14.mp3" }
         ];
 
         let currentTrackIndex = 0;
@@ -1675,67 +1745,131 @@
             if (playlist[index] && audio) {
                 audio.src = playlist[index].src;
                 audio.volume = 0.4;
-                audio.load(); // 強制重新載入檔案
+                audio.load();
                 if (titleElem) {
                     titleElem.innerText = playlist[index].title;
                 }
+                renderMusicTrackList();
+            }
+        }
+
+        // 同步更新播放控制按鈕狀態圖示
+        function updatePlayControlUI() {
+            const playPauseBtn = document.getElementById('music-play-pause-btn');
+            const menuBtn = document.getElementById('music-menu-btn');
+            if (playPauseBtn) {
+                playPauseBtn.innerText = isMusicPlaying ? "⏸" : "▶";
+            }
+            if (menuBtn) {
+                menuBtn.style.borderColor = isMusicPlaying ? "#e07b46" : "rgba(224, 123, 70, 0.5)";
+            }
+        }
+
+        // 開啟音樂選單彈窗（注意：不觸發 body.modal-open，確保播放器本身不被隱藏）
+        function openMusicSelectModal() {
+            renderMusicTrackList();
+            document.getElementById('modal-music-select').style.display = 'flex';
+        }
+
+        // 關閉音樂選單彈窗
+        function closeMusicSelectModal() {
+            document.getElementById('modal-music-select').style.display = 'none';
+        }
+
+        // 渲染選單項目
+        function renderMusicTrackList() {
+            const listEl = document.getElementById('music-track-list');
+            if (!listEl) return;
+            listEl.innerHTML = '';
+
+            playlist.forEach((track, idx) => {
+                const item = document.createElement('div');
+                const isCurrent = (idx === currentTrackIndex);
+                item.className = `music-track-item ${isCurrent ? 'playing' : ''}`;
+                item.innerHTML = `
+                    <span>${idx + 1}. ${track.title}</span>
+                    <span style="font-size: 11px; opacity: 0.85;">${isCurrent && isMusicPlaying ? '▶ 播放中' : (isCurrent ? '⏸ 就緒' : '點擊播放')}</span>
+                `;
+                item.onclick = () => {
+                    selectAndPlayTrack(idx);
+                };
+                listEl.appendChild(item);
+            });
+        }
+
+        // 點播指定曲目
+        function selectAndPlayTrack(index) {
+            currentTrackIndex = index;
+            loadTrack(currentTrackIndex);
+
+            const audio = document.getElementById('bgm-audio');
+            if (audio) {
+                audio.play().then(() => {
+                    isMusicPlaying = true;
+                    updatePlayControlUI();
+                    renderMusicTrackList();
+                }).catch(error => {
+                    console.error("音樂播放失敗：", error);
+                });
             }
         }
 
         function togglePlayMusic() {
             const audio = document.getElementById('bgm-audio');
-            const btn = document.getElementById('music-toggle-btn');
+            if (!audio) return;
 
-            if (!audio) {
-                alert("找不到 <audio id='bgm-audio'> 標籤，請檢查 HTML！");
-                return;
+            // 取消隨機，首次由第 1 首開始
+            if (!audio.src || audio.src.endsWith('.html') || audio.src === window.location.href) {
+                currentTrackIndex = 0;
+                loadTrack(currentTrackIndex);
             }
-
-            // 初次點擊若尚未載入 src，隨機挑選一首開始播放
-if (!audio.src || audio.src.endsWith('.html') || audio.src === window.location.href) {
-    currentTrackIndex = Math.floor(Math.random() * playlist.length); // 隨機亂數索引
-    loadTrack(currentTrackIndex);
-}
 
             if (isMusicPlaying) {
                 audio.pause();
-                btn.innerText = "🎵";
-                btn.style.borderColor = "rgba(56, 189, 248, 0.5)";
                 isMusicPlaying = false;
+                updatePlayControlUI();
+                renderMusicTrackList();
             } else {
-                // 嘗試播放音樂
                 const playPromise = audio.play();
-                
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
-                        btn.innerText = "⏸";
-                        btn.style.borderColor = "#34d399"; // 播放中變綠色
                         isMusicPlaying = true;
+                        updatePlayControlUI();
+                        renderMusicTrackList();
                     }).catch(error => {
                         console.error("音樂播放失敗：", error);
-                        alert(`無法播放音樂！\n可能原因：\n1. 找不到檔案 (${playlist[currentTrackIndex].src})\n2. 檔案格式不支援\n3. 瀏覽器阻擋自動播放`);
                     });
                 }
             }
         }
 
         function playNextTrack() {
+            // 循序向後切換，最後一首循環回到第 1 首
             currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
             loadTrack(currentTrackIndex);
             
             const audio = document.getElementById('bgm-audio');
-            if (isMusicPlaying && audio) {
-                audio.play().catch(err => console.log("切換下一首失敗：", err));
+            if (audio) {
+                audio.play().then(() => {
+                    isMusicPlaying = true;
+                    updatePlayControlUI();
+                    renderMusicTrackList();
+                }).catch(err => console.log("切換下一首失敗：", err));
             }
         }
 
         function playPrevTrack() {
+            // 循序向前切換，第 1 首循環回到最後一首
             currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
             loadTrack(currentTrackIndex);
             
             const audio = document.getElementById('bgm-audio');
-            if (isMusicPlaying && audio) {
-                audio.play().catch(err => console.log("切換上一首失敗：", err));
+            if (audio) {
+                audio.play().then(() => {
+                    isMusicPlaying = true;
+                    updatePlayControlUI();
+                    renderMusicTrackList();
+                }).catch(err => console.log("切換上一首失敗：", err));
             }
         }
 
@@ -3229,6 +3363,12 @@ if (!audio.src || audio.src.endsWith('.html') || audio.src === window.location.h
             if (e.target === scheduleModal) {
                 closeScheduleModal();
             }
+
+            // 點擊音樂選單彈窗背景
+            const musicSelectModal = document.getElementById('modal-music-select');
+            if (e.target === musicSelectModal) {
+                closeMusicSelectModal();
+            }
         });
         // ==========================================
         // 💬 世界觀簡介與點擊後隨機對白（帶角色大頭像版）
@@ -3455,8 +3595,7 @@ if (!audio.src || audio.src.endsWith('.html') || audio.src === window.location.h
                     <img src="images/${item.charKey}.webp" alt="${item.charKey}" style="width: 48px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
                     <div style="flex-grow: 1;">
                         <p style="font-weight: 600; color: #f8fafc; margin-bottom: 4px; font-size: 0.88rem; line-height: 1.5;">${item.text}</p>
-                        <p style="font-size: 0.72rem; color: #38bdf8; opacity: 0.85; margin-bottom: 0; text-align: right;">( ✦ 點擊切換下一句對話 ✦ )</p>
-                    </div>
+                        <p style="font-size: 0.72rem; color: #d6cbbe; opacity: 0.85; margin-bottom: 0; text-align: right;">( ✦ 點擊切換下一句對話 ✦ )</p>                    </div>
                 </div>
             `;
         };
@@ -4164,8 +4303,8 @@ if (!audio.src || audio.src.endsWith('.html') || audio.src === window.location.h
                 }
             }
         });
-        // 🌟 視覺小說 Modal 觸發邏輯 🌟
-    function openVNModal(initialChapterIndex = 0) {
+    // 🌟 視覺小說 Modal 觸發邏輯 🌟
+    function openVNModal(chapterIndex = null) {
     const modal = document.getElementById('vn-modal');
     const iframe = document.getElementById('vn-iframe');
     
@@ -4174,8 +4313,10 @@ if (!audio.src || audio.src.endsWith('.html') || audio.src === window.location.h
     }
 
     iframe.onload = function() {
-        if (initialChapterIndex > 0) {
-            iframe.contentWindow.postMessage({ type: 'SELECT_CHAPTER_INDEX', index: initialChapterIndex }, '*');
+        // 只有在明確手動指定篇章索引 (如傳入數字) 時才發送切換訊息
+        // 預設 (不傳入參數) 時完全由 vn_reader.html 內部的 DEFAULT_CHAPTER_TITLE 自主決定！
+        if (typeof chapterIndex === 'number' && chapterIndex >= 0) {
+            iframe.contentWindow.postMessage({ type: 'SELECT_CHAPTER_INDEX', index: chapterIndex }, '*');
         }
         setTimeout(() => {
             iframe.focus();
@@ -4188,8 +4329,29 @@ if (!audio.src || audio.src.endsWith('.html') || audio.src === window.location.h
 }
 
 function closeVNModal() {
-    // ...退出全螢幕邏輯保持原樣...
     const modal = document.getElementById('vn-modal');
+    const iframe = document.getElementById('vn-iframe');
+
+    // 關閉視覺小說時，若音樂面板還開著，停止 YouTube 聲音
+    if (iframe && iframe.contentWindow) {
+        try {
+            iframe.contentWindow.postMessage({ type: 'STOP_FLAME_MUSIC' }, '*');
+        } catch (e) {}
+    }
+
+    // 若先前是因為 YouTube 暫停了主頁音樂，關閉視覺小說時自動恢復播放
+    if (wasBgmPlayingBeforeVideo) {
+        const audio = document.getElementById('bgm-audio');
+        if (audio) {
+            audio.play().then(() => {
+                isMusicPlaying = true;
+                updatePlayControlUI();
+                renderMusicTrackList();
+            }).catch(err => console.log("恢復播放受阻：", err));
+        }
+        wasBgmPlayingBeforeVideo = false;
+    }
+
     modal.style.display = 'none';
     document.body.classList.remove('ui-hidden');
     document.body.classList.remove('vn-open');   // 解鎖首頁
@@ -4229,12 +4391,44 @@ function closeVNModal() {
         }
     }
 
-    // 接收來自 vn_reader.html 的背景切換通知
+    // 🌟 接收來自 vn_reader.html 的背景切換與音樂暫停/恢復通知 🌟
+    let wasBgmPlayingBeforeVideo = false;
+
     window.addEventListener('message', function(e) {
-        if (e.data && (e.data.type === 'CHANGE_BG' || e.type === 'CHANGE_BG')) {
+        if (!e.data) return;
+
+        // 1. 背景切換同步
+        if (e.data.type === 'CHANGE_BG' || e.type === 'CHANGE_BG') {
             const bgUrl = e.data.bgUrl;
             if (bgUrl) {
                 document.body.style.setProperty('--bg-image', `url('${bgUrl}')`);
+            }
+        }
+
+        // 2. 視覺小說播放 YouTube 時，暫停主頁 BGM
+        if (e.data.type === 'PAUSE_MAIN_BGM') {
+            const audio = document.getElementById('bgm-audio');
+            if (audio && isMusicPlaying) {
+                wasBgmPlayingBeforeVideo = true;
+                audio.pause();
+                isMusicPlaying = false;
+                updatePlayControlUI();
+                renderMusicTrackList();
+            }
+        }
+
+        // 3. 視覺小說關閉音樂卡片或影片播完時，恢復主頁 BGM
+        if (e.data.type === 'RESUME_MAIN_BGM') {
+            if (wasBgmPlayingBeforeVideo) {
+                const audio = document.getElementById('bgm-audio');
+                if (audio) {
+                    audio.play().then(() => {
+                        isMusicPlaying = true;
+                        updatePlayControlUI();
+                        renderMusicTrackList();
+                    }).catch(err => console.log("恢復播放受阻：", err));
+                }
+                wasBgmPlayingBeforeVideo = false;
             }
         }
     });

@@ -276,19 +276,94 @@
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       width: 90%;
-      max-width: 500px;
-      max-height: 70vh;
-      background: rgba(30, 24, 23, 0.9);
+      max-width: 560px;
+      max-height: 75vh;
+      background: rgba(30, 24, 23, 0.94);
       border: 1px solid rgba(224, 123, 70, 0.4);
       border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       z-index: 200;
       display: none;
       flex-direction: column;
       padding: 20px;
       color: #ede5d8;
+    }
+
+    /* 🌟 篇章彈窗頂部分類切換鈕 🌟 */
+    .modal-tab-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(224, 123, 70, 0.25);
+      padding-bottom: 8px;
+    }
+
+    .modal-tab-btn {
+      flex: 1;
+      background: rgba(21, 19, 20, 0.7);
+      border: 1px solid rgba(224, 123, 70, 0.3);
+      color: #d6cbbe;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .modal-tab-btn:hover {
+      background: rgba(224, 123, 70, 0.25);
+      color: #ede5d8;
+      border-color: rgba(224, 123, 70, 0.6);
+    }
+
+    .modal-tab-btn.active {
+      background: linear-gradient(135deg, #e07b46, #c96532);
+      color: #151314;
+      border-color: #f5a623;
+      box-shadow: 0 0 10px rgba(224, 123, 70, 0.4);
+    }
+
+    /* 🌟 荒野焰嵐影音卡片與歌詞容器 🌟 */
+    .music-video-card {
+      background: rgba(21, 19, 20, 0.85);
+      border: 1px solid rgba(224, 123, 70, 0.3);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 比例 */
+      height: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      background: #000;
+    }
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .lyrics-box {
+      background: rgba(15, 13, 14, 0.7);
+      border-left: 3px solid #e07b46;
+      border-radius: 0 6px 6px 0;
+      padding: 10px 12px;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: #d6cbbe;
+      white-space: pre-wrap;
+      max-height: 140px;
+      overflow-y: auto;
     }
 
     .modal-header {
@@ -318,6 +393,8 @@
     .modal-body {
       flex-grow: 1;
       overflow-y: auto;
+      overflow-x: hidden; /* 強制鎖死橫向捲軸，根除左右拉桿跳動 */
+      padding-right: 4px;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -343,16 +420,107 @@
       padding: 12px 16px;
       border-radius: 10px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      box-sizing: border-box;
+      width: 100%;
     }
 
     .chapter-card:hover, .chapter-card.active {
       background: rgba(224, 123, 70, 0.25);
       border-color: #e07b46;
-      transform: translateX(4px);
+      box-shadow: 0 0 10px rgba(224, 123, 70, 0.35);
+      /* 移除 transform: translateX(4px) 避免觸發水平溢出抖動 */
+    }
+
+    /* 🌟 荒野焰嵐音樂播放專屬面板（取代原有對話框） 🌟 */
+    #music-stage-panel {
+      position: absolute;
+      bottom: 60px;
+      width: 90%;
+      max-width: 960px;
+      max-height: 75vh;
+      background: rgba(21, 19, 20, 0.88);
+      border: 1px solid rgba(224, 123, 70, 0.5);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85);
+      border-radius: 14px;
+      padding: 18px 22px;
+      z-index: 15;
+      display: none;
+      flex-direction: column;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      overflow-y: auto;
+    }
+
+    .music-stage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(224, 123, 70, 0.3);
+      padding-bottom: 8px;
+    }
+
+    .music-stage-content {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      justify-content: center; /* 歌詞隱藏時影片自動置中 */
+    }
+
+    .music-stage-video {
+      flex: 1.2;
+      max-width: 720px; /* 限制最大寬度，避免無歌詞時過度拉寬 */
+      position: relative;
+      padding-bottom: 40%;
+      height: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+    .music-stage-video iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    .music-stage-lyrics {
+      flex: 1;
+      background: rgba(15, 13, 14, 0.7);
+      border-left: 3px solid #e07b46;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 14px;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: #ede5d8;
+      white-space: pre-wrap;
+      max-height: 240px;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 768px) {
+      #music-stage-panel {
+        bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+        max-height: 82vh !important;
+        padding: 14px !important;
+      }
+      .music-stage-content {
+        flex-direction: column;
+      }
+      .music-stage-video {
+        width: 100%;
+        padding-bottom: 56.25%;
+      }
+      .music-stage-lyrics {
+        width: 100%;
+        max-height: 140px;
+      }
     }
 
     .chapter-card-title {
@@ -466,6 +634,23 @@
       <button class="ctrl-btn" onclick="toggleVnUI(event)" title="隱藏對話框觀看純背景">隱藏</button>
     </div>
 
+    <!-- 荒野焰嵐影音播放卡片（取代對話框） -->
+    <div id="music-stage-panel" onclick="event.stopPropagation()">
+      <div class="music-stage-header">
+        <div>
+          <span id="music-stage-title" style="font-size: 1.15rem; font-weight: bold; color: #e07b46;">樂曲標題</span>
+          <span id="music-stage-desc" style="font-size: 0.75rem; color: #aaa; margin-left: 8px;">樂曲說明</span>
+        </div>
+        <button class="modal-close" onclick="closeMusicStagePanel()" title="返回文字對話模式">✕</button>
+      </div>
+      <div class="music-stage-content">
+        <div class="music-stage-video">
+          <iframe id="music-stage-iframe" src="about:blank" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="music-stage-lyrics" id="music-stage-lyrics">歌詞內容</div>
+      </div>
+    </div>
+
     <!-- 對話框本體 -->
     <div id="dialogue-box">
       <!-- 角色頭像 Avatar UI -->
@@ -497,8 +682,14 @@
   <!-- ☰ 篇章選擇彈窗 -->
   <div id="chapter-modal" onclick="event.stopPropagation()">
     <div class="modal-header">
-      <div class="modal-title">☰ 選擇篇章</div>
+      <div class="modal-title">☰ 目錄選擇</div>
       <button class="modal-close" onclick="closeChapterModal()">✕</button>
+    </div>
+    <!-- 篇章三大分類按鈕 -->
+    <div class="modal-tab-group">
+      <button id="tab-btn-theme" class="modal-tab-btn active" onclick="switchChapterTab('theme')">主題進展</button>
+      <button id="tab-btn-flame" class="modal-tab-btn" onclick="switchChapterTab('flame')">荒野焰嵐</button>
+      <button id="tab-btn-echo" class="modal-tab-btn" onclick="switchChapterTab('echo')">回聲殘響</button>
     </div>
     <div id="chapter-list" class="modal-body"></div>
   </div>
@@ -508,9 +699,9 @@
       {
   title: "學園祭 巡展",
   badge: "主題進展",
-  bgImage: "images/bg_school.webp",
+  bgImage: "images/bg_naka.webp",
   story: [
-    { speaker: "■學園祭 巡展", text: "當校園的各處正進行著熱烈的比賽時，各系館門口也擺滿了科展與成果發表的看板。", bgUrl: "images/bg_school.webp" },
+    { speaker: "■學園祭 巡展", text: "當校園的各處正進行著熱烈的比賽時，各系館門口也擺滿了科展與成果發表的看板。", bgUrl: "images/bg_naka.webp" },
     { text: "崩雙手插在空手道服的口袋裡，眼眸冷淡掃過那些充滿青春氣息的攤位與展覽。他對這種吵雜且充滿群體自我滿足的活動一點興趣也沒有。" },
     { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "smile", text: "怎樣？第一次來這個校園裡，你有什麼感想嗎？" },
     { speaker: "崩", avatar: "images/kuzure_sp.webp", expr: "neutral", text: "真奇妙，你是來監視我的吧，何必和我套交情呢？還是說，你們覺得如此做就能探聽到什麼進一步的情況？" },
@@ -1021,7 +1212,7 @@
       },
       {
         title: "崩川牛子",
-        badge: "戰況速報",
+        badge: "回聲殘響",
         bgImage: "images/BON.webp",
         rawText: `荒野焰嵐於樂團較勁中全面潰敗，已宣告解散。\n\n……\n\n「你以為我是什麼人？我是那個為了再見重要之人一面、可以背叛全世界的『崩川牛子』啊！」\n\n「等等，今天是愚人節啊，他們還沒有解散！」看著信以為真的崩，嵐懶只好緊急和他說出真相。\n\n「啊？」崩猛然把手中的木棒往地上一摔，發出咚的一聲重響，隨後雙手抱著頭，發出一聲慘烈的悶哼。\n\n「無名！你這傢伙……你這傢伙的心到底是刻了什麼崩壞元素！竟然拿那種……那種聽起來這麼悲壯、這麼符合我責任感的台詞，來套在我這個身上搞笑！」\n\n崩氣得在原地轉圈，他現在只想找個地洞鑽進去。\n\n「噗哈個鬼啊！還笑!既然你這麼愛看『崩川牛子』搞笑，那以後對邦的時候，乾脆你就叫那個祥子出來幫你打太鼓算了！」\n\n……\n\n雖然夥伴間的鬧事不斷，但荒野焰嵐沒有放棄，也沒有解散！\n倒是有位豹飲豹食的太鼓手已經急著做出宣言了，看來崩也被騙得很徹底呢。`
       },
@@ -1110,15 +1301,288 @@
       };
     });
 
-    let typingTimer = null;
-    let isTyping = false;
-    let fullTextToType = "";
+    // ====================================================
+    // 🌟 預設篇章與荒野焰嵐音樂資料庫設定
+    // ====================================================
 
-    let currentChapterIndex = 0;
+    // 【手動設定預設顯示篇章】未來只要修改這個標題名稱即可更換預設篇章！
+    const DEFAULT_CHAPTER_TITLE = "學園祭 巡展"; 
+
+    // 【荒野焰嵐 YouTube 樂團影音與歌詞資料庫】
+    const flameMusicList = [
+      {
+        id: "flame1",
+        title: "《灼嵐火》",
+        badge: "荒野焰嵐",
+        bgImage: "images/tempest.webp",
+        desc: "作詞：嵐懶 ｜ 主唱：克爾 ｜ 荒野焰嵐原創曲",
+        embedUrl: "https://www.youtube-nocookie.com/embed/QDlN5sg5wx8?enablejsapi=1",
+        lyrics: `【中文原詞 / Original Chinese Lyrics】
+
+狂風吹起，撕裂沉寂，
+烈焰在掌心熾燃不息。
+黑夜壓境，沉默無聲，
+但我的吶喊猶如雷霆！
+
+怒火在翻湧，劃破長空，
+鐵與血鑄成無畏眼眸！
+風暴來襲，我踏碎恐懼，
+燒盡舊日枷鎖與謊言！
+
+灼嵐火，席捲一切！
+閃電劃破命運的黑塔！
+烈焰狂舞，雷霆轟炸，
+重生之契接連了未來！
+
+甦醒吧，燃盡過往！
+狂風之中戰鼓猛回響！
+焚盡虛妄，怒潮滂湃，
+星球將由我們來主宰！
+
+沉睡的夢境，如灰燼消散，
+不願再成無名的塵埃。
+踏碎陰霾，吞下傷害，
+浴火之後更強悍！
+
+灼嵐火，席捲天下！
+閃電劃破命運的黑塔！
+烈焰狂舞，雷霆轟炸，
+重生之光映照未來！
+
+灼嵐火，燃盡過往！
+狂風之中戰鼓回響！
+焚盡虛妄，怒潮滂湃，
+星球將由我們來主宰！
+
+烈風仍嘯，餘燼未熄，
+那炙熱的心跳，仍在無盡燃燒
+
+【日文演唱詞 / JP Lyrics】
+
+狂風が吹き荒れ 静寂を裂く
+掌には烈火 燃え盛る炎
+黒夜の壓迫 沈黙無音
+だが我が咆哮は 雷霆の如し
+
+怒火が滾り 空を貫く
+鉄と血で成す 恐れなき瞳
+嵐が来ようと 恐怖を踏み砕き
+旧き枷鎖と 偽りを焼き尽くせ
+
+灼嵐の火よ すべてを呑み込め
+閃光が貫く 運命の黒塔
+烈火が狂い踊る 雷鳴轟く
+再生まつ契約 未来を繋ぐ
+
+目覚めよ 過去を焼き払え
+狂風に響く 戦鼓の轟音
+虚妄を灰に 激濤を越えて
+この星の覇者は 我らが掴み取る
+
+眠れる夢は 灰燼と散り
+名もなき塵に 堕ちる気などない
+暗雲を踏みつけ 痛みを呑み干し
+劫火を越えて 更なる強者へ
+
+灼嵐の火よ 天下を統べよ
+閃光が貫く 運命の黒塔
+烈火が狂い踊る 雷鳴轟く
+再生の光 未来を照らす
+
+灼嵐の火よ 過去を焼き払え
+狂風に響く 戦鼓の轟音
+虚望を灰にし 激濤を越えて
+この星の覇者は 我らが掴み取る
+
+烈風なお哮り 熾火は消えず
+熱き鼓動は 果てなく燃え盛る`
+      },
+      {
+        id: "flame2",
+        title: "《滄月心》",
+        badge: "荒野焰嵐",
+        bgImage: "images/tempest.webp",
+        desc: "作詞：嵐懶 ｜ 主唱：克爾 ｜ 荒野焰嵐原創曲",
+        embedUrl: "https://www.youtube-nocookie.com/embed/_jn-s6WLEDE?enablejsapi=1",
+        lyrics: `【中文原詞 / Original Chinese Lyrics】
+靜謐長夜，與潮汐共鳴，
+倒映的光，殘缺卻清明。
+誰的腳步，又穿越風塵？
+拾起未竟的夢境。
+
+指尖劃過冷冽星痕，
+殘星未息，照亮漂泊之魂。
+
+命運刻鑄之名，燃盡遺憾微光，
+縱然曾被遺忘，依舊為夢歌唱。
+滄月低語著，那些無聲回響，
+我會走向它，守護最後希望。
+
+夜風吹醒，破碎的執念，
+蒼藍映照，依舊熾熱的眼。
+即使世界，再度推我離岸，
+信念依然不曾熄滅。
+
+指尖劃過冷冽星痕，
+殘星未息，照亮漂泊之魂。
+
+命運刻鑄之名，燃盡遺憾微光，
+縱然曾被遺忘，依舊為夢歌唱。
+滄月低語著，那些無聲回響，
+我會走向它，守護最後希望。
+
+若時序反覆更迭，讓滄月黯淡，
+我依然能夠無畏，迎接流轉。
+
+即使孤身，仍向海面仰望，
+我的歌聲，將為黎明點光。
+
+【日文演唱詞 / JP Lyrics】
+静かな夜　潮騒に響く
+欠けた光よ　澄み渡る水面
+風塵を越えて　誰の足音
+残る夢を　そっと拾い集めて
+
+冷たき星痕　指で撫でる
+消えぬ残星　彷徨う魂を照らせ
+
+刻まれた名を　燃やす微光
+忘れ去られても　夢を歌おう
+蒼き月が囁く　声なき響き
+最後の希望　守り抜くため　歩む
+
+夜風が醒ます　砕け散る執念
+蒼く映る　今も燃ゆる瞳
+世界が再び　岸を遠ざけても
+胸の炎は　決して絶やさない
+
+刻まれた名を　燃やす微光
+忘れ去られても　夢を歌おう
+蒼き月が囁く　声なき響き
+最後の希望　守り抜くため　歩む
+
+時が巡りて　月が翳ろうとも
+恐れはしない　流転を迎えよう
+
+一人仰ぐ海　この歌声は
+夜明けの光となれ
+
+(光と…なれ…)`
+      },
+      {
+        id: "flame3",
+        title: "《嚎影》",
+        badge: "荒野焰嵐",
+        bgImage: "images/tempest.webp",
+        desc: "作詞：影 ｜ 主唱：影 ｜ 豹飲豹食原創曲",
+        embedUrl: "https://www.youtube-nocookie.com/embed/mlDwb6jhakw?enablejsapi=1",
+        lyrics: `【中文原詞 / Original Chinese Lyrics】
+
+眾人讚頌的大英雄背後，
+無數暗影，在操縱節奏。
+競爭對決藏於日常裂縫，
+緊急呼叫，我一笑帶過。
+
+噴發的語句就像連環子彈，
+每拍鎖定住你心臟的律動。
+
+現在就上場迎戰！
+
+吼！嗡！號角劃破夜空！
+蹦！盪！踩著街頭脈衝！
+働！隆！秘藏絕招失控！
+瘋狂引線全燃，直取準星必中！
+
+黑夜永不終結，看月光正在嘲諷，
+絕望的迴圈，沉入黑暗深處的心聲。
+
+榮光在你我手中閃耀，
+變成鑰匙，破開牢籠，
+讓靈魂振翅飛向高空。
+
+噴發的語句就像連環子彈，
+每拍鎖定住你心臟的律動。
+
+現在就上場迎戰！
+
+吼！嗡！號角劃破夜空！
+蹦！盪！踩著街頭脈衝！
+働！隆！秘藏絕招失控！
+瘋狂引線全燃，直取準星必中！
+
+這一刻開播，誰都別想逃走！
+
+【日文演唱詞 / JP Lyrics】
+
+Yeah 偽りの舞台 幕が上がるぜ
+
+讃えられし英雄 その背の裏で
+無数の影が 操るリリカル リズム
+日常の亀裂に　潜んだ　Dead or Alive
+鳴り響くコールも　鼻で笑い飛ばすだけ
+
+放つ言葉は　マシンガンの　Bullet
+ワンバースごとに　捉える　Your heartbeat
+逃げ場はないぜ　照準はロック
+さあ始めようか　開戦のゴング
+
+咆哮　唸れ　夜を裂く　Horn
+跳べ　揺らせ　街鳴らす　Pulse
+暴走　轟音　秘めたる　Trigger
+狂気の導火線　着火して　Headshot
+
+終わらない　Dark night　嘲笑う月明かり
+抜け出せぬ　Loop　底へ沈む　Soul
+だが手の中　微かに灯る　Glory
+檻をこじ開ける　鍵へと変わる
+解き放て翼　天高く　Fly high
+
+放つ言葉は　マシンガンの　Bullet
+ワンバースごとに　捉える　Your heartbeat
+逃げ場はないぜ　照準はロック
+さあ始めようか　開戦のゴング
+
+咆哮　唸れ　夜を裂く　Horn
+跳べ　揺らせ　街鳴らす　Pulse
+暴走　轟音　秘めたる　Trigger
+狂気の導火線　着火して　Headshot
+
+配信開始だ　誰一人 逃がしゃしない`
+      },
+      {
+        id: "flame4",
+        title: "《The Iron Ascent》",
+        badge: "荒野焰嵐",
+        bgImage: "images/tempest.webp",
+        desc: "荒野焰嵐 Instrumental 原創曲",
+        embedUrl: "https://www.youtube-nocookie.com/embed/FcnDcn6RhM0?enablejsapi=1",
+        lyrics: ``
+      }
+    ];
+
+    // 檢查預設標題是否屬於荒野焰嵐樂曲
+    const defaultMusicItem = flameMusicList.find(m => m.title === DEFAULT_CHAPTER_TITLE);
+
+    // 若預設是音樂，選單分頁自動切至 'flame'，否則為 'theme'
+    let currentModalTab = defaultMusicItem ? 'flame' : 'theme';
+
+    // 計算預設小說篇章索引，若設定為樂曲或找不到則退回第 0 篇
+    let initialChapterIndex = 0;
+    const foundIdx = chaptersData.findIndex(c => c.title === DEFAULT_CHAPTER_TITLE);
+    if (foundIdx !== -1) {
+      initialChapterIndex = foundIdx;
+    }
+
+    // 核心狀態變數宣告
+    let currentChapterIndex = initialChapterIndex;
     let currentStepIndex = 0;
     let isAuto = false;
     let autoTimer = null;
     let currentActiveBgLayer = 1;
+
+    let typingTimer = null;
+    let isTyping = false;
+    let fullTextToType = "";
 
     function getCurrentStory() {
       return chaptersData[currentChapterIndex].story;
@@ -1294,33 +1758,182 @@
       document.getElementById('log-modal').style.display = 'none';
     }
 
-    function openChapterModal() {
-      if (isAuto) stopAuto();
+    // 切換選單分類標籤（theme: 主題進展 | flame: 荒野焰嵐 | echo: 回聲殘響）
+    function switchChapterTab(tabName) {
+      currentModalTab = tabName;
+      document.querySelectorAll('.modal-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      renderChapterModalContent();
+    }
+
+    // 渲染篇章選單內容
+    function renderChapterModalContent() {
       const listEl = document.getElementById('chapter-list');
+      if (!listEl) return;
       listEl.innerHTML = "";
 
-      chaptersData.forEach((ch, idx) => {
-        const card = document.createElement('div');
-        card.className = `chapter-card ${idx === currentChapterIndex ? 'active' : ''}`;
-        card.innerHTML = `
-          <div class="chapter-card-title">${ch.title}</div>
-          <div class="chapter-card-badge">${ch.badge}</div>
-        `;
-        card.onclick = (e) => {
-          e.stopPropagation();
-          currentChapterIndex = idx;
-          currentStepIndex = 0;
-          closeChapterModal();
-          renderStep();
-        };
-        listEl.appendChild(card);
-      });
+      if (currentModalTab === 'flame') {
+        // --- 荒野焰嵐專區：歌曲點選按鈕清單 ---
+        flameMusicList.forEach((item) => {
+          const card = document.createElement('div');
+          card.className = 'chapter-card';
+          card.innerHTML = `
+            <div>
+              <div class="chapter-card-title">${item.title}</div>
+              <div style="font-size:0.75rem; color:#d6cbbe; margin-top:3px;">${item.desc}</div>
+            </div>
+            <div class="chapter-card-badge">▶ 播放</div>
+          `;
+          card.onclick = (e) => {
+            e.stopPropagation();
+            closeChapterModal();
+            launchFlameMusicMode(item);
+          };
+          listEl.appendChild(card);
+        });
+      } else {
+        // --- 主題進展 或 回聲殘響 篇章列表 ---
+        const targetBadge = currentModalTab === 'theme' ? '主題進展' : '回聲殘響';
+        
+        chaptersData.forEach((ch, idx) => {
+          if (ch.badge === targetBadge) {
+            const card = document.createElement('div');
+            card.className = `chapter-card ${idx === currentChapterIndex ? 'active' : ''}`;
+            card.innerHTML = `
+              <div class="chapter-card-title">${ch.title}</div>
+              <div class="chapter-card-badge">${ch.badge}</div>
+            `;
+            card.onclick = (e) => {
+              e.stopPropagation();
+              closeMusicStagePanel(); // 點擊文字篇章時，確保退出音樂面板模式
+              currentChapterIndex = idx;
+              currentStepIndex = 0;
+              closeChapterModal();
+              renderStep();
+            };
+            listEl.appendChild(card);
+          }
+        });
+      }
+    }
 
+    // 開啟篇章選單彈窗（保留上次開啟的分頁按鈕狀態）
+    function openChapterModal() {
+      if (isAuto) stopAuto();
+
+      // 如果是第一次開啟且未記錄過分頁，才根據當前篇章設定初始分頁
+      if (!currentModalTab) {
+        const curBadge = chaptersData[currentChapterIndex] ? chaptersData[currentChapterIndex].badge : '主題進展';
+        currentModalTab = (curBadge === '主題進展') ? 'theme' : 'echo';
+      }
+
+      // 直接切換並渲染上次使用者停留的分頁（theme / flame / echo）
+      switchChapterTab(currentModalTab);
       document.getElementById('chapter-modal').style.display = 'flex';
     }
 
+    // 關閉篇章選單彈窗
     function closeChapterModal() {
       document.getElementById('chapter-modal').style.display = 'none';
+    }
+
+    // 啟動荒野焰嵐音樂模式（隱藏對話框、切換背景為 tempest.webp、開啟 YouTube 與歌詞判定、重置捲軸）
+    function launchFlameMusicMode(musicItem) {
+      if (isAuto) stopAuto();
+      currentModalTab = 'flame'; // 記錄當前停留分頁
+
+      // 🌟 通知主頁面暫停背景音樂
+      window.parent.postMessage({ type: 'PAUSE_MAIN_BGM' }, '*');
+
+      // 1. 隱藏視覺小說對話框與底部資訊列
+      const dialogueBox = document.getElementById('dialogue-box');
+      const footerBar = document.getElementById('dialogue-outer-footer');
+      if (dialogueBox) dialogueBox.style.display = 'none';
+      if (footerBar) footerBar.style.display = 'none';
+
+      // 2. 注入 YouTube 連結與標題資訊
+      const titleEl = document.getElementById('music-stage-title');
+      const descEl = document.getElementById('music-stage-desc');
+      const iframeEl = document.getElementById('music-stage-iframe');
+      if (titleEl) titleEl.innerText = musicItem.title || '';
+      if (descEl) descEl.innerText = musicItem.desc || '';
+      if (iframeEl) iframeEl.src = musicItem.embedUrl || 'about:blank';
+
+      // 3. 歌詞動態判定（純音樂無歌詞時自動隱藏右側框，換歌時捲軸強制置頂）
+      const lyricsBox = document.getElementById('music-stage-lyrics');
+      const videoBox = document.querySelector('.music-stage-video');
+      
+      if (lyricsBox) {
+        if (!musicItem.lyrics || musicItem.lyrics.trim() === "") {
+          lyricsBox.style.display = 'none';
+          if (videoBox) {
+            videoBox.style.flex = '1';
+            videoBox.style.paddingBottom = '52%';
+          }
+        } else {
+          lyricsBox.style.display = 'block';
+          lyricsBox.innerText = musicItem.lyrics;
+          lyricsBox.scrollTop = 0; // 🌟 切換歌曲時歌詞捲軸強制回到頂部！
+          if (videoBox) {
+            videoBox.style.flex = '1.2';
+            videoBox.style.paddingBottom = '40%';
+          }
+        }
+      }
+
+      // 4. 重置外層面板滾動位置，避免版面偏移
+      const musicPanel = document.getElementById('music-stage-panel');
+      if (musicPanel) {
+        musicPanel.scrollTop = 0;
+        musicPanel.style.display = 'flex';
+      }
+
+      // 5. 雙圖層平滑切換至專屬背景（tempest.webp）
+      const targetBgUrl = musicItem.bgImage || "images/tempest.webp";
+      const bg1El = document.getElementById('bg1');
+      const bg2El = document.getElementById('bg2');
+      const currentActiveEl = currentActiveBgLayer === 1 ? bg1El : bg2El;
+      const currentInactiveEl = currentActiveBgLayer === 1 ? bg2El : bg1El;
+
+      if (currentInactiveEl && currentActiveEl) {
+        currentInactiveEl.style.backgroundImage = `url('${targetBgUrl}')`;
+        currentInactiveEl.classList.add('active');
+        currentActiveEl.classList.remove('active');
+        currentActiveBgLayer = currentActiveBgLayer === 1 ? 2 : 1;
+      }
+
+      // 同步通知父層更新全螢幕背景
+      try {
+        const absoluteUrl = new URL(targetBgUrl, window.location.href).href;
+        window.parent.postMessage({ type: 'CHANGE_BG', bgUrl: absoluteUrl }, '*');
+      } catch (e) {
+        // 忽略跨域例外
+      }
+    }
+
+    // 關閉音樂播放面板，恢復視覺小說對話模式
+    function closeMusicStagePanel() {
+      const musicPanel = document.getElementById('music-stage-panel');
+      const iframeEl = document.getElementById('music-stage-iframe');
+      const dialogueBox = document.getElementById('dialogue-box');
+      const footerBar = document.getElementById('dialogue-outer-footer');
+
+      if (musicPanel) {
+        musicPanel.style.display = 'none';
+      }
+      if (iframeEl) {
+        iframeEl.src = 'about:blank'; // 停止 YouTube 影片與聲音播放
+      }
+      if (dialogueBox) {
+        dialogueBox.style.display = 'flex';
+      }
+      if (footerBar) {
+        footerBar.style.display = 'flex';
+      }
+
+      // 🌟 關閉荒野焰嵐音樂面板時，通知主頁面恢復背景音樂
+      window.parent.postMessage({ type: 'RESUME_MAIN_BGM' }, '*');
     }
 
     window.addEventListener('keydown', function(e) {
@@ -1345,28 +1958,46 @@
       }
     });
 
+   // 🌟 整合版訊息監聽器：統一處理篇章切換、影音關閉與 YouTube 播放結束事件 🌟
     window.addEventListener('message', function(e) {
-      if (e.data && e.data.type === 'CHANGE_BG') {
-        const bgUrl = e.data.bgUrl;
-        if (bgUrl) {
-          document.body.style.setProperty('--bg-image', `url('${bgUrl}')`);
-        }
-      }
-    });
+      if (!e.data) return;
 
-    window.addEventListener('message', function(e) {
-      if (e.data && e.data.type === 'SELECT_CHAPTER_INDEX') {
+      // 1. 處理來自 YouTube 播放器的狀態（影片播放完畢時，通知首頁恢復背景音樂）
+      if (typeof e.data === 'string') {
+        try {
+          const ytData = JSON.parse(e.data);
+          // info === 0 代表 YouTube 影片播放完畢 (ENDED)
+          if (ytData.event === 'infoDelivery' && ytData.info && ytData.info.playerState === 0) {
+            window.parent.postMessage({ type: 'RESUME_MAIN_BGM' }, '*');
+          }
+        } catch (err) {}
+        return;
+      }
+
+      // 2. 接收外部指定切換篇章索引
+      if (e.data.type === 'SELECT_CHAPTER_INDEX') {
         const idx = e.data.index;
-        if (idx >= 0 && idx < chaptersData.length) {
+        if (typeof idx === 'number' && idx >= 0 && idx < chaptersData.length) {
+          closeMusicStagePanel(); // 若當前處於音樂模式，切換篇章時先還原對話框
           currentChapterIndex = idx;
           currentStepIndex = 0;
           renderStep();
         }
       }
+
+      // 3. 接收外部關閉彈窗指令：強制停止 YouTube 聲音並隱藏播放面板
+      if (e.data.type === 'STOP_FLAME_MUSIC') {
+        closeMusicStagePanel();
+      }
     });
 
-    document.getElementById('bg1').style.backgroundImage = `url('${getCurrentStory()[0].bgUrl}')`;
-    renderStep();
+    // 🌟 啟動判斷：如果預設設定為樂曲，直接開啟音樂面板；否則進入小說對話模式
+    if (defaultMusicItem) {
+      launchFlameMusicMode(defaultMusicItem);
+    } else {
+      document.getElementById('bg1').style.backgroundImage = `url('${getCurrentStory()[0].bgUrl}')`;
+      renderStep();
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
         if (window.innerWidth <= 768) {
