@@ -1796,10 +1796,19 @@ Yeah 偽りの舞台 幕が上がるぜ
 
     function openLogModal() {
       if (isAuto) stopAuto();
-      const story = getCurrentStory();
       const logBody = document.getElementById('log-body');
       logBody.innerHTML = "";
 
+      // 🌟 核心判定：如果音樂面板正在顯示，或當前處於荒野焰嵐分頁/樂曲狀態，Log 保持空白不印出小說對話
+      const musicPanel = document.getElementById('music-stage-panel');
+      const isFlameMusicActive = (musicPanel && musicPanel.style.display === 'flex') || (activeMusicItem !== null);
+
+      if (isFlameMusicActive) {
+        document.getElementById('log-modal').style.display = 'flex';
+        return; // 直接中斷，保留空白畫面
+      }
+
+      const story = getCurrentStory();
       for (let i = 0; i <= currentStepIndex; i++) {
         const item = story[i];
         const logItem = document.createElement('div');
@@ -1979,6 +1988,8 @@ Yeah 偽りの舞台 幕が上がるぜ
 
     // 關閉音樂播放面板，恢復視覺小說對話模式
     function closeMusicStagePanel() {
+      activeMusicItem = null; // 🌟 退出音樂模式時清空樂曲狀態標記
+
       const musicPanel = document.getElementById('music-stage-panel');
       const iframeEl = document.getElementById('music-stage-iframe');
       const dialogueBox = document.getElementById('dialogue-box');
