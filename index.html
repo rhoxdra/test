@@ -1615,11 +1615,19 @@
         </div>
     </div>
 
-    <!-- 🌟 視覺小說全螢幕 Overlay 視窗 🌟 -->
+<!-- 🌟 視覺小說全螢幕 Overlay 視窗 🌟 -->
 <div id="vn-modal" class="vn-modal-overlay">
-    <div class="vn-top-floating-btns">
-        <button class="vn-float-btn" onclick="toggleVNFullscreen()" title="切換全螢幕">⛶</button>
-        <button class="vn-float-btn" onclick="closeVNModal()" title="關閉視覺小說">✕</button>
+    <div class="vn-top-floating-btns" onclick="event.stopPropagation()">
+        <!-- 將原本的 ⛶ 替換為帶有 ID 的按鈕與專屬全螢幕展開圖示 -->
+        <button id="vn-fullscreen-btn" class="vn-float-btn" onclick="toggleVNFullscreen()" title="進入全螢幕">
+            <svg id="vn-fs-icon-enter" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+            </svg>
+            <svg id="vn-fs-icon-exit" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                <path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/>
+            </svg>
+        </button>
+        <button class="vn-float-btn" onclick="event.stopPropagation(); closeVNModal();" title="關閉視覺小說">✕</button>
     </div>
     
     <div id="vn-container" class="vn-iframe-container">
@@ -1699,6 +1707,7 @@
 <button class="form-switch-btn" onclick="downloadFortuneImage()" style="margin-bottom: 0; flex: 1; background: linear-gradient(135deg, #f5a623 0%, #d97706 100%); border-color: rgba(245, 166, 35, 0.6);">[↓] 儲存籤詩圖卡</button>
         </div>
     </div>
+</div>
     <!-- 🌟 JS 控制腳本 🌟 -->
     <script>
         // ==========================================
@@ -4302,17 +4311,16 @@
                     item.style.display = 'none';
                 }
             });
-        }
-        // 🌟 觀圖模式下：點擊螢幕任意空白處直接還原 UI（支援手機觸控） 🌟
-        document.addEventListener('click', function(e) {
-            // 只在開啟觀圖模式 (body 帶有 ui-hidden) 時運作
-            if (document.body.classList.contains('ui-hidden')) {
-                // 點擊點在「海報文字」與「按鈕本身」以外的任意空白處，直接切換還原 UI
-                if (!e.target.closest('#poster-title-box') && !e.target.closest('#ui-toggle-btn')) {
-                    toggleUI();
                 }
-            }
-        });
+                  // 🌟 觀圖模式下：點擊螢幕任意空白處直接還原 UI（加入 vn-open 與 vn-modal 排除） 🌟
+                   document.addEventListener('click', function(e) {
+                     // 僅在「純淨觀圖模式」運作，若正在閱讀視覺小說 (vn-open) 則絕不觸發
+                        if (document.body.classList.contains('ui-hidden') && !document.body.classList.contains('vn-open')) {
+                            if (!e.target.closest('#poster-title-box') && !e.target.closest('#ui-toggle-btn') && !e.target.closest('#vn-modal')) {
+                              toggleUI();
+                         }
+                   }
+                 });
     // 🌟 視覺小說 Modal 觸發邏輯 🌟
     function openVNModal(chapterIndex = null) {
     const modal = document.getElementById('vn-modal');
@@ -4342,14 +4350,23 @@ function closeVNModal() {
     const modal = document.getElementById('vn-modal');
     const iframe = document.getElementById('vn-iframe');
 
-    // 關閉視覺小說時，若音樂面板還開著，停止 YouTube 聲音
+    // 1. 若處於全螢幕狀態，立即退出
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen().catch(() => {});
+        }
+    }
+
+    // 2. 停止音樂廣播
     if (iframe && iframe.contentWindow) {
         try {
             iframe.contentWindow.postMessage({ type: 'STOP_FLAME_MUSIC' }, '*');
         } catch (e) {}
     }
 
-    // 若先前是因為 YouTube 暫停了主頁音樂，關閉視覺小說時自動恢復播放
+    // 3. 恢復主頁 BGM
     if (wasBgmPlayingBeforeVideo) {
         const audio = document.getElementById('bgm-audio');
         if (audio) {
@@ -4362,10 +4379,14 @@ function closeVNModal() {
         wasBgmPlayingBeforeVideo = false;
     }
 
+    // 4. 關閉彈窗並強制解鎖所有首頁樣式
     modal.style.display = 'none';
-    document.body.classList.remove('ui-hidden');
-    document.body.classList.remove('vn-open');   // 解鎖首頁
-    document.body.classList.remove('modal-open');
+    document.body.classList.remove('ui-hidden', 'vn-open', 'modal-open');
+    
+    // 5. 確保在畫面渲染後解鎖點擊（避免手機/瀏覽器全螢幕動畫造成的凍結）
+    requestAnimationFrame(() => {
+        document.body.classList.remove('ui-hidden', 'vn-open', 'modal-open');
+    });
 }
 
     // 全螢幕開關邏輯
@@ -4390,17 +4411,36 @@ function closeVNModal() {
     }
 
     // 監聽全螢幕狀態改變事件
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+document.addEventListener('fullscreenchange', handleFullscreenChange);
+document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
 
-    function handleFullscreenChange() {
-        const modal = document.getElementById('vn-modal');
-        if (!document.fullscreenElement && !document.webkitFullscreenElement && modal.style.display === 'none') {
-            document.body.classList.remove('modal-open');
-            document.body.classList.remove('vn-open');
-            document.body.classList.remove('ui-hidden');
+function handleFullscreenChange() {
+    const modal = document.getElementById('vn-modal');
+    const fsBtn = document.getElementById('vn-fullscreen-btn');
+    const iconEnter = document.getElementById('vn-fs-icon-enter');
+    const iconExit = document.getElementById('vn-fs-icon-exit');
+    const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement);
+
+    // 1. 同步切換視覺小說按鈕圖示與 Title
+    if (fsBtn && iconEnter && iconExit) {
+        if (isFullscreen) {
+            iconEnter.style.display = 'none';
+            iconExit.style.display = 'block';
+            fsBtn.title = '退出全螢幕';
+        } else {
+            iconEnter.style.display = 'block';
+            iconExit.style.display = 'none';
+            fsBtn.title = '進入全螢幕';
         }
     }
+
+    // 2. 原本的關閉判斷
+    if (!isFullscreen && modal && modal.style.display === 'none') {
+        document.body.classList.remove('modal-open');
+        document.body.classList.remove('vn-open');
+        document.body.classList.remove('ui-hidden');
+    }
+}
 
     // 🌟 接收來自 vn_reader.html 的背景切換與音樂暫停/恢復通知 🌟
     let wasBgmPlayingBeforeVideo = false;
