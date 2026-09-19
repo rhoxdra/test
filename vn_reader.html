@@ -249,7 +249,8 @@
 
     body.vn-ui-hidden #dialogue-box,
     body.vn-ui-hidden #controls-bar,
-    body.vn-ui-hidden #dialogue-outer-footer {
+    body.vn-ui-hidden #dialogue-outer-footer,
+    body.vn-ui-hidden #music-stage-panel {
       opacity: 0 !important;
       visibility: hidden !important;
       pointer-events: none !important;
@@ -1574,6 +1575,7 @@ Yeah 偽りの舞台 幕が上がるぜ
 
     // 核心狀態變數宣告
     let currentChapterIndex = initialChapterIndex;
+    let activeMusicItem = null;
     let currentStepIndex = 0;
     let isAuto = false;
     let autoTimer = null;
@@ -1654,12 +1656,34 @@ Yeah 偽りの舞台 幕が上がるぜ
     }
 
     function handleStageClick() {
-      // 🌟 若目前處於荒野焰嵐音樂面板模式，點擊背景不推進文字對話
-      const musicPanel = document.getElementById('music-stage-panel');
-      if (musicPanel && musicPanel.style.display === 'flex') return;
+      // 🌟 如果篇章選單或 Log 視窗開著，點擊背景空白處時直接關閉它們，不推進對話
+      const chapterModal = document.getElementById('chapter-modal');
+      const logModal = document.getElementById('log-modal');
+      if ((chapterModal && chapterModal.style.display === 'flex') || 
+          (logModal && logModal.style.display === 'flex')) {
+        closeChapterModal();
+        closeLogModal();
+        return;
+      }
 
+      // 如果畫面目前是「隱藏UI」狀態，點擊任意處專門用來喚醒 UI，不推進對話
       if (document.body.classList.contains('vn-ui-hidden')) {
         document.body.classList.remove('vn-ui-hidden');
+        
+        const dialogueBox = document.getElementById('dialogue-box');
+        const footerBar = document.getElementById('dialogue-outer-footer');
+        const musicPanel = document.getElementById('music-stage-panel');
+        
+        if (!(musicPanel && musicPanel.style.display === 'flex')) {
+          if (dialogueBox) dialogueBox.style.display = 'flex';
+          if (footerBar) footerBar.style.display = 'flex';
+        }
+        return;
+      }
+
+      // 荒野焰嵐音樂面板模式下點擊背景不動作
+      const musicPanel = document.getElementById('music-stage-panel');
+      if (musicPanel && musicPanel.style.display === 'flex') {
         return;
       }
 
@@ -1701,7 +1725,27 @@ Yeah 偽りの舞台 幕が上がるぜ
 
     function toggleVnUI(e) {
       if (e) e.stopPropagation();
-      document.body.classList.toggle('vn-ui-hidden');
+      
+      // 🌟 直接切換隱藏狀態，音樂不斷開、面板保留
+      const isHidden = document.body.classList.toggle('vn-ui-hidden');
+      const dialogueBox = document.getElementById('dialogue-box');
+      const footerBar = document.getElementById('dialogue-outer-footer');
+      const musicPanel = document.getElementById('music-stage-panel');
+      
+      if (isHidden) {
+        if (dialogueBox) dialogueBox.style.display = 'none';
+        if (footerBar) footerBar.style.display = 'none';
+        // 注意：這裡不把 musicPanel 的 display 設為 none，讓 CSS 去做 opacity 淡出與 pointer-events 阻擋，音樂就能繼續播！
+      } else {
+        if (musicPanel && musicPanel.style.display === 'flex') {
+          // 如果原本是荒野焰嵐模式，喚醒時保持 flex 顯示
+          musicPanel.style.display = 'flex';
+        } else {
+          if (dialogueBox) dialogueBox.style.display = 'flex';
+          if (footerBar) dialogueBox.style.display = 'flex'; // 若有需要可對應 footerBar
+          if (footerBar) footerBar.style.display = 'flex';
+        }
+      }
     }
 
     function scheduleAutoNext() {
@@ -1853,6 +1897,7 @@ Yeah 偽りの舞台 幕が上がるぜ
     function launchFlameMusicMode(musicItem) {
       if (isAuto) stopAuto();
       currentModalTab = 'flame'; // 記錄當前停留分頁
+      activeMusicItem = musicItem;
 
       // 🌟 通知主頁面暫停背景音樂
       window.parent.postMessage({ type: 'PAUSE_MAIN_BGM' }, '*');
@@ -1930,20 +1975,13 @@ Yeah 偽りの舞台 幕が上がるぜ
       const dialogueBox = document.getElementById('dialogue-box');
       const footerBar = document.getElementById('dialogue-outer-footer');
 
-      if (musicPanel) {
-        musicPanel.style.display = 'none';
-      }
-      if (iframeEl) {
-        iframeEl.src = 'about:blank'; // 停止 YouTube 影片與聲音播放
-      }
-      if (dialogueBox) {
-        dialogueBox.style.display = 'flex';
-      }
-      if (footerBar) {
-        footerBar.style.display = 'flex';
-      }
+      if (musicPanel) musicPanel.style.display = 'none';
+      if (iframeEl) iframeEl.src = 'about:blank';
+      
+      // 正常關閉音樂面板時，恢復顯示對話框與底欄
+      if (dialogueBox) dialogueBox.style.display = 'flex';
+      if (footerBar) footerBar.style.display = 'flex';
 
-      // 🌟 關閉荒野焰嵐音樂面板時，通知主頁面恢復背景音樂
       window.parent.postMessage({ type: 'RESUME_MAIN_BGM' }, '*');
     }
 

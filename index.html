@@ -4371,6 +4371,7 @@ function closeVNModal() {
     // 全螢幕開關邏輯
     function toggleVNFullscreen() {
         const elem = document.getElementById('vn-modal');
+        const poster = document.getElementById('poster-title-box');
         if (!document.fullscreenElement && !document.webkitFullscreenElement) {
             if (elem.requestFullscreen) {
                 elem.requestFullscreen().catch(err => alert(`無法進入全螢幕模式: ${err.message}`));
