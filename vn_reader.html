@@ -2056,19 +2056,32 @@ Yeah 偽りの舞台 幕が上がるぜ
         }
       }
 
-      // 3. 接收外部關閉彈窗指令：強制停止 YouTube 聲音並隱藏播放面板
-      if (e.data.type === 'STOP_FLAME_MUSIC') {
-        closeMusicStagePanel();
+      // 3. 接收外部重置 / 關閉指令
+      if (e.data.type === 'STOP_FLAME_MUSIC' || e.data.type === 'RESET_VN_READER') {
+        resetToDefaultMode();
       }
     });
 
-    // 🌟 啟動判斷：如果預設設定為樂曲，直接開啟音樂面板；否則進入小說對話模式
-    if (defaultMusicItem) {
-      launchFlameMusicMode(defaultMusicItem);
-    } else {
-      document.getElementById('bg1').style.backgroundImage = `url('${getCurrentStory()[0].bgUrl}')`;
-      renderStep();
+    // 🌟 重置回預設狀態（荒野焰嵐預設樂曲或預設篇章）
+    function resetToDefaultMode() {
+      // 關閉可能開啟中的選單與 Log 視窗
+      closeChapterModal();
+      closeLogModal();
+      if (isAuto) stopAuto();
+
+      if (defaultMusicItem) {
+        launchFlameMusicMode(defaultMusicItem);
+      } else {
+        closeMusicStagePanel();
+        currentChapterIndex = initialChapterIndex;
+        currentStepIndex = 0;
+        document.getElementById('bg1').style.backgroundImage = `url('${getCurrentStory()[0].bgUrl}')`;
+        renderStep();
+      }
     }
+
+    // 🌟 啟動判斷：初始化進入預設模式
+    resetToDefaultMode();
 
     window.addEventListener('DOMContentLoaded', () => {
         if (window.innerWidth <= 768) {
