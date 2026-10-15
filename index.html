@@ -3626,6 +3626,12 @@
                 iframe.contentWindow.postMessage({ type: 'RESET_VN_READER' }, '*');
             }
         } catch (e) {}
+        // 🌟 已經載入過的情境：彈窗開啟時立即聚焦到 iframe 的 contentWindow
+        setTimeout(() => {
+            if (iframe.contentWindow) {
+                iframe.contentWindow.focus();
+            }
+        }, 50);
     }
 
     iframe.onload = function() {
@@ -3634,9 +3640,12 @@
         } else {
             iframe.contentWindow.postMessage({ type: 'RESET_VN_READER' }, '*');
         }
+        // 🌟 首次載入的情境：使用 contentWindow.focus() 搶佔視窗焦點
         setTimeout(() => {
-            iframe.focus();
-        }, 100);
+            if (iframe.contentWindow) {
+                iframe.contentWindow.focus();
+            }
+        }, 150);
     };
 
     modal.style.display = 'flex';

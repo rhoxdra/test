@@ -2274,6 +2274,20 @@ Yeah 偽りの舞台 幕が上がるぜ
 
     // 🌟 啟動判斷：初始化進入預設模式
     resetToDefaultMode();
+
+    // 🌟 焦點自動補正：保證一進頁面或滑鼠滑入時立即接收鍵盤事件
+    window.addEventListener('DOMContentLoaded', () => {
+      window.focus();
+      const stage = document.getElementById('stage');
+      if (stage) {
+        stage.setAttribute('tabindex', '0');
+        stage.focus();
+      }
+    });
+
+    window.addEventListener('mouseenter', () => {
+      window.focus();
+    });
   </script>
 </body>
 </html>
