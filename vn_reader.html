@@ -22,7 +22,8 @@
       "horse", "igarashi", "kage", "kokumei", "kulu", 
       "kuzure", "lanlan", "osae", "owl", "roar", 
       "rofena", "rub", "sugar", "takawa", "teiner", 
-      "wakima", "zarion", "jareth", "volt"
+      "wakima", "zarion", "jareth", "volt",
+      "proto", "koushou", "ultima", "arashiyama", "veil", "zoma"
       // 新增角色範例：只需寫入 id，例如 "new_character"
     ];
 
@@ -171,7 +172,7 @@
 
     .expr-tired     { background-position: 1.2% 100%; }
     .expr-angry     { background-position: 33.733% 99%; }
-    .expr-sad       { background-position: 65.366% 99%; }
+    .expr-sad       { background-position: 66.5% 99%; }
     .expr-smirk     { background-position: 98.7% 98.9%; }
 
     #speaker-name {
@@ -646,10 +647,11 @@
       <div class="modal-title">☰ 目錄選擇</div>
       <button class="modal-close" onclick="closeChapterModal()">✕</button>
     </div>
-    <!-- 篇章三大分類按鈕 -->
+    <!-- 篇章四大分類按鈕 -->
     <div class="modal-tab-group">
       <button id="tab-btn-theme" class="modal-tab-btn active" onclick="switchChapterTab('theme')">主題進展</button>
       <button id="tab-btn-flame" class="modal-tab-btn" onclick="switchChapterTab('flame')">荒野焰嵐</button>
+      <button id="tab-btn-orbit" class="modal-tab-btn" onclick="switchChapterTab('orbit')">無盡軌跡</button>
       <button id="tab-btn-echo" class="modal-tab-btn" onclick="switchChapterTab('echo')">回聲殘響</button>
     </div>
     <div id="chapter-list" class="modal-body"></div>
@@ -657,6 +659,289 @@
 
   <script>
     const announcements = [
+{
+      title: "無盡軌跡 薄明之戰 壹",
+      badge: "無盡軌跡",
+      bgImage: "images/cover01.webp",
+      story: [
+        { speaker: "■無盡軌跡 薄明之戰 壹", text: "這是一個歷經滅亡，又因「元素結晶」的出現而重生的星球。", bgUrl: "images/cover01.webp" },
+        { speaker: "■無盡軌跡 薄明之戰 壹", text: "然而，這奇蹟的第二次機會卻因人類的一抹貪念化為災難的序曲，戰火與紛亂再度蔓延至每一片大地。", bgUrl: "images/cover01.webp" },
+        { text: "※※※" },
+        { text: "暴風雨在天空肆虐，雷電將荒野照亮成一片白色的混亂。", bgUrl: "images/arc_escape.webp" },
+        { text: "正進行征戰旅途的人類青年「洛爾」與紅髮藍毛狼人「克爾」，在泥濘的草地中發現了一名遍體鱗傷、毛色黯淡的橘毛犬族獸人。", bgUrl: "images/arc_escape.webp" },
+        { speaker: "克爾", avatar: "images/kulu_sp.webp", expr: "surprised", text: "那裡有個生物！氣息非常微弱……" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "neutral", text: "他受了很重的傷，我們得幫助他。" },
+        { text: "兩人小心翼翼地將犬族扶進乾燥的山洞中，並讓克爾以火元素點燃篝火。" },
+        { text: "犬族在火光中渾身顫抖，耳朵緊貼頭頂、尾巴蜷縮在身下，眼神中充滿了恐懼與警惕。" },
+        { text: "在洛爾輕柔的安撫、清理傷口與上藥後，犬族終於在火光旁沉沉睡去。直到隔日清晨雨勢漸歇，他才在陽光中緩緩醒來，拘謹地接過遞來的乾糧與水。" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "smile", text: "別擔心，我們不會傷害你的。我叫「洛爾」，這位從尼爾桑大陸來的狼族夥伴是「克爾」。" },
+        { speaker: "亞爾克", avatar: "images/arc_sp.webp", expr: "tired", text: "謝謝你們……我的名字是「亞爾克」。我好不容易才從一座實驗室裡逃出來。" },
+        { text: "即便洛爾告知這趟旅程將充滿戰事與危險，亞爾克琥珀色眼眸中依然閃爍著堅定，決定與兩人同行。" },
+        { text: "入夜後，三人在一座小村莊廣場篝火旁歇息。" },
+        { text: "望著跳動的火焰，洛爾開始向新夥伴亞爾克訴說這場席捲世界的戰火究竟從何而起……" },
+        { text: "※※※" },
+        { text: "故事要從距今數百年前說起。", bgUrl: "images/ultima_lab.webp" },
+        { text: "當時星球因資源枯竭瀕臨末日，舉世聞名的救世學者「阿爾提瑪」在偏僻山脈的實驗室中，賭上一切進行最後的新能源實驗。" },
+        { speaker: "阿爾提瑪", avatar: "images/ultima_sp.webp", expr: "angry", text: "啟動終段程序……快點！這是最後的機會！" },
+        { text: "隨著他將合成物注入漆黑石核，如烈日般耀眼的「元素結晶」終於現世。" },
+        { text: "然而失控的能量瞬間吞噬了整座實驗室，阿爾提瑪的身影也在能量漩渦中銷聲匿跡，只留下改寫世界能源體系的結晶。" },
+        { text: "時光流轉至現代。" },
+        { text: "在艾瑞爾大陸偏遠山脈深處的秘密實驗室內，本該早已逝去的阿爾提瑪竟再度現身。學者神情冷淡如鐵，將一枚閃爍橘光的結晶強行嵌入一隻橘毛野獸體內。" },
+        { speaker: "阿爾提瑪", avatar: "images/ultima_sp.webp", expr: "neutral", text: "你能成為我的新助力嗎……還是會像前幾個失敗品一樣，在痛苦中消失呢？" },
+        { text: "高頻脈衝與強烈電流貫穿全身，野獸在煉獄般的痛苦中死死守住最後一絲自我意識。" },
+        { text: "就在意識即將被撕裂的前一刻，實驗室電力系統突然發生故障、陷入一片黑暗。" },
+        { text: "野獸胸口猛然爆發出強烈的震盪波，震碎了粗重的金屬鎖鏈。牠跌跌撞撞地衝出實驗室大門，一頭栽進門外狂風暴雨的荒野之中。" },
+        { speaker: "阿爾提瑪", avatar: "images/ultima_sp.webp", expr: "smirk", text: "野獸的逃脫雖是意料之外，卻是元素成功融合進身體的最好證據。" },
+        { speaker: "阿爾提瑪", avatar: "images/ultima_sp.webp", expr: "smirk", text: "『賈瑞斯』啊，總有一天，我一定……" },
+        { text: "實驗室內迴盪著阿爾提瑪難以掩飾的狂喜笑聲，伴隨著窗外的閃電與雷鳴久久不息。" },
+        { text: "※※※" },
+        { text: "與此同時，在嵐光大陸南部邊緣，有一座四季分明、充滿花香與和平氣息的山谷村落「嵐光村」。自幼沒有雙親的洛爾，與「高和」、「高翔」兄弟在這裡相依為命。", bgUrl: "images/bg_village_peace.webp" },
+        { text: "戴著黑框眼鏡的高和沉穩多聞，弟弟高翔則總是背著一把巨大迴旋鏢、熱愛探索村外的古老遺跡。" },
+        { speaker: "高和", avatar: "images/takawa_sp.webp", expr: "neutral", text: "高翔，最近村外的野獸有點不安分，你出去探索可別太冒險啊。" },
+        { speaker: "高翔", avatar: "images/koushou_sp.webp", expr: "smile", text: "老哥你放心吧，我很有經驗的！說不定還會帶些稀有古物回來給你們呢！" },
+        { text: "送走充滿朝氣的高翔後，洛爾與高和像往常一樣走進村裡的小賣店，挑了幾本記錄著尼爾桑大陸風土的舊書，正一邊拌嘴今晚的晚餐菜單、一邊踏出店門。" },
+        { text: "隆——！" },
+        { text: "一聲震耳欲聾的巨響突然從村莊中心炸裂。赤紅的砲火撕裂建築，烈焰如野獸般吞噬了熟悉的木屋與街道，驚叫與哀號瞬間響徹整座山谷。", bgUrl: "images/bg_village_war.webp" },
+        { speaker: "高和", avatar: "images/takawa_sp.webp", expr: "surprised", text: "什麼？快走，阿洛，往東側出口跑！" },
+        { text: "兩人拔腿狂奔至村口，一道高大冷硬的黑影卻無聲無息地攔在前方。是一名身披深色斗篷、胸口嵌著「滅」字黑紫色結晶的神秘男子。", bgUrl: "images/volt_attack.webp" },
+        { text: "沒有任何警告，男子一抬右手便將濃縮的能量球射向高和胸口，將他重重轟飛撞上石牆！" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "angry", text: "你這混帳！不能就這樣結束！" },
+        { text: "眼見致命一擊即將落下，洛爾用盡全力伸出右手，手腕竟猛然爆發出如破曉烈日般的刺眼紅光，硬生生扭曲並偏折能量球的軌道。" },
+        { text: "就在洛爾因劇痛倒下的前一刻，一名循著貓草香氣路過的棕毛獅族獸人如疾風般躍起，一記猛撞將神秘男子擊退數丈！" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "angry", text: "這位不具名的先生，恐怕你得拿出更硬的本事，才有資格讓我認真呢。" },
+        { text: "激戰數回合後，神秘男子在濃煙與爆炸中緩緩隱去身形，只留下一道冷酷的低語迴盪在風中。" },
+        { speaker: "弗爾特", avatar: "images/volt_sp.webp", expr: "neutral", text: "……弗爾特。" },
+        { text: "※※※" },
+        { text: "黃昏的橘紅餘暉映照著滿目瘡痍的嵐光村。昔日充滿笑聲的村落如今只剩焦黑瓦礫，而高翔也始終下落不明。", bgUrl: "images/bg_village_war.webp" },
+        { speaker: "高和", avatar: "images/takawa_sp.webp", expr: "sad", text: "我們……實在失去了太多了……" },
+        { text: "極端的無力與憤怒交織之際，洛爾右手腕上的元素刻印再度散發出溫暖而深沉的紅光。他抬起頭，眼神中燃起前所未有的決意。" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "angry", text: "高和，不能再讓我們的熟人這樣白白犧牲了！", bgUrl: "images/roar_resolve.webp" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "angry", text: "我一定要結束這一切爭端，創造一個我們能夠安心居住的地方！" },
+        { text: "就在此時，救下兩人的獅族獸人「五十嵐」穩步走近，向他們揭開了塵封的真相：洛爾、高和以及高翔並非普通人類，而是傳說「十三元素」的『賦形者』。" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "neutral", text: "你們沒有親人卻能自然融入村莊，是因為過往的記憶曾被人為干涉。某些組織懼怕你們的力量甦醒，才不惜屠村扼殺未來的希望。" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "smile", text: "光有覺悟是不夠的。讓我來教導你們如何掌握這份元素的『權能』，並帶領倖存的村民重新站起來吧！" },
+        { text: "在餘暉渲染的天色下，三道身影並肩踏上了離開故鄉、邁向未來的道路。" },
+        { text: "※※※" },
+        { text: "然而，並非所有不具記憶的種子都能走向光明。", bgUrl: "images/proto_climb.webp" },
+        { text: "在幾年前的一個陰雨天，曾與洛爾、高和兄弟情同手足、大他們三歲的學長，在獨自挑戰攀岩時因岩石濕滑墜落，更在半空中遭一道落雷貫穿。" },
+        { text: "大難不死的他，腦海中卻湧現出被封印的實驗室記憶——" },
+        { text: "無窗的房間、冷白的燈光，以及白袍學者「阿爾提瑪」那低沉威壓的聲音。" },
+        { text: "當他滿身泥濘地回到村口，遠遠望見洛爾正將雨傘遞給高和兄弟、三人純真笑鬧的模樣時，被世界背叛與操縱的痛苦徹底壓垮了他。" },
+        { text: "學長無法再用原本的模樣面對學弟們，默默轉身踏入黑暗之中。" },
+        { text: "多年後，他已披上鮮血染就的紅甲、手持雙槍，成為冷血無情的詛碼團幹部「普洛特」。" },
+        { text: "※※※" },
+        { text: "另一方面，探險歸來卻發現嵐光村化為焦土的高翔，以為哥哥與摯友皆已罹難。", bgUrl: "images/koushou_fall.webp" },
+        { text: "在無盡的失落中，他用僅存的財物買下船票，渡海來到了原始而神秘的「尼爾桑大陸」。" },
+        { text: "在密林深處探索時，高翔意外驚動了正在採集辛香草的灰毛狼人「克明」。" },
+        { text: "克明剛一躍而出準備先發制人，高翔卻手忙腳亂地踩到濕石，撲通一聲在草地上翻了個大跟斗。" },
+        { speaker: "克明", avatar: "images/kokumei_sp.webp", expr: "smile", text: "哈哈……抱歉，我以為你是襲擊者。" },
+        { speaker: "克明", avatar: "images/kokumei_sp.webp", expr: "smile", text: "你這個人類真是有趣，怎麼會跑到這種地方來？" },
+        { text: "沒有語言隔閡的兩人越聊越投機，從植物習性聊到料理技巧，彷彿一見如故。", bgUrl: "images/kokumei_river.webp" },
+        { text: "儘管克明顧慮村中「狩獵派」對人類的戒心而未立即帶他回村，兩人仍約定每日在林間相會。" },
+        { text: "幾天後，克明在山洞採藥時突遭巨獸襲擊，左臂重傷昏迷。" },
+        { text: "一直暗中跟蹤弟弟的狩獵派頭領——克明的哥哥「克爾」聞聲衝入洞內，正巧看見高翔手持染血的迴旋鏢站在弟弟身旁！" },
+        { speaker: "克爾", avatar: "images/kulu_sp.webp", expr: "angry", text: "就是你！你對我弟弟做了什麼？" },
+        { text: "直到甦醒的克明急忙出聲解釋是高翔拚死擊殺巨獸救了自己，克爾才勉強壓下殺意收回短刀，並破例邀請這位救命恩人前往隱匿於濃霧森林中的狼人村作客。" },
+        { text: "在狼人村的幾天裡，高翔品嚐了克明的拿手烤魚，還收下了兄弟倆在夜市買來送他的獸骨手鍊。" },
+        { text: "高翔換上輕便的狼族狩獵服，真心以為跨越種族的和平生活正要展開……" },
+        { text: "然而，村外接連出現動物被詭異手法擊殺的痕跡，不祥的陰影已悄然逼近。" },
+        { text: "這天高翔獨自出村巡查時，竟在林間看見了一道令他呼吸驟停的鮮紅背影——", bgUrl: "images/bg_forest_day.webp" },
+        { speaker: "高翔", avatar: "images/koushou_sp.webp", expr: "surprised", text: "不會吧……是普洛特學長？" },
+        { speaker: "高翔", avatar: "images/koushou_sp.webp", expr: "surprised", text: "我以為你早就……我真的太高興了！" },
+        { speaker: "普洛特", avatar: "images/proto_sp.webp", expr: "neutral", text: "我原本打算在狼人村一網打盡的，既然你們分開行動，也只能一個一個來了。" },
+        { speaker: "普洛特", avatar: "images/proto_sp.webp", expr: "angry", text: "高翔，待在尼爾桑繼續躲著就好，別再追過來了。" },
+        { text: "砰！" },
+        { text: "槍聲轟鳴！普洛特冷酷地開槍擊傷高翔的右腿與胸口，隨即轉身率領部隊對狼人村發動了毀滅性的夜襲。" },
+        { text: "熊熊烈焰吞噬了房屋，狼族戰士在突襲中死傷慘重。", bgUrl: "images/kulu_village_fire.webp" },
+        { text: "克爾揮舞著鑲嵌火元素的短刀在火海中浴血奮戰，卻在河岸邊遭普洛特以雙槍與壓倒性實力步步逼入絕境。" },
+        { text: "更令克爾心碎的是，弟弟克明竟被敵軍反綁雙手押為人質！" },
+        { text: "砰！" },
+        { text: "普洛特趁著克爾動搖之際連開數槍貫穿他的手腕與左腿，語氣充滿戲謔與殘酷。" },
+        { speaker: "普洛特", avatar: "images/proto_sp.webp", expr: "smirk", text: "真該好好感謝你的人類朋友高翔，如果不是他帶我們來這裡，我們還得多花好幾天找路呢。" },
+        { speaker: "普洛特", avatar: "images/proto_sp.webp", expr: "smirk", text: "狼人果然就是這麼愚蠢又有趣。" },
+        { speaker: "克爾", avatar: "images/kulu_sp.webp", expr: "angry", text: "可惡啊……你們這些人類！我恨透了你們！" },
+        { text: "就在普洛特將槍口對準克爾額頭扣下扳機的千鈞一髮之際，負傷趕來的高翔猛然擲出迴旋鏢打偏子彈軌道！爆炸的衝擊將克爾炸飛墜入湍急的河流之中。" },
+        { speaker: "高翔", avatar: "images/koushou_sp.webp", expr: "angry", text: "放開克明！否則，我將會和學長你一戰！" },
+        { text: "高翔手腕上的「極」元素在此刻悄然甦醒，然而普洛特卻以克明作為人質並引爆煙霧彈從容撤退，只留下高翔跪在焦土上發出無力的怒吼。" },
+        { text: "※※※" },
+        { text: "視線回到嵐光大陸。", bgUrl: "images/igarashi_ball.webp" },
+        { text: "在過去一個月裡，洛爾與高和帶領倖存村民北遷至嵐光城外的腹地，於五十嵐的指導與資助下，將荒地建設成了充滿生機的「嵐光鎮」。" },
+        { text: "兩人的元素修練也突飛猛進：洛爾掌握了零元素『回歸』的真諦——透過想像力具象化萬物並逆轉創傷；高和則在拋接球特訓中領悟了恆元素『恆定』——能將空氣與能量狀態鎖定在特定瞬間。" },
+        { text: "就在兩人運用雙重權能協助鎮民治癒傷患、穩定防禦之際，鎮上的警鐘驟然響起——宿敵弗爾特再度現身郊區，企圖摧毀這座新生的小鎮。" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "angry", text: "沒想到，報一箭之仇的時刻來得這麼快！", bgUrl: "images/volt_attack.webp" },
+        { text: "這一次，師徒三人已不再是任人宰割的弱者。高和展開多重恆定障壁擋下漫天能量彈，洛爾將立方體化為光弓射出封存著恆定能量的箭矢引發連鎖爆破，五十嵐更以「嵐氣襲」正面擊潰了弗爾特的終極能量球！" },
+        { text: "負傷的弗爾特化作黑霧撤退後，五十嵐神色凝重地揭示了幕後黑手。" },
+        { text: "現任詛碼團首領名為「白珥」，而他們的下一個目標正是尼爾桑大陸的村莊。為了守護更多生命，師徒三人決定立刻渡海出征。" },
+        { text: "※※※" },
+        { text: "踏上尼爾桑大陸後，眾人分頭調查異常的元素波動。", bgUrl: "images/bg_forest_day.webp" },
+        { text: "五十嵐獨自回到了自己昔日定居的貓族村落，向敬重的養父——年邁的村長「嵐山」遞出一顆護村的轉襲嵐元素結晶。" },
+        { speaker: "嵐山", avatar: "images/arashiyama_sp.webp", expr: "sad", text: "我們貓族對元素一向懷有敬畏甚至恐懼。" },
+        { speaker: "嵐山", avatar: "images/arashiyama_sp.webp", expr: "sad", text: "我不能代表所有村民，但你是我認可的兒子，這一點永遠不會改變。" },
+        { text: "然而踏出門外，迎接五十嵐的卻是村民們冰冷的兵刃與敵意。" },
+        { text: "五十嵐想起了最痛心的一天：當年他為了真誠相待而主動解除村人的「記憶干涉」，卻反被村民視為利用信任、違反祖訓的「異端」與「災厄」無情放逐。" },
+        { text: "離開村落後，五十嵐獨自坐在荒野的陰雨中撫平傷痛。", bgUrl: "images/igarashi_rain.webp" },
+        { text: "此時，一隻神祕嬌小的生物開啟傳送裂隙喚回了他；五十嵐也在村外降下守護的暴風雨，毅然轉身奔赴戰場。" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "sad", text: "我不希望其他元素賦形者再像我這樣被當成異類、走上絕路。我想……保護他們。" },
+        { text: "※※※" },
+        { text: "另一頭，穿越密林的洛爾與高和在河岸淺灘發現了重傷擱淺、瀕臨死亡的狼人克爾。", bgUrl: "images/kulu_berserk.webp" },
+        { text: "兩人耗盡體力，結合『回歸』與『恆定』權能進行高難度手術，硬是將他從鬼門關拉了回來。" },
+        { text: "然而，剛從昏迷中甦醒的克爾，被創傷與對人類的極度憎恨徹底淹沒，竟如失控的狂獸般撲倒洛爾、狠狠咬入他的腹側與肩膀！" },
+        { speaker: "克爾", avatar: "images/kulu_sp.webp", expr: "angry", text: "你這普洛特的走狗早該死光了！你們這些人類……一個都別想活著！" },
+        { speaker: "高和", avatar: "images/takawa_sp.webp", expr: "angry", text: "阿洛！" },
+        { text: "高和及時趕到以恆元素制伏克爾並灌下舒緩藥劑。冷靜下來後，克爾得知兩人竟是為討伐普洛特而來，且眼前的高和正是高翔的親哥哥，內心的堅冰終於開始鬆動。" },
+        { text: "當洛爾伸手觸及克爾頸側發光的「融」元素刻印時，『零』與『融』產生強烈共鳴，將兩人意識拉入上古記憶碎片——" },
+        { text: "在扭曲的空間裡，他們聽見了「阿爾提瑪」與神祕人物的交戰。" },
+        { text: "與此同時，獨自在滿月溪畔平復情緒的高和，終於迎來了奇蹟般的時刻——弟弟高翔穿越夜色飛奔而來，相逢的兄弟倆立刻緊緊相擁。", bgUrl: "images/takawa_lake.webp" },
+        { speaker: "高和", avatar: "images/takawa_sp.webp", expr: "smile", text: "你能平安回來，比什麼都重要。" },
+        { speaker: "高和", avatar: "images/takawa_sp.webp", expr: "smile", text: "生日快樂，高翔。" },
+        { text: "※※※" },
+        { text: "隔日清晨，眾人在營地交換情報後決定兵分兩路。", bgUrl: "images/kulu_smoke.webp" },
+        { text: "覺醒了『極』元素的高翔帶著克爾交付的狼人族戒，獨自南下營救克明；洛爾、高和與五十嵐則帶著克爾直搗東北方的詛碼團主基地。"},
+        { text: "行進途中，五十嵐向克爾揭曉了『融』元素的真諦——透過「理解」與「補全」讓夥伴能力變得更完整；克爾也開始抽起高和調配的草本藥菸抑制神經抽痛。" },
+        { text: "突襲行動正式展開！" },
+        { text: "東北方的主基地內，五十嵐與高和潛入牢房區營救被俘的貓族村民，不料這竟是精心設計的陷阱——" },
+        { text: "高和在走廊遭失控的村民圍攻，而在地下深處，村長嵐山為了保住全村性命，含淚親手為五十嵐銬上了吸收元素能量的枷鎖。", bgUrl: "images/igarashi_captured.webp" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "sad", text: "如果我的犧牲能換你們活命……那就殺了我吧。" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "sad", text: "我願意讓出自己的一切，換取你們繼續活下去。" },
+        { text: "與此同時，突破重圍的洛爾與克爾憑藉『零』與『融』的完美配合構築巨型迫擊砲轟開防線，推開基地深處的巨門，見到了高坐於王座之上、身披血紅鎧甲的昔日學長——普洛特。", bgUrl: "images/proto_throne.webp" },
+        { speaker: "普洛特", avatar: "images/proto_sp.webp", expr: "smirk", text: "你們終於來了。" },
+        { speaker: "普洛特", avatar: "images/proto_sp.webp", expr: "angry", text: "當我發現我們的記憶全是他們編造的謊言時，我便對這個扭曲的世界再無信任，只有力量才能改變一切！" },
+        { speaker: "普洛特", avatar: "images/proto_sp.webp", expr: "smirk", text: "學弟啊，我們久別重逢，有沒有什麼話想對我說？" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "angry", text: "我理解你的痛苦，學長！但我不會因此否定人性，更不會否定那些真正關心我的人。" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "angry", text: "即使你是我曾敬重的學長，我也不會退讓！" },
+        { text: "面對普洛特覺醒「毀」元素拳套的毀滅性猛攻，洛爾將零元素化為能將萬物歸於空無的『徹光劍』，克爾則融合雷焰喚出咆哮的『霆狼』，兩人一前一後夾擊而上！" },
+        { text: "※※※" },
+        { text: "與此同時，潛入南方基地的高翔在戰情室前，正被迫與手中緊握法杖的克明兵刃相向。", bgUrl: "images/kokumei_cry.webp" },
+        { text: "克明面容冷漠、揮杖釋出帶有腐蝕氣息的黑綠光波，但高翔敏銳察覺到每一擊都刻意避開了自己的要害。" },
+        { speaker: "高翔", avatar: "images/koushou_sp.webp", expr: "surprised", text: "克明，你怎麼了？為什麼會加入他們？！" },
+        { speaker: "克明", avatar: "images/kokumei_sp.webp", expr: "sad", text: "我被抓來這裡後，他們用哥哥和村民的性命折磨威脅我……情緒失控下，我覺醒了代表混沌的『沌』元素。" },
+        { speaker: "克明", avatar: "images/kokumei_sp.webp", expr: "sad", text: "一直追求平和的我，卻被賦予了這麼極端的力量……" },
+        { text: "話語未落，陰影中傳來陰森的威脅聲，敵兵竟粗暴地押出遍體鱗傷的狼人村民與重傷的克爾作為人質！" },
+        { text: "在精神控制與龐大罪惡感的撕扯下，克明痛哭著召喚出數十支漆黑槍矛與冰柱襲向高翔。" },
+        { speaker: "克明", avatar: "images/kokumei_sp.webp", expr: "sad", text: "高翔……拜託你……救救我……！" },
+        { speaker: "高翔", avatar: "images/koushou_sp.webp", expr: "angry", text: "哪有人一邊攻擊，一邊要對方救他的啊！克明，快點醒醒啊！" },
+        { text: "就在高翔右腳遭冰柱凍結、迴旋鏢也被凍在半空之際，克明竟因不願再傷害摯友，絕望地將黑矛尖刺調轉對準自己的胸口企圖自盡。" },
+        { speaker: "克明", avatar: "images/kokumei_sp.webp", expr: "sad", text: "高翔，謝謝你來找我，能認識你真的很高興……我無法再傷害你了！" },
+        { text: "千鈞一髮之際，高翔瞥見那個「克爾」手上戴著戒指，瞬間想起口袋裡正貼身收著克爾託付的真正族戒！" },
+        { speaker: "高翔", avatar: "images/koushou_sp.webp", expr: "angry", text: "既然本尊身上的戒指在我手上，那這個克爾，絕對是假的！" },
+        { text: "左手腕「極」元素黃光炸裂，高翔解凍迴旋鏢斬斷腳踝冰柱，借風躍起一鏢刺穿假克爾的肩膀——傷口迸發出的竟不是鮮血，而是詭異的墨綠色黏稠泥液！" },
+        { text: "高翔趁勢飛撲上前抓住克明的右手，將真正的狼人族戒套入克明指間，用力搖晃著他的肩膀大喊。" },
+        { speaker: "高翔", avatar: "images/koushou_sp.webp", expr: "angry", text: "克明，你給我看清楚，那個人不是你哥！" },
+        { speaker: "高翔", avatar: "images/koushou_sp.webp", expr: "angry", text: "我依約找到你哥了，他還活著！" },
+        { text: "溫潤的金屬觸感與哥哥熟悉的氣息瞬間驅散了克明心底的迷霧。" },
+        { text: "然而幕後操控者冷笑宣告計畫失敗後，基地隨即啟動連環自毀爆破，冒牌人質頓時全數融化成黑綠泥灘。" },
+        { text: "高翔緊握克明的手臂，揮舞灌注極元素的迴旋鏢劈開倒塌的殘牆，在基地徹底轟然崩塌前夕衝出生天。" },
+        { text: "脫險後，克明取下自己的銀戒鄭重套入高翔的手指。", bgUrl: "images/bg_forest_day.webp" },
+        { speaker: "克明", avatar: "images/kokumei_sp.webp", expr: "smile", text: "這枚戒指……暫時先交給你保管。等我們回去之後，我會為你做一個專屬的。" },
+        { text: "兩人相擁平復情緒後，高翔立刻掏出通訊平板向哥哥回報這場驚險的營救。" },
+        { text: "※※※" },
+        { text: "視線回到東北方主基地。正因為高翔及時傳來的情報，陷入村民圍攻的高和得以看穿真相。", bgUrl: "images/proto_throne.webp" },
+        { text: "他以恆定權能解析並封鎖了混沌物質，揭穿眼前的村長與村民全是由黑綠泥捏造的冒牌人偶，及時解開五十嵐的手銬。" },
+        { text: "而王座廳內，煙塵散盡後，普洛特身上的紅甲雖已碎如殘瓷，雙臂的槍拳卻依舊完好無損。" },
+        { text: "他甚至從容接起通訊電話，在腳前鳴槍示威後轉身離去。" },
+        { speaker: "普洛特", avatar: "images/proto_sp.webp", expr: "smirk", text: "我可不想同時對上四個賦形者。下次再會吧，學弟。" },
+        { speaker: "普洛特", avatar: "images/proto_sp.webp", expr: "smirk", text: "不過記住，如果你們不能讓我感覺到快樂……那可就別怪我不留情了。" },
+        { speaker: "克爾", avatar: "images/kulu_sp.webp", expr: "angry", text: "感覺他是故意放我們一馬的。可惡……真是太不爽了！", bgUrl: "images/bg_forest_day.webp" },
+        { speaker: "克爾", avatar: "images/kulu_sp.webp", expr: "angry", text: "等我恢復行動力後，再也不會讓那傢伙輕易從我面前逃掉！" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "smile", text: "這次你的配合真的很完美，克爾。以後……我還能繼續依靠你吧？" },
+        { speaker: "克爾", avatar: "images/kulu_sp.webp", expr: "smile", text: "廢話，你把我當什麼人了？" },
+        { text: "克爾嘴硬別過頭，泛紅的耳根卻出賣了內心的想法。" },
+        { text: "四人會合後，五十嵐望向北方，決定帶眾人前往高科技重鎮「艾瑞爾大陸」會見最高領導者並揭開一切謎團。" },
+        { text: "※※※" },
+        { text: "與此同時，在赤土荒原的地底密室內。", bgUrl: "images/veil_question.webp" },
+        { text: "普洛特與弗爾特向身穿白執事服、右眼戴著單片銀眼鏡的詛碼團軍師「白珥」復命。" },
+        { text: "白珥操縱黑綠色泥液核心，竟當場重塑出一具能施展嵐襲技巧的五十嵐人偶供普洛特試刀；隨後投影出世界地圖，指出嵐光與尼爾桑大陸和「元素之源」的連結皆已切斷，唯獨剩下北方的艾瑞爾大陸。" },
+        { speaker: "白珥", avatar: "images/veil_sp.webp", expr: "smirk", text: "不過，在回去前先回答我一個問題——" },
+        { speaker: "白珥", avatar: "images/veil_sp.webp", expr: "smirk", text: "你還會留戀嵐光村的那些同伴嗎？" },
+        { speaker: "普洛特", avatar: "images/proto_sp.webp", expr: "angry", text: "與其說留戀，他們如今已經成長到足以讓我……想要親手毀掉的地步了。" },
+        { text: "※※※" },
+        { text: "渡海前往艾瑞爾大陸的夜船甲板上。", bgUrl: "images/igarashi_ship.webp" },
+        { text: "五十嵐正叼著貓草與一名嬌小神秘的身影、以及投影螢幕中雙眼布滿血絲的學者「艾瑞爾」秘密通話，談論著阿爾提瑪與賦形者計畫。" },
+        { text: "不料這番對話，卻被恰巧走上甲板的克爾隱匿氣息暗中聽見。" },
+        { speaker: "克爾", avatar: "images/kulu_sp.webp", expr: "angry", text: "阿爾提瑪……奇怪的實驗……我們真的能相信五十嵐嗎？" },
+        { text: "疑慮如暗火般在克爾心中燃起。" },
+        { text: "抵達艾瑞爾大陸的港口小鎮後，五十嵐亮出特權卡片輕鬆通關，並在地圖前將眾人分為兩路護送縮小的元素結晶貨櫃補給各聚落——", bgUrl: "images/bg_area_waste_day.webp" },
+        { text: "五十嵐與高和走西邊，洛爾與克爾則搭乘雷元素車輛前往東邊荒野。" },
+        { text: "臨別前，洛爾與高和向老師正式宣告了他們復興組織的名字「野性之聲」。" },
+        { text: "然而，洛爾與克爾在護送結晶前往荒野遺跡的途中，卻遭遇一場突如其來的狂風暴雨。", bgUrl: "images/arc_mountain.webp" },
+        { text: "兩人正是在這場風雨中，救起了剛從秘密實驗室逃出的亞爾克，洛爾為他取了「阿風」的暱稱，正式納入『野性之聲』。" },
+        { text: "在遺跡廣場完成結晶交接時，洛爾察覺了克爾連日來的沉默與掙扎主動向他詢問。", bgUrl: "images/kulu_cry.webp" },
+        { text: "克爾情緒終於潰堤，坦白了自己對突然出現的亞爾克十分在意、對過去罪行的自責，以及在船上偷聽到五十嵐秘密的不安。" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "smile", text: "克爾，我們會是一生的夥伴。" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "smile", text: "五十嵐老師如果真的對我們有企圖，我一定會站出來對抗的。" },
+        { text: "解開心結後，三人在荒野山坡遭遇數十台老舊人造人圍攻。", bgUrl: "images/arc_panic.webp" },
+        { text: "激戰中天空驟降大雨壓制了克爾的火元素，洛爾更為保護亞爾克被刀刃劃傷後腰。" },
+        { text: "看著負傷的洛爾，深感自責的亞爾克不再逃避內心恐懼，將守護的決意注入左胸「震」元素刻印，釋放出廣範圍震盪波一舉震碎敵陣。" },
+        { text: "克爾也及時捏碎偷襲隊長，三人默契在戰火中悄然成形。" },
+        { text: "※※※" },
+        { text: "經過長途跋涉，三人終於抵達高聳入雲的未來科技都市「艾瑞爾城」。", bgUrl: "images/bg_area_city_day.webp" },
+        { text: "街頭隨處可見懸浮虛擬螢幕與傳送門，連吃個能量果凍都充滿科技感。" },
+        { text: "依約走進宛如先進研究所的市政廳總督室後，戴眼鏡、穿實驗袍的總督「艾瑞爾」起身迎接，並投影出星球中心「元素之源」與龍神「賈瑞斯」的影像，揭示『十三元素』皆是由龍神分裂出的生命體。", bgUrl: "images/bg_governor_office.webp" },
+        { text: "然而，身穿復古白袍的學者「阿爾提瑪」竟緩緩現身。" },
+        { text: "他狂妄宣告自己才是擊碎龍神、將十三元素種子投向各地的「再生父親」，並當場下令讓兄弟相殘！" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "angry", text: "你以為我為什麼要對你們這麼好？全都是為了讓你們能派上用場而做的啊！", bgUrl: "images/igarashi_resolve.webp" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "angry", text: "我為此忍耐了多久你知道嗎？" },
+        { text: "五十嵐丟出高和破損的通訊平板、右手金光一閃換上深藍黑色夾克冷酷出擊；艾瑞爾雙眼染黑，手中純白立方體「賦形晶」展開為巨型機械光翼，一記光束貫穿亞爾克胸口將他放倒。" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "sad", text: "高和……阿風……信任的夥伴一個個倒下，到底還有什麼是可以抓住的稻草……", bgUrl: "images/area_deploy.webp" },
+        { text: "啪！" },
+        { text: "克爾毫不猶豫甩了洛爾幾記巴掌。" },
+        { speaker: "克爾", avatar: "images/kulu_sp.webp", expr: "angry", text: "如果這個世界沒有任何稻草能讓你抓住，那就抓住我的手吧！" },
+        { text: "重拾鬥志的洛爾與克爾合力構築銀色巨盾擋下攻勢，並發動『零』與『融』的元素共鳴，雙雙潛入亞爾克充滿惡夢與自我壓抑的內心深處。" },
+        { speaker: "洛爾", avatar: "images/roar_sp.webp", expr: "angry", text: "你不是為了服從而活下來的！不要輸給那場實驗，也不要輸給那份本該由你主導的力量！" },
+        { text: "洛爾揮舞鏡面巨鐮斬斷痛苦枷鎖，喚醒亞爾克在草原奔馳、月夜長嚎的自由記憶。" },
+        { text: "回到現實後，三人齊聲發出震撼雲霄的野性長嚎，重整陣型反擊。", bgUrl: "images/bg_governor_office.webp" },
+        { text: "接著，洛爾以零元素修復高和的破損平板、逆向彈回風刃與光束；亞爾克以震波球擊碎艾瑞爾的機械左翼；艾瑞爾則展開「斷」元素切裂空間防禦，五十嵐與克爾也各自蓄力準備一決勝負——" },
+        { text: "嗡！" },
+        { text: "就在雙方殺招即將正面對撞的千鈞一髮之際，一道傳送門憑空開啟。" },
+        { text: "一隻身穿雲紋袍的灰色鯰魚精「瓦奇瑪」走了出來，還一頭撞上了洛爾的徹光斬卻毫髮無傷。" },
+        { speaker: "瓦奇瑪", avatar: "images/wakima_sp.webp", expr: "angry", text: "笨蛋艾瑞爾！你又趁我去忙的時候偷吃了我的布丁是吧？我打開冰箱時發現少了兩個！" },
+        { text: "碰！" },
+        { text: "緊接著，安然無恙的高和展開恆定障壁擋下克爾。" },
+        { text: "艾瑞爾也在被瓦奇瑪抓包偷吃布丁後解除人類外設，變回灰色小山貓的本體模樣。", bgUrl: "images/area_playful.webp" },
+        { text: "原來，剛剛的阿爾提瑪只是過去留下的投影幻象，而五十嵐與艾瑞爾自己因得應付體內無法違抗的「指令制約」並測試眾人實力，才順水推舟演了這場戲。" },
+        { text: "誤會冰釋後，瓦奇瑪得意炫耀自己能定義萬物上下位、免疫一切攻擊的「位」元素權能。" },
+        { text: "隨後，克爾、洛爾與高和三人聯手發動元素調和，一同窺見了最真實的上古記憶——" },
+        { text: "※※※" },
+        { text: "數百年前。", bgUrl: "images/jareth_source.webp" },
+        { text: "位於星球異界中心「元素之源」的黃龍龍神「賈瑞斯」，曾應阿爾提瑪的懇求釋放基礎元素拯救瀕死的世界，並無私與他共研真理。" },
+        { text: "然而求知欲化為貪婪的阿爾提瑪卻以「究極元素」暗中侵染元素漩渦，召喚巨型黑手束縛並擊碎了賈瑞斯的右腰，強行奪走三枚核心碎片。", bgUrl: "images/ultima_control.webp" },
+        { text: "危急關頭，賈瑞斯將剩餘碎片賦形為成年的五十嵐、年幼的艾瑞爾與瓦奇瑪。" },
+        { text: "五十嵐獨自斷後牽制阿爾提瑪，艾瑞爾則撕開空間裂縫掩護賈瑞斯與瓦奇瑪帶著其餘「希望的種子」逃往外界。" },
+        { text: "龍神在給予瓦奇瑪布丁作為酬勞後，便獨自返回元素之源封鎖通道。" },
+        { text: "※※※" },
+        { text: "從記憶回歸現實後，「野性之聲」與「艾瑞爾軍」正式結為『聯合陣線』。", bgUrl: "images/bg_area_city_night.webp" },
+        { text: "當晚在市政廳的慶功晚宴上，克爾還被五十嵐唬得一愣一愣，擺出扶頰仰頭的荒唐貴族姿勢壓場，逗得眾人忍俊不禁。" },
+        { text: "隔日一早。" },
+        { text: "為了阻止詛碼團切斷艾瑞爾大陸與元素之源的最後聯繫，洛爾、克爾、亞爾克、高和與瓦奇瑪藉著「上位者」的祝福，透過傳送裝置進入數位世界「裏網」。", bgUrl: "images/bg_darknet.webp" },
+        { text: "眾人穿越數據雪原抵達極北神殿的連結點，透過無倒影的鏡面水池見到結晶化的龍神賈瑞斯，聆聽祂希望眾人過出屬於自己生活的期許。" },
+        { text: "然而人造人弗爾特再度撕裂空間現身，並冷笑質問自己被賦予仇恨誕生的意義，再召喚黑紫能量獸撲向連結點！", bgUrl: "images/volt_confront.webp" },
+        { speaker: "弗爾特", avatar: "images/volt_sp.webp", expr: "smirk", text: "認真點啊，不然這次可真要死在我手下了！" },
+        { text: "弗爾特喚出巨狼「沃斯」發動大範圍轟炸。激戰中，洛爾、克爾與亞爾克首度施展三元素融合技『零界融震』轟碎眼前的弗爾特。", bgUrl: "images/wos_beast.webp" },
+        { text: "不料那竟只是誘餌分身，真正的弗爾特從巨狼身上的斷手中重塑肉身，發動穿刺波一舉摧毀了連結點與整座神殿！" },
+        { text: "雖沒能保住連結點，水池中的龍神仍在徹底孤立前留下最後神諭：阿爾提瑪攻破結晶屏障需耗時近一年，眾人務必把握這一年寬限期變強。" },
+        { text: "※※※" },
+        { text: "裏網登出遭封鎖的同時，現實世界的艾瑞爾城也響起刺耳警報。", bgUrl: "images/bg_governor_office.webp" },
+        { text: "軍師「白珥」率領數以百計的黑綠泥人偶大軍攻入了市政廳總督室！" },
+        { text: "艾瑞爾展開光翼在空中狙擊分身，卻在瞄準白珥左眼刻印的關鍵時刻，再度遭阿爾提瑪下達『不能對兄弟出手』的制約而全身僵直。" },
+        { text: "五十嵐只能獨自迎戰，燃盡生命連環施展「嵐襲五式」——『嵐湧』、『嵐鍊』、『嵐解』、『嵐燚』，最終以一記貫穿真空的『嵐旋』轟穿了白珥的胸口！" },
+        { text: "然而白珥並未倒下。" },
+        { text: "他表面的白執事外殼如瓷器般碎裂剝落，露出了深藍色暗影禮服下冷酷威嚴的幕後真身——詛碼團領袖「詛碼」本人！", bgUrl: "images/zoma_appear.webp" },
+        { speaker: "詛碼", avatar: "images/zoma_sp.webp", expr: "smirk", text: "看看你現在這副模樣……被賈瑞斯利用到這種地步，最後還是倒在自己最厭惡的敵人手下。" },
+        { speaker: "詛碼", avatar: "images/zoma_sp.webp", expr: "smirk", text: "這是給你的回禮。" },
+        { text: "噗滋。" },    
+        { text: "詛碼一拳貫穿耗盡力量的五十嵐。" },
+        { text: "當洛爾一行人終於突破封鎖趕回總督室時，五十嵐的身軀已開始解離、變回純粹的元素結晶，連洛爾的回歸權能與高和的恆定都無法逆轉宿命。", bgUrl: "images/igarashi_fade.webp" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "smile", text: "阿洛……高和……你們是為師最驕傲的學生。" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "smile", text: "為師的身形會消失，但這個嵐元素不會，請你拿著繼續奮鬥。" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "smile", text: "當你迷惘的時候，呼喚我，記得為師就在你身邊。" },
+        { text: "解除人類外設變回小山貓模樣的艾瑞爾哭成一團，瓦奇瑪強忍淚水不捨道別，克爾舉起右手擺出那個荒唐卻充滿敬意的「禮數」，亞爾克則將爪子輕搭在五十嵐膝頭莊重行禮。" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "smile", text: "你們知道嗎……遇見你們，是為師這一生最美好的事。" },
+        { speaker: "五十嵐", avatar: "images/igarashi_sp.webp", expr: "smile", text: "嵐的精神……會永遠與你們同在……" },
+        { text: "微風輕柔地帶走了他最後一絲氣息。五十嵐帶著無悔的微笑化作點點金光消散，將守護世界的希望與未竟的使命，永遠託付給了這群年輕的夥伴。" },
+        { text: "——薄明之戰 壹 完——" }
+      ]
+    },
+
     {
         title: "學園祭 渾解",
         badge: "主題進展",
@@ -1453,7 +1738,7 @@
     // ====================================================
 
     // 【手動設定預設顯示篇章】未來只要修改這個標題名稱即可更換預設篇章！
-    const DEFAULT_CHAPTER_TITLE = "學園祭 渾解"; 
+    const DEFAULT_CHAPTER_TITLE = "無盡軌跡　薄明之戰　壹"; 
 
     // 【荒野焰嵐 YouTube 樂團影音與歌詞資料庫】
     const flameMusicList = [
@@ -2196,8 +2481,13 @@ Yeah 偽りの舞台 幕が上がるぜ
           listEl.appendChild(card);
         });
       } else {
-        // --- 主題進展 或 回聲殘響 篇章列表 ---
-        const targetBadge = currentModalTab === 'theme' ? '主題進展' : '回聲殘響';
+        // --- 主題進展 / 無盡軌跡 / 回聲殘響 篇章列表 ---
+        const tabBadgeMap = {
+          theme: '主題進展',
+          orbit: '無盡軌跡',
+          echo: '回聲殘響'
+        };
+        const targetBadge = tabBadgeMap[currentModalTab] || '主題進展';
         
         chaptersData.forEach((ch, idx) => {
           if (ch.badge === targetBadge) {
@@ -2228,7 +2518,9 @@ Yeah 偽りの舞台 幕が上がるぜ
       // 如果是第一次開啟且未記錄過分頁，才根據當前篇章設定初始分頁
       if (!currentModalTab) {
         const curBadge = chaptersData[currentChapterIndex] ? chaptersData[currentChapterIndex].badge : '主題進展';
-        currentModalTab = (curBadge === '主題進展') ? 'theme' : 'echo';
+        if (curBadge === '主題進展') currentModalTab = 'theme';
+        else if (curBadge === '無盡軌跡') currentModalTab = 'orbit';
+        else currentModalTab = 'echo';
       }
 
       // 直接切換並渲染上次使用者停留的分頁（theme / flame / echo）
