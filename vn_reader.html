@@ -2195,26 +2195,56 @@ function getCurrentStory() {
       return chaptersData[currentChapterIndex].story;
     }
 
-// 🌟 自動從所有章節劇本蒐集出現過的角色立繪（未來新增角色直接寫在劇本 avatar 即可，不用手動維護清單）
-    let hasPreloadedSprites = false;
-    function preloadCharacterSpritesDeferred() {
-      if (hasPreloadedSprites) return;
-      hasPreloadedSprites = true;
+// 🌟 立繪全量預載器：優先依登場順序讀完「當前章節」所有立繪（含解碼），接著立刻把「全站所有章節」立繪一次讀完
+    let isPreloadingAllSprites = false;
 
-      const spriteUrls = new Set();
-      chaptersData.forEach(ch => {
+    function preloadAllSpritesPriority(priorityChapterIndex = 0) {
+      const orderedSprites = [];
+      const seen = new Set();
+
+      const addSprite = (url) => {
+        if (url && url.trim() !== "" && !seen.has(url)) {
+          seen.add(url);
+          orderedSprites.push(url);
+        }
+      };
+
+      // 1. 最優先：目前正在閱讀的章節，照劇情登場從頭到尾排隊（保證後半段角色絕不卡頓）
+      const activeChapter = chaptersData[priorityChapterIndex];
+      if (activeChapter && Array.isArray(activeChapter.story)) {
+        activeChapter.story.forEach(step => addSprite(step.avatar));
+      }
+
+      // 2. 次優先：把其他所有章節出現過的立繪也全部納入清單，確保切換任何篇章都已備妥
+      chaptersData.forEach((ch, idx) => {
+        if (idx === priorityChapterIndex) return;
         if (Array.isArray(ch.story)) {
-          ch.story.forEach(step => {
-            if (step.avatar && step.avatar.trim() !== "") {
-              spriteUrls.add(step.avatar);
-            }
-          });
+          ch.story.forEach(step => addSprite(step.avatar));
         }
       });
 
-      spriteUrls.forEach(url => {
-        loadSingleImage(url);
-      });
+      // 濾掉已經讀完解碼的立繪
+      const pendingSprites = orderedSprites.filter(url => !loadedImageCache.has(url));
+      if (pendingSprites.length === 0 || isPreloadingAllSprites) return;
+
+      isPreloadingAllSprites = true;
+      let cursor = 0;
+      const SPRITE_CONCURRENCY = 3; // 維持 3 條專屬通道全速讀完並解碼進記憶體
+
+      function pumpSprite() {
+        if (cursor >= pendingSprites.length) {
+          isPreloadingAllSprites = false;
+          return;
+        }
+        const url = pendingSprites[cursor++];
+        loadSingleImage(url).then(() => {
+          pumpSprite();
+        });
+      }
+
+      for (let i = 0; i < SPRITE_CONCURRENCY; i++) {
+        pumpSprite();
+      }
     }
 
     // 🌟 單張圖片載入 Promise（含快取紀錄與解碼確認）
@@ -2283,11 +2313,11 @@ function getCurrentStory() {
       const firstUrl = orderedUrls[0];
       const remainingUrls = orderedUrls.slice(1);
 
-      loadSingleImage(firstUrl).then(() => {
+loadSingleImage(firstUrl).then(() => {
         if (currentToken !== preloadSessionToken) return;
 
-        // 首張圖已就緒，此時才在背景預載立繪
-        preloadCharacterSpritesDeferred();
+        // 首張背景一出來，立刻依登場順序把整章與全站所有精靈圖全部讀完並解碼！
+        preloadAllSpritesPriority(chapterIndex);
 
         // 後續順位：維持雙通道依劇情順序自動遞補載入所有剩餘背景
         let cursor = 0;
