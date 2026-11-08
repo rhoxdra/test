@@ -2214,6 +2214,32 @@ Yeah 偽りの舞台 幕が上がるぜ
       return chaptersData[currentChapterIndex].story;
     }
 
+    const preloadedBgCache = new Set();
+
+    function preloadChapterBackgrounds(chapterIndex) {
+      const chapter = chaptersData[chapterIndex];
+      if (!chapter) return;
+
+      const urlsToLoad = new Set();
+      if (chapter.bgImage) urlsToLoad.add(chapter.bgImage);
+
+      if (Array.isArray(chapter.story)) {
+        chapter.story.forEach(step => {
+          if (step.bgUrl && step.bgUrl.trim() !== "") {
+            urlsToLoad.add(step.bgUrl);
+          }
+        });
+      }
+
+      urlsToLoad.forEach(url => {
+        if (!preloadedBgCache.has(url)) {
+          preloadedBgCache.add(url);
+          const img = new Image();
+          img.src = url;
+        }
+      });
+    }
+
     function renderStep() {
       const story = getCurrentStory();
       const data = story[currentStepIndex];
@@ -2502,6 +2528,7 @@ Yeah 偽りの舞台 幕が上がるぜ
               closeMusicStagePanel(); // 點擊文字篇章時，確保退出音樂面板模式
               currentChapterIndex = idx;
               currentStepIndex = 0;
+              preloadChapterBackgrounds(idx); // 🌟【新增】點開該篇立刻預載背景圖
               closeChapterModal();
               renderStep();
             };
@@ -2674,6 +2701,7 @@ Yeah 偽りの舞台 幕が上がるぜ
           closeMusicStagePanel(); // 若當前處於音樂模式，切換篇章時先還原對話框
           currentChapterIndex = idx;
           currentStepIndex = 0;
+          preloadChapterBackgrounds(idx); // 🌟【新增】外部切換時同步預載背景圖
           renderStep();
         }
       }
@@ -2697,6 +2725,7 @@ Yeah 偽りの舞台 幕が上がるぜ
         closeMusicStagePanel();
         currentChapterIndex = initialChapterIndex;
         currentStepIndex = 0;
+        preloadChapterBackgrounds(initialChapterIndex); // 🌟【新增】預載預設開啟的那一篇文章
         document.getElementById('bg1').style.backgroundImage = `url('${getCurrentStory()[0].bgUrl}')`;
         renderStep();
       }
