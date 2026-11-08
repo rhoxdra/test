@@ -14,25 +14,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>《無限元素》主題進展與回聲殘響 - 視覺小說閱讀器</title>
-
-   <script>
-    // 🌟 未來只要在這裡新增角色的 ID 即可，程式會自動組合成完整路徑並預先讀取
-    const characterIds = [
-      "arc", "area", "chitar", "doutou", "electric", 
-      "horse", "igarashi", "kage", "kokumei", "kulu", 
-      "kuzure", "lanlan", "osae", "owl", "roar", 
-      "rofena", "rub", "sugar", "takawa", "teiner", 
-      "wakima", "zarion", "jareth", "volt",
-      "proto", "koushou", "ultima", "arashiyama", "veil", "zoma"
-      // 新增角色範例：只需寫入 id，例如 "new_character"
-    ];
-
-    // 自動對每個 ID 加上資料夾前綴與副檔名，並進行預先讀取
-    characterIds.forEach(id => {
-      const img = new Image();
-      img.src = `images/${id}_sp.webp`;
-    });
-  </script>
   <style>
     
     * {
@@ -2210,33 +2191,153 @@ Yeah 偽りの舞台 幕が上がるぜ
     let isTyping = false;
     let fullTextToType = "";
 
-    function getCurrentStory() {
+function getCurrentStory() {
       return chaptersData[currentChapterIndex].story;
     }
 
-    const preloadedBgCache = new Set();
+// 🌟 自動從所有章節劇本蒐集出現過的角色立繪（未來新增角色直接寫在劇本 avatar 即可，不用手動維護清單）
+    let hasPreloadedSprites = false;
+    function preloadCharacterSpritesDeferred() {
+      if (hasPreloadedSprites) return;
+      hasPreloadedSprites = true;
 
-    function preloadChapterBackgrounds(chapterIndex) {
+      const spriteUrls = new Set();
+      chaptersData.forEach(ch => {
+        if (Array.isArray(ch.story)) {
+          ch.story.forEach(step => {
+            if (step.avatar && step.avatar.trim() !== "") {
+              spriteUrls.add(step.avatar);
+            }
+          });
+        }
+      });
+
+      spriteUrls.forEach(url => {
+        loadSingleImage(url);
+      });
+    }
+
+    // 🌟 單張圖片載入 Promise（含快取紀錄與解碼確認）
+    const loadedImageCache = new Set();
+    const loadingImagePromises = new Map();
+
+    function loadSingleImage(url) {
+      if (!url) return Promise.resolve();
+      if (loadedImageCache.has(url)) return Promise.resolve();
+      if (loadingImagePromises.has(url)) return loadingImagePromises.get(url);
+
+      const promise = new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          loadedImageCache.add(url);
+          loadingImagePromises.delete(url);
+          if (img.decode) {
+            img.decode().then(resolve).catch(resolve);
+          } else {
+            resolve();
+          }
+        };
+        img.onerror = () => {
+          loadingImagePromises.delete(url);
+          resolve();
+        };
+        img.src = url;
+      });
+
+      loadingImagePromises.set(url, promise);
+      return promise;
+    }
+
+    // 🌟 動態遞補排程器：不寫死張數，依劇情出現先後順序自動逐批載入
+    let preloadSessionToken = 0;
+
+    function preloadChapterBackgrounds(chapterIndex, startStep = 0) {
       const chapter = chaptersData[chapterIndex];
       if (!chapter) return;
 
-      const urlsToLoad = new Set();
-      if (chapter.bgImage) urlsToLoad.add(chapter.bgImage);
+      const currentToken = ++preloadSessionToken;
+
+      const orderedUrls = [];
+      const seen = new Set();
+
+      const addUrl = (u) => {
+        if (u && u.trim() !== "" && !seen.has(u)) {
+          seen.add(u);
+          orderedUrls.push(u);
+        }
+      };
 
       if (Array.isArray(chapter.story)) {
-        chapter.story.forEach(step => {
-          if (step.bgUrl && step.bgUrl.trim() !== "") {
-            urlsToLoad.add(step.bgUrl);
-          }
-        });
+        for (let i = startStep; i < chapter.story.length; i++) {
+          addUrl(chapter.story[i].bgUrl);
+        }
+        for (let i = 0; i < startStep; i++) {
+          addUrl(chapter.story[i].bgUrl);
+        }
+      }
+      addUrl(chapter.bgImage);
+
+      if (orderedUrls.length === 0) return;
+
+      // 第一順位：獨佔頻寬優先載入「當下第一張」
+      const firstUrl = orderedUrls[0];
+      const remainingUrls = orderedUrls.slice(1);
+
+      loadSingleImage(firstUrl).then(() => {
+        if (currentToken !== preloadSessionToken) return;
+
+        // 首張圖已就緒，此時才在背景預載立繪
+        preloadCharacterSpritesDeferred();
+
+        // 後續順位：維持雙通道依劇情順序自動遞補載入所有剩餘背景
+        let cursor = 0;
+        const CONCURRENCY = 2;
+
+        function pumpNext() {
+          if (currentToken !== preloadSessionToken) return;
+          if (cursor >= remainingUrls.length) return;
+
+          const nextUrl = remainingUrls[cursor++];
+          loadSingleImage(nextUrl).then(() => {
+            pumpNext();
+          });
+        }
+
+        for (let w = 0; w < CONCURRENCY; w++) {
+          pumpNext();
+        }
+      });
+    }
+
+    // 🌟 追蹤目前背景切換請求編號，防止快速連點錯亂或閃黑
+    let bgTransitionToken = 0;
+
+    function applyBackgroundSmoothly(targetBgUrl) {
+      if (!targetBgUrl) return;
+
+      const bg1El = document.getElementById('bg1');
+      const bg2El = document.getElementById('bg2');
+      const currentActiveEl = currentActiveBgLayer === 1 ? bg1El : bg2El;
+      const currentInactiveEl = currentActiveBgLayer === 1 ? bg2El : bg1El;
+
+      if (currentActiveEl.style.backgroundImage.includes(encodeURI(targetBgUrl))) {
+        return;
       }
 
-      urlsToLoad.forEach(url => {
-        if (!preloadedBgCache.has(url)) {
-          preloadedBgCache.add(url);
-          const img = new Image();
-          img.src = url;
-        }
+      const myToken = ++bgTransitionToken;
+
+      loadSingleImage(targetBgUrl).then(() => {
+        if (myToken !== bgTransitionToken) return;
+
+        currentInactiveEl.style.backgroundImage = `url('${targetBgUrl}')`;
+        currentInactiveEl.classList.add('active');
+        currentActiveEl.classList.remove('active');
+        currentActiveBgLayer = currentActiveBgLayer === 1 ? 2 : 1;
+
+        try {
+          const absoluteUrl = new URL(targetBgUrl, window.location.href).href;
+          window.parent.postMessage({ type: 'CHANGE_BG', bgUrl: absoluteUrl }, '*');
+        } catch (e) {}
       });
     }
 
@@ -2287,21 +2388,7 @@ Yeah 偽りの舞台 幕が上がるぜ
         }
       }, typingSpeed);
 
-      const targetBgUrl = data.bgUrl || "";
-      const bg1El = document.getElementById('bg1');
-      const bg2El = document.getElementById('bg2');
-      const currentActiveEl = currentActiveBgLayer === 1 ? bg1El : bg2El;
-      const currentInactiveEl = currentActiveBgLayer === 1 ? bg2El : bg1El;
-
-      if (!currentActiveEl.style.backgroundImage.includes(encodeURI(targetBgUrl))) {
-        currentInactiveEl.style.backgroundImage = `url('${targetBgUrl}')`;
-        currentInactiveEl.classList.add('active');
-        currentActiveEl.classList.remove('active');
-        currentActiveBgLayer = currentActiveBgLayer === 1 ? 2 : 1;
-
-        const absoluteUrl = new URL(targetBgUrl, window.location.href).href;
-        window.parent.postMessage({ type: 'CHANGE_BG', bgUrl: absoluteUrl }, '*');
-      }
+      applyBackgroundSmoothly(data.bgUrl || "");
 
       document.getElementById('progress-tag').innerText = `【${chaptersData[currentChapterIndex].title}】 ${currentStepIndex + 1} / ${story.length}`;
     }
@@ -2712,7 +2799,7 @@ Yeah 偽りの舞台 幕が上がるぜ
       }
     });
 
-    // 🌟 重置回預設狀態（荒野焰嵐預設樂曲或預設篇章）
+// 🌟 重置回預設狀態（荒野焰嵐預設樂曲或預設篇章）
     function resetToDefaultMode() {
       // 關閉可能開啟中的選單與 Log 視窗
       closeChapterModal();
@@ -2725,8 +2812,7 @@ Yeah 偽りの舞台 幕が上がるぜ
         closeMusicStagePanel();
         currentChapterIndex = initialChapterIndex;
         currentStepIndex = 0;
-        preloadChapterBackgrounds(initialChapterIndex); // 🌟【新增】預載預設開啟的那一篇文章
-        document.getElementById('bg1').style.backgroundImage = `url('${getCurrentStory()[0].bgUrl}')`;
+        preloadChapterBackgrounds(initialChapterIndex);
         renderStep();
       }
     }
