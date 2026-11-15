@@ -175,18 +175,23 @@
     .view-btn { padding: 4px 10px; font-size: 0.75rem; }
 }
 
-/* 3. 限制側邊欄寬度最大不超過螢幕的 1/3，並確保可上下完整滑動 */
 .info-drawer {
-    width: 33.333vw !important; /* 不論直式或橫式，寬度固定為螢幕的三分之一 */
-    min-width: 280px;           /* 設定基本閱讀寬度，避免在窄螢幕過窄 */
-    max-width: 33.333vw !important;
+    width: 33.333vw;
+    min-width: 320px;
+    max-width: 420px;
     height: 100vh !important;
     max-height: 100vh !important;
-    overflow-y: auto !important; /* 確保內容超出時可上下滾動 */
-    -webkit-overflow-scrolling: touch; /* iOS 滑動順暢支援 */
-    padding-bottom: 40px !important; /* 底部保留足夠空間，避免按鈕被邊緣切到或卡住 */
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 40px !important;
     display: flex;
     flex-direction: column;
+}
+@media (max-width: 768px) {
+    .info-drawer {
+        width: 85vw !important;
+        max-width: 85vw !important;
+    }
 }
 
 /* 4. 側邊欄內部按鈕區防止被壓縮 */
@@ -210,8 +215,8 @@
         <div id="header-main-title" class="main-title">《無限元素》元素週期表</div>
         <div id="header-sub-title" class="sub-title">收錄全體角色關係圖譜</div>
         <div class="view-switch-box">
-            <button id="btn-mode-periodic" class="view-btn active" onclick="switchView('periodic')">❖ 元素週期表</button>
-            <button id="btn-mode-geo" class="view-btn" onclick="switchView('geo')">🗺️ 世界地理圖</button>
+            <button id="btn-mode-periodic" class="view-btn active" onclick="switchView('periodic')">元素週期表</button>
+            <button id="btn-mode-geo" class="view-btn" onclick="switchView('geo')">世界地理圖</button>
         </div>
     </div>
 
@@ -229,6 +234,7 @@
         <div class="legend-item"><div class="legend-line" style="background: #ab47bc;"></div>誓奪爪盟</div>
         <div class="legend-item"><div class="legend-line" style="background: #f5a623;"></div>上古元素</div>
         <div class="legend-item"><div class="legend-line" style="background: #26c6da;"></div>聚學舍</div>
+        <div class="legend-item"><div class="legend-line" style="background: #ec407a;"></div>破詛者</div>
         <div class="legend-item"><div class="legend-line" style="background: #8c827a;"></div>外傳與其他陣營</div>
     </div>
 
@@ -242,8 +248,8 @@
         <label><input type="checkbox" id="layer-tier34" checked> 村落與遺跡</label>
         <label><input type="checkbox" id="layer-labels" checked> 區域名稱標示</label>
         <div class="btn-group">
-            <button id="ruler-btn" class="action-btn" onclick="toggleRuler()">📏 空間測距工具 [關閉]</button>
-            <button class="action-btn" onclick="resetGeoView()">⟲ 全景復位 (Space / R)</button>
+            <button id="ruler-btn" class="action-btn" onclick="toggleRuler()">空間測距工具 [關閉]</button>
+            <button class="action-btn" onclick="resetGeoView()">全景復位 (Space / R)</button>
         </div>
     </div>
 
@@ -349,6 +355,7 @@
         const cClaw = "#ab47bc";  // 誓奪爪盟
         const cAcad = "#26c6da";  // 聚學舍
         const cOuts = "#8c827a";  // 外界/其他
+        const cBreak = "#ec407a"; // 破詛者
 
         const rawNodes = [
             { id: "roar", name: "零(洛爾)", faction: "野性之聲", x: -158, y: -65, color: cWild, quote: "「我一定要結束這一切的爭端，創造一個我們能夠安心居住的地方。」", desc: "零元素賦形者，夥伴們多半習慣稱他為阿洛。\n\n童年時，他與幾位摯友一同生活在嵐光村，平凡而安穩的日子卻在詛碼團的一次襲擊中徹底消失。村落被焚毀、生命瀕臨終結之際，他因五十嵐的出手相救而倖存，也在那一刻覺醒了自身的元素之力。自此，他成立了組織「野性之聲」，踏上復興故鄉、對抗詛碼團的艱險征途。" },
@@ -361,7 +368,7 @@
             { id: "koushou", name: "極(高翔)", faction: "野性之聲", x: -450, y: 60, color: cWild, quote: "「上次我讓你離我而去。但這一次……我要把你帶回身邊！」", desc: "極元素賦形者，是高和的弟弟。\n\n自幼成長於嵐光村。與性格沉穩的兄長不同，他天性外向，熱衷於野外活動。年少時便經常與普洛特學長一同離村探險，在一次次踏入未知的過程中，逐漸愛上了自由而粗獷的野外生活，也因此在村中幾乎難得一見他的身影，總是把時間花在山林與荒野之間。" },
             { id: "kokumei", name: "沌(克明)", faction: "野性之聲", x: -328, y: 36, color: cWild, quote: "「我會盡村長之責攜手抵抗威脅，也會開啟與外族共存的新時代！」", desc: "沌元素賦形者，是克爾的弟弟。\n\n他個性溫和而沉穩，與狼人村內狩獵派獵者對人類普遍抱持警戒的態度不同，克明對人類懷有純粹而強烈的好奇心。他率先向身為人類的高翔伸出友誼之手，跨出打破種族隔閡的第一步。" },
             { id: "tia", name: "緹婭", faction: "獸人族群", x: -436, y: -120, color: cOuts, quote: "「我很期待屬於你自己的音樂會是怎麼樣的，之後一定要讓我聽聽看喔！」", desc: "狼人村狩獵派，是克爾信賴的左膀右臂。\n\n當克爾不在村中時，由她全權統籌防衛與指揮事務，處事冷靜而果斷。" },
-            { id: "arashiyama", name: "嵐山", faction: "獸人族群", x: -487, y: 225, color: cOuts, quote: "「歡迎回來。」", desc: "貓族村現任村長。\n\n他將非親生的五十嵐視如己出，對於村民當年以冷酷態度放逐這位兒子的決定始終耿耿於懷，心中藏著難以言說的痛與愧疚。" },
+            { id: "arashiyama", name: "嵐山", faction: "獸人族群", x: -487, y: 225, color: cOuts, quote: "「歡迎回來。」", desc: "元素使用者，貓族村卸任村長。\n\n他將非親生的五十嵐視如己出，對於村民當年以冷酷態度放逐這位兒子的決定始終耿耿於懷，心中藏著難以言說的痛與愧疚。" },
             { id: "cat", name: "瑟莉雅", faction: "獸人族群", x: -443, y: 336, color: cOuts, quote: "「大家都很恐懼、害怕，深怕自己所認知的一切都是虛構，是假的，是別人口中所訴說的故事而已！我不知道該相信什麼！」", desc: "灰虎斑貓族少女。\n\n平日裡在市集協助家人經營擺攤生意。她曾是五十嵐在貓族村開設學堂時的學生，對曾經親近的「老師」懷有複雜而深沉的情感。" },
             { id: "rub", name: "劫", faction: "誓奪爪盟", x: 292, y: -154, color: cClaw, quote: "「真是悲慘的下場呢，這就是和你扯上關係的後果，你的存在，根本不會帶給任何人幸福！」", desc: "劫元素賦形者。\n\n體幹高大、肩膀寬闊，身披深黑色長大衣，一舉一動皆散發著冷冽、高傲且不容置疑的絕對領袖威嚴。\n\n在《無盡探途》中，他曾是最為怯懦退縮、極度依賴戴爾莫格的少年。在無名引導下克服心魔，並正式開啟探索隊的探尋之途。" },
             { id: "osae", name: "制", faction: "誓奪爪盟", x: 407, y: -81, color: cClaw, quote: "「看好了——這可是集結我鬣制工藝匠魂的結晶——《無垠號》！」", desc: "制元素賦形者。\n\n身形精悍，常年帶著招牌的壞笑，語調輕快瀟灑。\n\n在《無盡探途》中，身為上古菁英的他對各式載具、機械工藝與器械研發有著近乎痴迷的改裝熱情。在千年前便與劫一同完成了高性能的「原界庫」設備，在團隊中展現出無可挑剔的工藝匠魂與執行力。" },
@@ -396,11 +403,15 @@
             { id: "reva", name: "雷瓦維那", faction: "維那嶺", x: 42, y: -293, color: cOuts, quote: "「看起來只是石頭，但也許它們和你們元素一族原本的型態一樣，是以我們人類無法理解的方式活著的。」", desc: "地脈操流者，維那嶺的前任領主，亦是奧法魯斯的平輩舊識。\n\n他氣度不凡、舉止從容，隨身攜帶一根質樸卻雕刻精細的魔法法杖。\n\n在《無盡探途》外傳中，他在城堡宴會廳熱情接待了遠道而來的「無盡元素」探索隊，不僅大方提供荒廢的地下避難所供鬣制改造成「科學工坊」，更毫無保留地分享自己對地脈魔法的研究，並以「等價交換」的信任態度，委託探索隊討伐威脅西方大陸的禍源「熔岩龍」。" },
             { id: "leon", name: "萊昂維那", faction: "維那嶺", x: -42, y: -282, color: cOuts, quote: "「這真的很厲害……你們的技術水平遠超出我們的想像。」", desc: "維那嶺的現任領主，雷瓦・維那之子。\n\n在《無盡探途》外傳中，他與父親雷瓦一同在城堡接待遠道而來的「無盡元素」探索隊，展現出遠超同齡者的果斷決策力與治理領地的責任感。" },
             { id: "whissel", name: "旭言", faction: "晝光時報", x: 603, y: 24, color: cOuts, quote: "「我們可以一起旅行。我們去聽嵐光的演唱會，去看尼爾桑的環輝樹脊，用兩雙不同的眼睛看同樣的事物！」", desc: "晝光時報的記者。\n\n他的記者生涯可追溯至「薄明之戰」時期，當時的他，已手持攝影機與平板，穿行於詛碼團肆虐過後的焦土之上，將斷裂的街道、流離失所的居民，以及那些在塵煙之中勉強重建生活的人，一筆一筆記錄成專題刊登上各大版面。\n\n戰後，他的足跡延伸至尼爾桑大陸的原始地帶。穿越濃霧與未鋪設的道路，深入各個獸人部落，記錄祭儀、歌謠與世代相傳的規訓。" },
-            { id: "rin", name: "嶙安", faction: "砧鍛坊", x: 733, y: -31, color: cOuts, quote: "「如果有一天真的離開這裡，我……」", desc: "鍛魂獷牙開設的「砧鍛坊」裡不起眼的底層雜工。\n\n他長年在充斥著鐵鏽與煤灰的工坊過著忍耐又壓抑生活，連一次重要工作也沒被指名過，甚至在工坊裡遭到同事搶功、推搡與無情嘲弄。長期的壓榨與羞辱在他心底埋下了極深自卑，讓他無數次否定自己，卻又無比渴望能被看見與承認。" },
+            { id: "rin", name: "嶙安", faction: "破詛者", x: 733, y: -31, color: cBreak, quote: "「如果有一天真的離開這裡，我……」", desc: "地脈操流者，蜥蜴族獸人。\n\n原為鍛魂獷牙「砧鍛坊」裡的底層雜工，長期受盡同事陷害與壓榨。心灰意冷之際在廢棄礦坑遇見維賽德並觸碰共鳴石覺醒潛能，重返工坊痛毆欺壓者後親手扯斷與旭言的定情吊飾，正式加入「破詛者」擔任貼身保鑣。" },            
             { id: "tormunn", name: "拓穆恩", faction: "霸潮盟", x: -80, y: -380, color: cOuts, quote: "「請帶著這份秘密繼續前進吧。我想有朝一日，會出現那個讓我們霸潮盟足以買下這份情報的契機。」", desc: "「霸潮盟」艾瑞拉分會的分會長。\n\n他擁有極其高明且敏銳的商業頭腦，全身上下散發著精明的商賈氣場。在弱肉強食且資源匱乏的極北之地，拓穆恩憑藉著對規則的洞察與出色的管理手腕，將艾瑞拉打造成一座秩序井然、擁有先進保溫與防風設施的繁榮要塞，是個能憑一己之力維繫龐大都市運作的厲害人物。" },
             { id: "grossa", name: "格洛薩", faction: "霸潮盟", x: 17, y: -429, color: cOuts, quote: "「居然敢在我面前耍這種連手法都看不出來的老千啊，膽子真不小。被你算計了一道，不過——我很欣賞你，這反而讓我越來越中意你們了。」", desc: "掌控該區域地下秩序與商業運作的大勢力「霸潮盟」的老大。\n\n他體型龐大、全身覆著黑色毛髮，全身上下散發著一股歷經江湖與商業滄桑的沉穩威嚴。身為掌握海陸交通樞紐、貿易樞紐與暗處規則的核心人物，他行事冷酷、講求極致的務實與秩序，任何試圖在他地盤上賴帳或破壞規矩的人，都會被他毫不留情地教訓甚至「送去海底觀光」。" },
             { id: "igrahhan", name: "伊格拉罕", faction: "白原行族", x: 105, y: -419, color: cOuts, quote: "「此地不容迷途者。爾等為何帶著罪人的氣息而來？」", desc: "地脈操流者，白原行族的現任族長，同時也是塔芙琳的父親。\n\n他擁有歷經風霜的雪白毛皮與深邃敏銳的狼瞳，體型高大威嚴，全身上下散發著一股令人生畏的上位者氣場。作為這個歷史悠久的游牧部族最高掌權者與精神領袖，伊格拉罕恪守部族世代相傳的規矩，對地脈信仰抱持著絕對的敬畏，始終堅信唯有遵循自然的法則與先祖的智慧，族群才能在嚴酷的極北風雪中得以延續。" },
-            { id: "touphrin", name: "塔芙琳", faction: "白原行族", x: 173, y: -374, color: cOuts, quote: "「沒有啦！我只是開個玩笑，想看看你們的反應而已啦！」", desc: "地脈操流者，白原行族繼承人。\n\n她擁有一身潔白無瑕的深白色毛皮與一雙冰藍色且充滿靈氣的澄澈雙眼，全身上下配戴著諸多骨製飾品與引流晶，走起路來總是伴隨着輕柔的微弱嗡鳴。\n\n不同於父親與長老們的保守固執，塔芙琳性格開朗外向、大大咧咧且富有些許狂氣，時常展露出活潑俏皮的一面，但也因為這份直來直往與理想派的性格，讓她有時顯得有些傲嬌與不服輸。" }
+            { id: "touphrin", name: "塔芙琳", faction: "白原行族", x: 173, y: -374, color: cOuts, quote: "「沒有啦！我只是開個玩笑，想看看你們的反應而已啦！」", desc: "地脈操流者，白原行族繼承人。\n\n她擁有一身潔白無瑕的深白色毛皮與一雙冰藍色且充滿靈氣的澄澈雙眼，全身上下配戴著諸多骨製飾品與引流晶，走起路來總是伴隨着輕柔的微弱嗡鳴。\n\n不同於父親與長老們的保守固執，塔芙琳性格開朗外向、大大咧咧且富有些許狂氣，時常展露出活潑俏皮的一面，但也因為這份直來直往與理想派的性格，讓她有時顯得有些傲嬌與不服輸。" },
+            { id: "eagle", name: "曜空翔羽", faction: "聚學舍", x: 185, y: 115, color: cAcad, quote: "「在這個世界上，每股力量就像不同的工具，都有其合適的使用時機。」", desc: "鷹族獸人，現任最高學府「聚學舍」的創校三巨頭之一。\n\n在薄明之戰後的動盪重組期，與睿策樺霖校長、影識秘爪一同接手學府，被後世尊稱為給予聚學舍第二任生命的創校者。\n\n相較於坐鎮校園的樺霖與駐守學識之庫的伊尼昂，翔羽長年振翅巡視於各大陸的廣袤天際之上，在暗中守護著聚學舍的師生與知識秩序。" },
+            { id: "wesaid", name: "維賽德", faction: "破詛者", x: 645, y: 110, color: cBreak, quote: "「適者生存是自然界最正常的真理，為什麼一放到這個社會裡，卻變得如此荒謬呢？」", desc: "雪豹族獸人，舉止優雅從容、談吐斯文有禮，但在紳士氣質之下透出一股令人膽寒的野性反差。\n\n過去曾任職於艾瑞爾軍體系核心部門，在薄明之戰與城市遷移浪潮中離開體制，暗中策動「破詛者」勢力，誘導嶙安覺醒地脈潛能並牽動再契選後半戰的局勢。" },
+            { id: "hug", name: "哈格", faction: "狼人村", x: 125, y: -293, color: cOuts, quote: "「在我們這群世代生活於此的原住獸人心中，這片孕育了無數生命的故鄉，從古至今永遠只有一個名字——巴圖利亞！」", desc: "狐犬族青年，穿梭於東方大陸「巴圖利亞」各聚落之間的密林信差兼嚮導。\n\n在溶洞採集青光蕈時遭巨型飛蛾瘠羅襲擊，被無盡元素探索隊所救後展現出近乎黏人的熱情，主動引領眾人前往狼人村，與村長厄木齊是交情深厚的摯友。" },
+            { id: "ermuqi", name: "厄木齊", faction: "狼人村", x: 210, y: -249, color: cOuts, quote: "「我們狼人的嗅覺記憶極其牢固，只要聞過一次哪怕過上十年八載，也能在林子裡瞬間分辨出敵我。」", desc: "灰狼族獸人，巴圖利亞「狼人村」的當代村長兼草藥醫師。\n\n表面溫文儒雅，專注調藥時卻極度怕嚇、一遭摯友哈格背後熊抱便會瞬間炸毛咆哮。透過嗅覺確認無盡元素探索隊毫無惡意後熱情接待眾人，並分享百年前巴薩查與以亞哈並肩抗敵的傳說。" }
         ];
 
         const nodes = rawNodes.map(node => {
@@ -546,7 +557,24 @@
             { from: "grossa", to: "igrahhan", direction: "both", label: "對立", color: cOuts, desc: "【格洛薩 ✦ 伊格拉罕】：黑幫地下老大與白原行族傳統，造成嚴重對立。" },
             { from: "grossa", to: "reva", direction: "both", label: "對立", color: cOuts, desc: "【格洛薩 ✦ 雷瓦維那】：北原秩序與維那嶺勢力互為不干涉的堤防關係。" },
             { from: "tormunn", to: "touphrin", direction: "both", label: "友好?", color: cOuts, desc: "【拓穆恩 ✦ 塔芙琳】：艾瑞拉與白原行族私底下的溝通渠道。" },
-            { from: "igarashi", to: "cat", direction: "to", label: "師生", color: cOuts, desc: "【瑟莉雅 ✦ 五十嵐】：在數十年前，瑟莉雅曾為五十嵐於村中小學堂的學生之一，卻也是揭開真相後最先害怕逃離的人。" }
+            { from: "igarashi", to: "cat", direction: "to", label: "師生", color: cOuts, desc: "【瑟莉雅 ✦ 五十嵐】：在數十年前，瑟莉雅曾為五十嵐於村中小學堂的學生之一，卻也是揭開真相後最先害怕逃離的人。" },
+            // 聚學舍三巨頭補完（曜空翔羽）
+            { from: "fox", to: "eagle", direction: "both", label: "三巨頭", color: cAcad, desc: "【睿策樺霖 ✦ 曜空翔羽】：聚學舍創校三巨頭之一，一人坐鎮校園、一人巡視天際，共同守護學府秩序。" },
+            { from: "racoon", to: "eagle", direction: "both", label: "三巨頭", color: cAcad, desc: "【影識秘爪 ✦ 曜空翔羽】：聚學舍創校三巨頭之一，分別守護地脈歷史與高空疆域的戰友。" },
+
+            // 破詛者勢力關係網（維賽德、嶙安、伊蕾琪、獷牙、巡衛）
+            { from: "wesaid", to: "rin", direction: "to", label: "誘導覺醒 / 主從", color: cBreak, desc: "【維賽德 ✦ 嶙安】：維賽德在廢棄礦坑誘導心灰意冷的嶙安觸碰共鳴石覺醒，將其納為「破詛者」貼身保鑣。" },
+            { from: "wesaid", to: "electric", direction: "both", label: "破詛者同盟", color: cBreak, desc: "【維賽德 ✦ 伊蕾琪】：暗中串聯破詛者行動的危險搭檔，在各大陸之間悄然佈局。" },
+            { from: "wesaid", to: "boar", direction: "both", label: "破詛者同盟", color: cBreak, desc: "【維賽德 ✦ 鍛魂獷牙】：共同脫離舊體制、掌握共鳴石加工與武器鍛造的暗線盟友。" },
+            { from: "wesaid", to: "gorilla", direction: "both", label: "破詛者同盟", color: cBreak, desc: "【維賽德 ✦ 烈塵巡衛】：負責替破詛者進行實體秘密運輸與情報傳遞的舊識。" },
+            { from: "rin", to: "boar", direction: "to", label: "決裂反目", color: cBreak, desc: "【嶙安 ✦ 鍛魂獷牙】：覺醒力量後的嶙安重返砧鍛坊大鬧一場，徹底斬斷過去受壓榨的雜工身分。" },
+
+            // 《無盡探途》巴圖利亞篇（哈格、厄木齊）
+            { from: "hug", to: "ermuqi", direction: "both", label: "熊抱摯友", color: cOuts, desc: "【哈格 ✦ 厄木齊】：密林信差與狼人村長兼醫師。哈格總愛從背後突襲熊抱嚇得厄木齊炸毛，兩人實則互相關心照應。" },
+            { from: "hug", to: "zarion", direction: "to", label: "狂熱崇拜", color: cAnci, desc: "【哈格 ✦ 澤里恩】：在溶洞被耀的閃光救下一命後，哈格對這位「熊大哥」展現出近乎黏人的崇拜與熱情。" },
+            { from: "hug", to: "lanlan", direction: "to", label: "救命恩人 / 嚮導", color: cAnci, desc: "【哈格 ✦ 無名】：被無名救下後主動擔任探索隊的巴圖利亞嚮導，帶領眾人前往狼人村與貓族村。" },
+            { from: "ermuqi", to: "lanlan", direction: "both", label: "嗅覺信任", color: cOuts, desc: "【厄木齊 ✦ 無名】：透過狼人敏銳嗅覺確認探索隊毫無惡意後熱情接待，並允諾帶領眾人探訪巴薩查祭祀殿。" },
+            { from: "ermuqi", to: "garoz", direction: "to", label: "敬仰先祖戰友", color: cAnci, desc: "【厄木齊 ✦ 犺（巴薩查）】：狼人村世代供奉百年前與白狼神並肩抗敵的灰狼英雄巴薩查，村長亦守護著其專屬祭祀偏殿。" }
         ];
 
         const edgeMap = new Map();
@@ -754,8 +782,7 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
             // 尼爾桑大陸
             { id: "zoma_north", name: "詛碼團廢棄據點(北)", badge: "廢棄據點", region: "尼爾桑大陸 ✦ 北部區域", x: 630, y: -230, color: cGeoRuins, tier: 4, type: "base", desc: "位於尼爾桑大陸北部的詛碼團廢棄據點，現已不再使用，但部分設備卻仍能啟用，貌似有不明人士暗中在保養維護。" },
             { id: "neilsan_port", name: "尼爾桑港", badge: "西岸門戶", region: "尼爾桑大陸 ✦ 西北海岸", x: 280, y: -49, color: cGeoPort, tier: 2, type: "port", desc: "位於尼爾桑大陸西方海岸港口，為外界進入森林的門戶。週遭沒有城鎮、設施，只有簡單的集貨區顯得相對簡陋。" },
-            { id: "wolf_village", name: "狼人村", badge: "獸人村落", region: "尼爾桑大陸 ✦ 中北部區域", x: 570, y: -15, color: cGeoBeast, tier: 3, type: "village", desc: "位於尼爾桑港口東方的森林中央，是克爾與克明的故鄉。" },
-            { id: "wolf_farm", name: "狩牙沃野", badge: "田地", region: "尼爾桑大陸 ✦ 中北部區域", x: 565, y: -68, color: cGeoBeast, tier: 3, type: "village", desc: "位於狼人村近郊，受翠芽泰納協助開闢的田野。此地盛產各式農作物，可供狼人族於狩獵淡季食用，以及與其他部族交易。" },
+{ id: "wolf_village", name: "狼人村", badge: "獸人村落", region: "尼爾桑大陸 ✦ 中北部區域", x: 570, y: -15, color: cGeoBeast, tier: 3, type: "village", desc: "位於尼爾桑港口東方的森林中央，在千年前的古稱「巴圖利亞」時期便已存在，是克爾、克明與歷代狼人族的故鄉。" },            { id: "wolf_farm", name: "狩牙沃野", badge: "田地", region: "尼爾桑大陸 ✦ 中北部區域", x: 565, y: -68, color: cGeoBeast, tier: 3, type: "village", desc: "位於狼人村近郊，受翠芽泰納協助開闢的田野。此地盛產各式農作物，可供狼人族於狩獵淡季食用，以及與其他部族交易。" },
             { id: "cat_village", name: "貓族村", badge: "獸人聚落", region: "尼爾桑大陸 ✦ 東北部區域", x: 780, y: 0, color: cGeoBeast, tier: 3, type: "village", desc: "位於狼人村東邊、環輝樹脊西北邊的隱秘村落。不同於只有狼人們的村落，這裡是各種貓族一同群居的地方，居民多半對元素帶有排斥想法。早些時候這裡籠罩著不息的大雨，在停歇後終能開啟農耕生活。" },
             { id: "wolf_ruins", name: "水之遺跡", badge: "叢林遺跡", region: "尼爾桑大陸 ✦ 樹脊西北邊近郊", x: 600, y: 120, color: cGeoRuins, tier: 4, type: "ruins", desc: "克明與高翔曾經探險的水之遺跡，是尼爾桑大陸與元素之源的連結點。這裡曾是狼族的隱密祭祀點，但現已無人管理、往來。" },
             { id: "cat_sacred", name: "貓族聖地", badge: "傳統聖地", region: "尼爾桑大陸 ✦ 貓族村東邊近郊", x: 820, y: -32, color: cGeoBeast, tier: 4, type: "sacred", desc: "位於貓族村東邊不遠處山區的傳統聖地，為居民朝聖、祭拜的據點，山洞內保有紅焰壁畫。" },
@@ -931,7 +958,7 @@ ctx.shadowBlur = 0; // 畫完立即重置，避免殘留影響下一條線
             rulerPoints = [];
             const btn = document.getElementById('ruler-btn');
             btn.classList.toggle('active', rulerActive);
-            btn.innerText = rulerActive ? "📏 測距模式中 (點選兩點)" : "📏 空間測距工具 [關閉]";
+            btn.innerText = rulerActive ? "測距模式中 (點選兩點)" : "空間測距工具 [關閉]";
             document.getElementById('hint-box').innerText = rulerActive 
                 ? "【測距模式】點擊地圖任意兩點，計算直線航行距離。"
                 : "拖曳平移 ｜ 滾輪縮放 ｜ 點擊地點檢視詳細與高亮航線";
