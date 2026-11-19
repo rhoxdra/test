@@ -323,16 +323,13 @@
             pointer-events: none !important;
         }
 
-        .poster-main-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #e07b46;
-            letter-spacing: 3px;
-            line-height: 1.2;
-            margin-bottom: 8px;
-            text-shadow: 
-                0 0 15px rgba(224, 123, 70, 0.6), 
-                0 2px 4px rgba(0, 0, 0, 0.95);
+        .poster-main-banner {
+            display: block;
+            width: 75%;
+            max-width: 320px;
+            height: auto;
+            margin: 0 auto 10px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.85));
         }
 
         .poster-tagline {
@@ -346,7 +343,7 @@
 
         @media (max-width: 640px) {
             .poster-title-box { bottom: 120px !important; }
-            .poster-main-title { font-size: 1.5rem !important; margin-bottom: 6px !important; }
+            .poster-main-banner { width: 72% !important; max-width: 260px !important; margin-bottom: 8px !important; }
             .poster-tagline { font-size: 0.8rem !important; line-height: 1.4 !important; letter-spacing: 0.5px !important; }
         }
 
@@ -357,13 +354,15 @@
             margin-bottom: 15vh;
         }
 
-        .main-title {
-            font-size: 1.85rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            color: #e07b46;
-            text-shadow: 0 0 20px rgba(224, 123, 70, 0.6), 0 2px 4px rgba(0, 0, 0, 0.95);
-            margin-bottom: 6px;
+        /* === 首頁頂部圖片標題 === */
+        .main-title-banner {
+            display: block;
+            width: 82%;
+            max-width: 340px;
+            height: auto;
+            margin: 0 auto 12px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.85));
+            transition: transform 0.3s ease;
         }
 
         .tagline {
@@ -892,6 +891,7 @@
             color: #e07b46;
         }
 
+
         .fortune-brand-sub {
             font-size: 0.72rem;
             color: #d6cbbe;
@@ -1065,10 +1065,11 @@
     </div>
 </div>
 
-    <div id="main-container" class="container">
-        <!-- 頂部標題與精神短語 -->
-        <header class="header">
-            <h1 class="main-title">《無限元素》</h1>
+<div id="main-container" class="container">
+    <header class="header">
+            <h1 style="margin: 0;">
+                <img src="images/banner.webp" alt="《無限元素》" class="main-title-banner">
+            </h1>
             <div class="tagline">與賦形者相遇，和獸人夥伴展開日常冒險</div>
 
             <!-- 🌟 統合區塊：上方世界觀（含點擊對話），下方接 Current Event 輪播 🌟 -->
@@ -3969,8 +3970,8 @@ window.addEventListener('DOMContentLoaded', () => {
     </script>
     
     <div id="poster-title-box" class="poster-title-box">
-        <div class="poster-main-title">《無限元素》</div>
+        <img src="images/banner.webp" alt="《無限元素》" class="poster-main-banner">
         <div class="poster-tagline">與賦形者相遇，和獸人夥伴展開日常冒險</div>
-    </div> 
+    </div>
 </body>
 </html>
