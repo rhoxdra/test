@@ -1302,6 +1302,60 @@
                     <div class="avatar-item" data-key="ermuqi" onclick="openCharModal('ermuqi')"><img src="images/ermuqi.webp" alt="厄木齊"><span class="avatar-label">厄木齊</span></div>
                     <div class="avatar-item" data-key="eagle" onclick="openCharModal('eagle')"><img src="images/eagle.webp" alt="曜空翔羽"><span class="avatar-label">曜空翔羽</span></div>
                     <div class="avatar-item" data-key="wesaid" onclick="openCharModal('wesaid')"><img src="images/wesaid.webp" alt="維賽德"><span class="avatar-label">維賽德</span></div>
+                    </div>
+            </details>
+
+                    <!-- 🌟 新增：怪獸圖鑑（無分類標籤） 🌟 -->
+            <details class="link-card-dropdown">
+                <summary class="link-card-summary">
+                    <img src="images/scarlettiger.webp" alt="紅焰" class="avatar">
+                    <div class="link-info">
+                        <div class="link-title">怪獸圖鑑</div>
+                        <div class="link-desc">展開脈殤獸與其他各種異獸錄，點選圖像觀看習性簡介與全幅大圖</div>
+                    </div>
+                    <div class="arrow-icon">▼</div>
+                </summary>
+                <!-- 🌟 怪獸圖鑑雙重篩選按鈕區塊 🌟 -->
+                <div class="char-filter-container">
+                    <!-- 第一排：登場篇章篩選 -->
+                    <div class="filter-group">
+                        <span class="filter-label">登場篇章：</span>
+                        <button class="filter-btn active" onclick="filterMonsters('chapter', 'all', this)">全部</button>
+                        <button class="filter-btn" onclick="filterMonsters('chapter', '薄明之戰', this)">薄明之戰</button>
+                        <button class="filter-btn" onclick="filterMonsters('chapter', '再契選篇', this)">再契選篇</button>
+                        <button class="filter-btn" onclick="filterMonsters('chapter', '無盡探途', this)">無盡探途</button>
+                    </div>
+
+                    <!-- 第二排：怪獸類型篩選 -->
+                    <div class="filter-group" style="margin-top: 8px;">
+                        <span class="filter-label">怪獸類型：</span>
+                        <button class="filter-btn active" onclick="filterMonsters('type', 'all', this)">全部</button>
+                        <button class="filter-btn" onclick="filterMonsters('type', '脈殤獸', this)">脈殤獸</button>
+                        <button class="filter-btn" onclick="filterMonsters('type', '原生野獸', this)">原生野獸</button>
+                        <button class="filter-btn" onclick="filterMonsters('type', '召喚獸', this)">召喚獸</button>
+                        <button class="filter-btn" onclick="filterMonsters('type', '擬型怪獸', this)">擬型怪獸</button>
+                        <button class="filter-btn" onclick="filterMonsters('type', '機械獸', this)">機械獸</button>
+                        <button class="filter-btn" onclick="filterMonsters('type', '不明', this)">不明</button>
+                    </div>
+                </div>
+
+                <div class="avatar-grid" id="monster-grid">
+                    <div class="avatar-item" data-key="firedragon" onclick="openMonsterModal('firedragon')"><img src="images/firedragon.webp" alt="熔岩龍"><span class="avatar-label">熔岩龍</span></div>
+                    <div class="avatar-item" data-key="icewolf" onclick="openMonsterModal('icewolf')"><img src="images/icewolf.webp" alt="以亞哈"><span class="avatar-label">以亞哈</span></div>
+                    <div class="avatar-item" data-key="mastiff" onclick="openMonsterModal('mastiff')"><img src="images/mastiff.webp" alt="迅焰獒"><span class="avatar-label">迅焰獒</span></div>
+                    <div class="avatar-item" data-key="biolizard" onclick="openMonsterModal('biolizard')"><img src="images/biolizard.webp" alt="幽玄蜥"><span class="avatar-label">幽玄蜥</span></div>
+                    <div class="avatar-item" data-key="scarlettiger" onclick="openMonsterModal('scarlettiger')"><img src="images/scarlettiger.webp" alt="紅焰"><span class="avatar-label">紅焰</span></div>
+                    <div class="avatar-item" data-key="toxicmoth" onclick="openMonsterModal('toxicmoth')"><img src="images/toxicmoth.webp" alt="窟磷瘠羅"><span class="avatar-label">窟磷瘠羅</span></div>
+                    <div class="avatar-item" data-key="worse" onclick="openMonsterModal('worse')"><img src="images/worse.webp" alt="沃斯"><span class="avatar-label">沃斯</span></div>
+                    <div class="avatar-item" data-key="thornbeast" onclick="openMonsterModal('thornbeast')"><img src="images/thornbeast.webp" alt="刺棘獸"><span class="avatar-label">刺棘獸</span></div>
+                    <div class="avatar-item" data-key="sentinel" onclick="openMonsterModal('sentinel')"><img src="images/sentinel.webp" alt="哨衛"><span class="avatar-label">哨衛</span></div>
+                    <div class="avatar-item" data-key="wasorm" onclick="openMonsterModal('wasorm')"><img src="images/wasorm.webp" alt="瓦索姆"><span class="avatar-label">瓦索姆</span></div>
+                    <div class="avatar-item" data-key="zepher" onclick="openMonsterModal('zepher')"><img src="images/zepher.webp" alt="瑟弗爾"><span class="avatar-label">瑟弗爾</span></div>
+                    <div class="avatar-item" data-key="lodestone" onclick="openMonsterModal('lodestone')"><img src="images/lodestone.webp" alt="羅德斯通"><span class="avatar-label">羅德斯通</span></div>
+                    <div class="avatar-item" data-key="lagnor" onclick="openMonsterModal('lagnor')"><img src="images/lagnor.webp" alt="拉格諾"><span class="avatar-label">拉格諾</span></div>
+                    <div class="avatar-item" data-key="dirtywolfy" onclick="openMonsterModal('dirtywolfy')"><img src="images/dirtywolfy.webp" alt="汙濁狼-人型"><span class="avatar-label">汙濁狼-人型</span></div>
+                    <div class="avatar-item" data-key="dirtywolf" onclick="openMonsterModal('dirtywolf')"><img src="images/dirtywolf.webp" alt="汙濁狼-獸型"><span class="avatar-label">汙濁狼-獸型</span></div>
+                    <div class="avatar-item" data-key="elezero" onclick="openMonsterModal('elezero')"><img src="images/elezero.webp" alt="紫電零式"><span class="avatar-label">紫電零式</span></div>
                 </div>
             </details>
         </div>
@@ -2653,6 +2707,105 @@
 這位心思縝密、作風難以捉摸的雪豹，正靜靜注視著再契選後半戰的局勢演變，並以不為人知的手段暗中牽動著各方勢力的神經……` 
             }
         };
+ // === 怪獸圖鑑專屬資料庫 ===
+        const monsterData = {
+            "firedragon": {
+                name: "熔岩龍",
+                tags: { chapter: ["無盡探途"], type: ["脈殤獸"] },
+                bgImage: "images/firedragon_bg.webp",
+                desc: `盤踞於西方大陸維那嶺周邊的火山地帶。體型龐大、鱗甲堅硬且伴隨極高熱能，因捕獵活動嚴重威脅維那嶺領民安危並使地脈持續惡化，由現任領主萊昂・維那委託無盡元素探索隊前往火山展開討伐。`
+            },
+            "icewolf": {
+                name: "以亞哈",
+                tags: { chapter: ["無盡探途"], type: ["脈殤獸"] },
+                bgImage: "images/icewolf_bg.webp",
+                desc: `流傳於北方大陸「白原行族」與東方大陸「巴圖利亞」狼人村傳說中的白狼神。昔日曾與灰狼英雄巴薩查（犺）並肩作戰，在臨終前為壓制威脅選擇將意志沉入地脈之中；在《無盡探途》中，因受狂暴地脈牽引而失控化為脈殤獸，最終在無盡元素探索隊的合力下平息狂暴、迎來安息。`
+            },
+            "mastiff": {
+                name: "迅焰獒",
+                tags: { chapter: ["無盡探途"], type: ["原生野獸"] },
+                bgImage: "images/mastiff_bg.webp",
+                desc: `曾生活於北方大陸自然保留區山林中的原生犬科野獸，毛色呈橘白相間，生性擅長高速奔馳。在薄明之戰中受詛碼團的捕捉與非元素實驗中幾乎全數喪命，被外界宣告滅絕，僅有亞爾克轉化為震元素賦形者倖存下來。`
+            },
+            "biolizard": {
+                name: "幽玄蜥",
+                tags: { chapter: ["無盡探途"], type: ["脈殤獸"] },
+                bgImage: "images/biolizard_bg.webp",
+                desc: `盤踞於北方大陸貿易商道上的強大脈殤獸。因阻斷了門戶港鎮與內陸聚落艾瑞拉之間的交通與商路，使霸潮盟老大格洛薩委託無盡元素探索隊前往討伐，最後成功為北方開闢商道。`
+            },
+            "scarlettiger": {
+                name: "紅焰",
+                tags: { chapter: ["無盡探途"], type: ["召喚獸"] },
+                bgImage: "images/scarlettiger_bg.webp",
+                desc: `流傳於星球上與尼爾桑大陸貓族村之間的守護神傳說，形象為燃燒著熾熱火光的紅色巨虎。貓族村世代將其奉為信仰並建有紅焰祭壇與聖地壁畫；在《無盡探途》中作為創哥強大的火光召喚獸現身，本傳裡嵐懶亦曾於貓族村夜空中顯現其火光之姿。`
+            },
+            "toxicmoth": {
+                name: "窟磷瘠羅",
+                tags: { chapter: ["無盡探途"], type: ["脈殤獸"] },
+                bgImage: "images/toxicmoth_bg.webp",
+                desc: `盤踞於巴圖利亞天然溶洞深淵中的巨型飛蛾型脈殤獸，當地獸人部族稱這類受地脈異變影響的怪物為「瘠羅」。因狐族信差哈格深入溶洞採集青光蕈時受到驚動而發動毒霧襲擊，最終被剛踏上巴圖利亞的無盡元素探索隊，藉由耀的強光爆發與劫的腐蝕權能聯手擊敗。`
+            },
+            "worse": {
+                name: "沃斯",
+                tags: { chapter: ["薄明之戰", "再契選篇"], type: ["召喚獸"] },
+                bgImage: "images/worse_bg.webp",
+                desc: `弗爾特專屬的召喚獸，以高純度的黑紫色寂滅能量凝聚構築而成。在薄明之戰、市政廳防衛戰等場合曾被多次喚出參戰，憑藉充滿壓迫感的破壞力與能量攻勢作收尾的一擊。`
+            },
+            "thornbeast": {
+                name: "怒棘獸",
+                tags: { chapter: ["再契選篇"], type: ["原生野獸"] },
+                bgImage: "images/thornbeast_bg.webp",
+                desc: `盤踞於城堡廢墟周邊的兇猛掠食者，擁有強健巨爪、猩紅雙眼以及厚重堅硬的鱗甲，全身布滿鋒利巨刺。受激怒時能將背、肩、尾部的尖刺萬箭齊發般爆射而出，甚至能自巨口凝聚高熱能量砲擊；在咬碎高翔的迴旋鏢後，最終被兩人聯手以樹根與風鎖束縛、剝落尖刺並接連施展火焚與冰封重擊討伐。`
+            },
+            "sentinel": {
+                name: "哨衛",
+                tags: { chapter: ["再契選篇"], type: ["召喚獸"] },
+                bgImage: "images/sentinel_bg.webp",
+                desc: `克明透過權能召喚出的生物兵器，由墨綠色的渾沌泥漿翻湧凝聚而成。在第一次契選以及神域意識流中，克明皆曾呼喚大批狼形的泥漿哨衛進行高機動圍獵，即使遭擊碎亦能透過回流迅速重組數量。`
+            },
+            "zepher": {
+                name: "瑟弗爾",
+                tags: { chapter: ["再契選篇"], type: ["脈殤獸"] },
+                bgImage: "images/zepher_bg.webp",
+                desc: `在第二次契選中由劫召喚的高階契靈。外型宛如風化的古代遺跡泰坦，石縫間流動著蒼白光芒、雙眼空洞；象徵掌控荒蕪中的無窮智慧與資訊，具備驚人的攻擊力與沙塵暴破壞力。`
+            },
+            "wasorm": {
+                name: "瓦索姆",
+                tags: { chapter: ["再契選篇"], type: ["脈殤獸"] },
+                bgImage: "images/wasorm_bg.webp",
+                desc: `在第二次契選終局登場的巨型泰坦真核。劫在對決的關鍵時刻利用「共鳴石」改寫規則、反向強行奪取了阿爾提瑪的源能與抽牌機會，將這尊具壓倒性威能的存在召喚降臨，憑藉其一舉逆轉局勢。`
+            },
+            "lagnor": {
+                name: "拉格諾",
+                tags: { chapter: ["再契選篇"], type: ["脈殤獸"] },
+                bgImage: "images/lagnor_bg.webp",
+                desc: `在第二次契選以及尼爾桑南方離島礦坑戰役中登場的巨型石質泰坦，其體型巍峨、極具壓迫感。於南方小島的衝突中，最終被弗爾特與獸化覺醒「霸軀」的普洛特聯手擊碎化為石塊。`
+            },
+            "lodestone": {
+                name: "羅德斯通",
+                tags: { chapter: ["再契選篇"], type: ["擬型怪獸"] },
+                bgImage: "images/lodestone_bg.webp",
+                desc: `登場於「夜辰奇境」遊樂園鬼屋大宅邸設施中的存在。由誓奪爪盟的影利用變質權能化身擬態而成的鬼屋領主，以此設施與偽裝作為掩護，在暗中為制提供共鳴石的能源儲備。`
+            },
+            "dirtywolfy": {
+                name: "汙濁狼-人型",
+                tags: { chapter: ["再契選篇"], type: ["不明"] },
+                bgImage: "images/dirtywolfy_bg.webp",
+                desc: `自狼人神域「嘯壁」白狼神像裂縫滲出的暗影分靈。在意識流中向克爾、媞婭與鹿茲顯現為覆蓋灰黑硬毛的狼人姿態，能揮舞影之巨劍、並潛伏於對手的影子中發動帶有距離斥力懲罰的突襲。`
+            },
+            "dirtywolf": {
+                name: "汙濁狼-獸型",
+                tags: { chapter: ["再契選篇"], type: ["不明"] },
+                bgImage: "images/dirtywolf_bg.webp",
+                desc: `自白狼神像內部封印鬆動後逸散的暗影殘影，在意識流中向克明與高翔顯現為通體如夜色凝聚、籠罩青幽光芒的四足野獸狼影。動作帶有不自然的跳幀感，能釋放影擊核爆與暗影球，甚至能模仿並生成大量泥漿狼分靈體展開圍攻。`
+            },
+            "elezero": {
+                name: "紫電零式",
+                tags: { chapter: ["再契選篇"], type: ["機械獸"] },
+                bgImage: "images/elezero_bg.webp",
+                desc: `制於第五次契選中，透過飛空艇「無垠號」空投組件並以磁力在半空組合而成的重裝機械狼。機身披覆深紫色合金裝甲，脖頸圍繞深褐色鋼毛，尾端生有金色倒鉤尾刃；載具上刻有共鳴石發動陣勢，能釋放狂暴的地脈壓與雷磁砲。`
+            }
+        };
 
         let currentModalCharKey = null;
         let isBeastFormActive = false;
@@ -2741,6 +2894,7 @@
 
             // 渲染 4 組屬性標籤 (Tags)
             const tagsContainer = document.getElementById('char-tags-container');
+            tagsContainer.style.display = 'flex';
             const tags = (char && char.tags) ? char.tags : {
                 chapter: ["聚學舍篇"],
                 faction: ["未定"],
@@ -2811,6 +2965,57 @@
         function closeCharModal() {
             document.body.classList.remove('modal-open'); // 解除後方捲動鎖定      
             document.getElementById('char-modal').style.display = 'none';
+        }
+        // 🌟 怪獸詳情彈窗（顯示登場篇章與類型標籤） 🌟
+        function openMonsterModal(monsterKey) {
+            currentModalCharKey = null;
+            isBeastFormActive = false;
+
+            const monster = monsterData[monsterKey];
+            const monsterName = monster ? monster.name : monsterKey;
+            gtag('event', 'Monster_Encyclopedia_Click', { 'monster_id': monsterKey, 'monster_name': monsterName });
+
+            const monsterDesc = (monster && monster.desc !== undefined) ? monster.desc : "  ";
+            const bgImg = (monster && monster.bgImage) ? monster.bgImage : `images/${monsterKey}_bg.webp`;
+
+            // 設定怪獸名稱與簡介內文
+            document.getElementById('char-title').innerText = monsterName;
+            const charTextElem = document.getElementById('char-text');
+            charTextElem.innerText = monsterDesc;
+
+            // 隱藏名言與型態切換按鈕
+            document.getElementById('char-quote').style.display = 'none';
+            document.getElementById('char-switch-container').innerHTML = '';
+
+            // 渲染 2 組屬性標籤（登場篇章、類型）
+            const tagsContainer = document.getElementById('char-tags-container');
+            tagsContainer.style.display = 'flex';
+            const tags = (monster && monster.tags) ? monster.tags : {
+                chapter: ["未定"],
+                type: ["不明"]
+            };
+
+            const renderBadges = (list, className) => (list || []).map(t => `<span class="tag-badge ${className}">${t}</span>`).join('');
+
+            tagsContainer.innerHTML = `
+                <div class="tag-group"><span class="tag-label">登場篇章：</span>${renderBadges(tags.chapter, 'chapter')}</div>
+                <div class="tag-group"><span class="tag-label">怪獸類型：</span>${renderBadges(tags.type, 'type')}</div>
+            `;
+
+            // 更新全幅背景大圖
+            document.body.style.setProperty('--bg-image', `url('${bgImg}')`);
+
+            // 顯示彈窗並鎖定背景捲動
+            document.body.classList.add('modal-open');
+            const modalOverlay = document.getElementById('char-modal');
+            modalOverlay.style.display = 'flex';
+
+            requestAnimationFrame(() => {
+                const charModalContent = document.querySelector('.char-modal-content');
+                if (charModalContent) charModalContent.scrollTop = 0;
+                if (charTextElem) charTextElem.scrollTop = 0;
+                modalOverlay.scrollTop = 0;
+            });
         }
 
         
@@ -3813,6 +4018,56 @@
                 }
             });
                 }
+                // ==========================================
+        // 🔍 怪獸圖鑑雙重篩選邏輯（登場篇章 x 怪獸類型）
+        // ==========================================
+        let currentMonsterChapterFilter = 'all';
+        let currentMonsterTypeFilter = 'all';
+
+        function filterMonsters(category, value, btnElem) {
+            if (category === 'chapter') {
+                currentMonsterChapterFilter = value;
+            } else if (category === 'type') {
+                currentMonsterTypeFilter = value;
+            }
+
+            if (btnElem) {
+                const parentGroup = btnElem.parentElement;
+                parentGroup.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btnElem.classList.add('active');
+            }
+
+            const monsterItems = document.querySelectorAll('#monster-grid .avatar-item');
+
+            monsterItems.forEach(item => {
+                const monsterKey = item.getAttribute('data-key');
+                const monster = monsterData[monsterKey];
+
+                if (!monster) return;
+
+                // 條件 1：登場篇章比對
+                let chapterMatch = false;
+                if (currentMonsterChapterFilter === 'all') {
+                    chapterMatch = true;
+                } else if (monster.tags && monster.tags.chapter) {
+                    chapterMatch = monster.tags.chapter.includes(currentMonsterChapterFilter);
+                }
+
+                // 條件 2：怪獸類型比對
+                let typeMatch = false;
+                if (currentMonsterTypeFilter === 'all') {
+                    typeMatch = true;
+                } else if (monster.tags && monster.tags.type) {
+                    typeMatch = monster.tags.type.includes(currentMonsterTypeFilter);
+                }
+
+                if (chapterMatch && typeMatch) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
                   // 🌟 觀圖模式下：點擊螢幕任意空白處直接還原 UI（加入 vn-open 與 vn-modal 排除） 🌟
                    document.addEventListener('click', function(e) {
                      // 僅在「純淨觀圖模式」運作，若正在閱讀視覺小說 (vn-open) 則絕不觸發
